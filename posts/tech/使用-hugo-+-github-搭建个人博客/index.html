@@ -106,8 +106,8 @@
   "keywords": [
     "干货", "博客"
   ],
-  "articleBody": "初见Hugo Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。\n1. 安装 Hugo 到 Hugo Releases 下载适合你的操作系统的版本。\nWindows用户选择windows-amd64.zip\n下载下来的是一个exe文件，需打开cmd进行操作\n1 2 E:\\Projects\\hugo_0.111.2_windows-amd64\u003ehugo version hugo v0.111.2-4164f8fef9d71f50ef3962897e319ab6219a1dad windows/amd64 BuildDate=2023-03-05T12:32:20Z VendorInfo=gohugoio 2.创建一个新的网站 1 2 // 在命令行输入如下命令会在当前路径下创建一个新的网站文件夹 hugo new site quickstart 3. 添加一个主题 添加主题也可以放在后面\n主题\nhttps://github.com/nanxiaobei/hugo-paper\nhttps://github.com/adityatelange/hugo-PaperMod\nHUGO官方搭建的theme主题站有大量的开源主题可供选择\n基本上所有的主题都自带安装的方法\n这里我选择了一个主题进行演示\nhttps://themes.gohugo.io/themes/hugo-theme-charlolamode/\n在网页下方的说明内，根据步骤安装主题即可\n总结\n1 2 3 cd quickstart git init git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke 在根目录下的 config.toml 文件中添加一行\n1 echo 'theme = \"ananke\"' \u003e\u003e config.toml 4.添加一个新的文章 1 2 hugo new posts/my-first-post.md hugo new test.md 创建的新文章都会放在 content 文件夹下\n5.启动 Hugo 服务器 使用命令启动服务器\n1 hugo server 在浏览器输入localhost:1313即可查看生成的网站\n注意刚才添加的md并没有显示出来，是因为生成的md是drift，hugo默认忽略drift的文档，需在启动时添加-D参数\n1 hugo server -D --theme 选择哪个皮肤; --buildDrafts 由于想显示我们的内容，包括设置了 draft 草稿状态的内容。 部署 Hugo 作为一个 Github Pages Github Pages 本质上是一个静态网站托管系统，你可以使用它为你的每一个仓库制作一个静态网页入口\n1. 创建一个 Github 仓库 首先再Github上创建一个 Repository，命名为Github名字.github.io，例如我的仓库：GoodmanBin.github.io，这样就可以生成一个用户页面\n2.在本地构建Hugo静态网站 注意！！！\n在生成静态页面之前要把config.toml文件中的baseURL修改为自己博客的网址\n1 baseURL = 'https://GoodmanBin.github.io/' 执行命令\n1 hugo 输入hugo就可以生成public文件夹，这个文件夹可以部署到云服务器或者托管到github上，\n注意：输入hugo的生成方式只会往public文件夹里添加内容，但是不会删除外部已经不存在而public里面还存在的文件\n所以一般用hugo -F --cleanDestinationDir命令，表示每次生成的public都是全新的，会覆盖原来的。\n在命令执行后，出现一个public文件夹，里面就是网站的静态页面文件\n进入public文件夹，将public文件夹的内容上传到github仓库中\n1 2 3 4 5 6 cd public git init ##初始化仓库 git remote add origin https://github.com/GoodmanBin/GoodmanBin.github.io.git ##链接远程仓库 git add . git commit -m \"first commit\" git push -u origin master 将public文件夹推送上去之后直接访问GoodmanBin.github.io会显示404，需到项目中勾选上Use your GitHub Pages website才可访问\n在此之后更新文章，使用hugo生成新的静态页面，并使用git push进行同步\n1 2 3 4 5 cd public git add . git status git commit -m \"add blog post\" git push Hugo引入图片问题 直接使用typora的相对路径在生成静态网站的时候图片无法显示出来\nHugo的图片展示逻辑：\nHugo博客的根目录有一个static目录，这个static目录就是用来存放一些静态文件，比如图片、css、js文件等。 执行hugo命令的时候，会把static目录下的子目录或文件复制到public目录下。比如我在static下添加了一个img子目录，并且在img子目录放了图片，那执行hugo命令后，就会把static\\img文件的内容拷贝到public\\img里面。 大家都知道Hugo博客网站展示的其实是public下的内容，因此markdown文章里引用图片的时候，得引用pubic下的图片才可以。 具体操作非常简单，分2步：\n在static目录下创建img子目录，把markdown要使用的图片放在static\\img目录里。 在markdown文件里，按照如下格式引用图片(这里假设图片名称叫wechat.png)。这样最终public目录下生成的静态页面就可以引用到public\\img下的图片了。 1 ![](/img/wechat.png) 注意：\n严格注意路径：只能写成 /img/imagename.png 的形式（注意 / 和 \\ 的区别)\n可能是当前主题不支持的原因，嵌入图片的代码只能写成这样：![imagename](/img/imagename.png)； 这种格式的修改图片缩放比例的代码也是不能用的\n存放图片的文件夹不能有空格\n还可以用图床\nTypora配置图床 GitHub创建仓库并获取仓库Token 下载PicGo并安装 GitHub配置 设置参数说明：\n设定仓库名：填入你上面创建的仓库名，格式为：用户名/仓库名；\n设定分支名：一般填写 master 即可；\n设定 Token：将上一步 Github 配置中得到的 Token 粘贴进去；\n指定存储路径：图片在 Github 仓库中的存储路径，例如本人是：blog/202303/\n设定自定义域名：此处直接设置 jsDelivr 加速的访问地址，例如本人是：https://cdn.jsdelivr.net/gh/chance7bin/img-repo@main/\ngh 表示来自 Github 的仓库 chance7bin/img-repo 仓库的具体位置 main 仓库的分支 到此，配置过程已完成。\nPicGo配置 配置Typora 偏好设置 → 图像 → 插入图片时：上传图片 → 上传服务设定：上传服务选择PiacGo，PicGo路径选择软件安装路径 → 配置完成\nObisidian配置图床 Obisidian对img的兼容不是很好\n打开 Obsidian 按箭头标识数字顺序：设置 =》 第三方插件 =》 关闭安全模式 =》 浏览社区插件\n搜索：Image auto upload Plugin\n安装后打开选项，默认什么都不要改。\n其中最后一项 PicGo server 也是默认填好的，如果没有，就在 PicGo 设置，默认都不要动。\n",
-  "wordCount" : "2205",
+  "articleBody": "初见Hugo Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。\n1. 安装 Hugo 到 Hugo Releases 下载适合你的操作系统的版本。\nWindows用户选择windows-amd64.zip\n下载下来的是一个exe文件，需打开cmd进行操作\n1 2 E:\\Projects\\hugo_0.111.2_windows-amd64\u003ehugo version hugo v0.111.2-4164f8fef9d71f50ef3962897e319ab6219a1dad windows/amd64 BuildDate=2023-03-05T12:32:20Z VendorInfo=gohugoio 2. 创建一个新的网站 1 2 // 在命令行输入如下命令会在当前路径下创建一个新的网站文件夹 hugo new site quickstart 3. 添加一个主题 添加主题也可以放在后面\n主题\nhttps://github.com/nanxiaobei/hugo-paper\nhttps://github.com/adityatelange/hugo-PaperMod\nHUGO官方搭建的theme主题站有大量的开源主题可供选择\n基本上所有的主题都自带安装的方法\n这里我选择了一个主题进行演示\nhttps://themes.gohugo.io/themes/hugo-theme-charlolamode/\n在网页下方的说明内，根据步骤安装主题即可\n总结\n1 2 3 cd quickstart git init git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke 在根目录下的 config.toml 文件中添加一行\n1 echo 'theme = \"ananke\"' \u003e\u003e config.toml 4. 添加一个新的文章 1 2 hugo new posts/my-first-post.md hugo new test.md 创建的新文章都会放在 content 文件夹下\n5. 启动 Hugo 服务器 使用命令启动服务器\n1 hugo server 在浏览器输入localhost:1313即可查看生成的网站\n注意刚才添加的md并没有显示出来，是因为生成的md是drift，hugo默认忽略drift的文档，需在启动时添加-D参数\n1 hugo server -D --theme 选择哪个皮肤; --buildDrafts 由于想显示我们的内容，包括设置了 draft 草稿状态的内容。 部署 Hugo 作为一个 Github Pages Github Pages 本质上是一个静态网站托管系统，你可以使用它为你的每一个仓库制作一个静态网页入口\n1. 创建一个 Github 仓库 首先再Github上创建一个 Repository，命名为Github名字.github.io，例如我的仓库：GoodmanBin.github.io，这样就可以生成一个用户页面\n2. 在本地构建Hugo静态网站 注意！！！\n在生成静态页面之前要把config.toml文件中的baseURL修改为自己博客的网址\n1 baseURL = 'https://GoodmanBin.github.io/' 执行命令\n1 hugo 输入hugo就可以生成public文件夹，这个文件夹可以部署到云服务器或者托管到github上，\n注意：输入hugo的生成方式只会往public文件夹里添加内容，但是不会删除外部已经不存在而public里面还存在的文件\n所以一般用hugo -F --cleanDestinationDir命令，表示每次生成的public都是全新的，会覆盖原来的。\n在命令执行后，出现一个public文件夹，里面就是网站的静态页面文件\n进入public文件夹，将public文件夹的内容上传到github仓库中\n1 2 3 4 5 6 cd public git init ##初始化仓库 git remote add origin https://github.com/GoodmanBin/GoodmanBin.github.io.git ##链接远程仓库 git add . git commit -m \"first commit\" git push -u origin master 将public文件夹推送上去之后直接访问GoodmanBin.github.io会显示404，需到项目中勾选上Use your GitHub Pages website才可访问\n在此之后更新文章，使用hugo生成新的静态页面，并使用git push进行同步\n1 2 3 4 5 cd public git add . git status git commit -m \"add blog post\" git push 3.解决 hugo 中关于 integrity 的错误 问题描述\n在 Github Pages 上部署 Hugo 博客后，网站样式丢失，打开浏览器 F12 控制台可以发现错误：Failed to find a valid digest in the 'integrity' attribute for resource \"xxx.css\", The resource has been blocked.\n解决方法\n在 themes\\PaperMod\\layouts\\partials 文件夹下找到一个 head.html 文件，发现里面确实有 integrity=\"{{ $stylesheet.Data.Integrity }}\" 这么一句代码，把它改为 integrity=\"\" 然后重新发布\nHugo引入图片问题 直接使用typora的相对路径在生成静态网站的时候图片无法显示出来\nHugo的图片展示逻辑：\nHugo博客的根目录有一个static目录，这个static目录就是用来存放一些静态文件，比如图片、css、js文件等。 执行hugo命令的时候，会把static目录下的子目录或文件复制到public目录下。比如我在static下添加了一个img子目录，并且在img子目录放了图片，那执行hugo命令后，就会把static\\img文件的内容拷贝到public\\img里面。 大家都知道Hugo博客网站展示的其实是public下的内容，因此markdown文章里引用图片的时候，得引用pubic下的图片才可以。 具体操作非常简单，分2步：\n在static目录下创建img子目录，把markdown要使用的图片放在static\\img目录里。 在markdown文件里，按照如下格式引用图片(这里假设图片名称叫wechat.png)。这样最终public目录下生成的静态页面就可以引用到public\\img下的图片了。 1 ![](/img/wechat.png) 注意：\n严格注意路径：只能写成 /img/imagename.png 的形式（注意 / 和 \\ 的区别)\n可能是当前主题不支持的原因，嵌入图片的代码只能写成这样：![imagename](/img/imagename.png)； 这种格式的修改图片缩放比例的代码也是不能用的\n存放图片的文件夹不能有空格\n还可以用图床\nTypora配置图床 GitHub创建仓库并获取仓库Token 下载PicGo并安装 GitHub配置 设置参数说明：\n设定仓库名：填入你上面创建的仓库名，格式为：用户名/仓库名；\n设定分支名：一般填写 master 即可；\n设定 Token：将上一步 Github 配置中得到的 Token 粘贴进去；\n指定存储路径：图片在 Github 仓库中的存储路径，例如本人是：blog/202303/\n设定自定义域名：此处直接设置 jsDelivr 加速的访问地址，例如本人是：https://cdn.jsdelivr.net/gh/chance7bin/img-repo@main/\ngh 表示来自 Github 的仓库 chance7bin/img-repo 仓库的具体位置 main 仓库的分支 到此，配置过程已完成。\nPicGo配置 配置Typora 偏好设置 → 图像 → 插入图片时：上传图片 → 上传服务设定：上传服务选择PiacGo，PicGo路径选择软件安装路径 → 配置完成\nObisidian配置图床 Obisidian对img的兼容不是很好\n打开 Obsidian 按箭头标识数字顺序：设置 =》 第三方插件 =》 关闭安全模式 =》 浏览社区插件\n搜索：Image auto upload Plugin\n安装后打开选项，默认什么都不要改。\n其中最后一项 PicGo server 也是默认填好的，如果没有，就在 PicGo 设置，默认都不要动。\n",
+  "wordCount" : "2320",
   "inLanguage": "zh",
   "image":"https://cdn.jsdelivr.net/gh/chance7bin/img-repo@main//blog/202303/202303272123392.png","datePublished": "2023-03-27T21:06:06+08:00",
   "dateModified": "2023-03-27T21:06:06+08:00",
@@ -255,7 +255,7 @@
     
     <span id="post_meta_style_3">
         <span class="fa fa-file-word-o"></span>
-        <span>2205字
+        <span>2320字
             &nbsp;&nbsp;
         </span>
     </span>
@@ -318,21 +318,23 @@
                     <li>
                         <a href="#1-%e5%ae%89%e8%a3%85-hugo" aria-label="1. 安装 Hugo">1. 安装 Hugo</a></li>
                     <li>
-                        <a href="#2%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e6%96%b0%e7%9a%84%e7%bd%91%e7%ab%99" aria-label="2.创建一个新的网站">2.创建一个新的网站</a></li>
+                        <a href="#2-%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e6%96%b0%e7%9a%84%e7%bd%91%e7%ab%99" aria-label="2. 创建一个新的网站">2. 创建一个新的网站</a></li>
                     <li>
                         <a href="#3-%e6%b7%bb%e5%8a%a0%e4%b8%80%e4%b8%aa%e4%b8%bb%e9%a2%98" aria-label="3. 添加一个主题">3. 添加一个主题</a></li>
                     <li>
-                        <a href="#4%e6%b7%bb%e5%8a%a0%e4%b8%80%e4%b8%aa%e6%96%b0%e7%9a%84%e6%96%87%e7%ab%a0" aria-label="4.添加一个新的文章">4.添加一个新的文章</a></li>
+                        <a href="#4-%e6%b7%bb%e5%8a%a0%e4%b8%80%e4%b8%aa%e6%96%b0%e7%9a%84%e6%96%87%e7%ab%a0" aria-label="4. 添加一个新的文章">4. 添加一个新的文章</a></li>
                     <li>
-                        <a href="#5%e5%90%af%e5%8a%a8-hugo-%e6%9c%8d%e5%8a%a1%e5%99%a8" aria-label="5.启动 Hugo 服务器">5.启动 Hugo 服务器</a></li></ul>
+                        <a href="#5-%e5%90%af%e5%8a%a8-hugo-%e6%9c%8d%e5%8a%a1%e5%99%a8" aria-label="5. 启动 Hugo 服务器">5. 启动 Hugo 服务器</a></li></ul>
                     </li>
                     <li>
                         <a href="#%e9%83%a8%e7%bd%b2-hugo-%e4%bd%9c%e4%b8%ba%e4%b8%80%e4%b8%aa-github-pages" aria-label="部署 Hugo 作为一个 Github Pages">部署 Hugo 作为一个 Github Pages</a><ul>
                             
                     <li>
-                        <a href="#1-%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa-github-%e4%bb%93%e5%ba%93" aria-label="1. 创建一个 Github 仓库">1. 创建一个 Github 仓库</a></li>
+                        <a href="#1--%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa-github-%e4%bb%93%e5%ba%93" aria-label="1.  创建一个 Github 仓库">1.  创建一个 Github 仓库</a></li>
                     <li>
-                        <a href="#2%e5%9c%a8%e6%9c%ac%e5%9c%b0%e6%9e%84%e5%bb%bahugo%e9%9d%99%e6%80%81%e7%bd%91%e7%ab%99" aria-label="2.在本地构建Hugo静态网站">2.在本地构建Hugo静态网站</a></li></ul>
+                        <a href="#2-%e5%9c%a8%e6%9c%ac%e5%9c%b0%e6%9e%84%e5%bb%bahugo%e9%9d%99%e6%80%81%e7%bd%91%e7%ab%99" aria-label="2. 在本地构建Hugo静态网站">2. 在本地构建Hugo静态网站</a></li>
+                    <li>
+                        <a href="#3%e8%a7%a3%e5%86%b3-hugo-%e4%b8%ad%e5%85%b3%e4%ba%8e-integrity-%e7%9a%84%e9%94%99%e8%af%af" aria-label="3.解决 hugo 中关于 integrity 的错误">3.解决 hugo 中关于 integrity 的错误</a></li></ul>
                     </li>
                     <li>
                         <a href="#hugo%e5%bc%95%e5%85%a5%e5%9b%be%e7%89%87%e9%97%ae%e9%a2%98" aria-label="Hugo引入图片问题">Hugo引入图片问题</a></li>
@@ -438,7 +440,7 @@
 </span></span><span class="line"><span class="cl">hugo v0.111.2-4164f8fef9d71f50ef3962897e319ab6219a1dad windows/amd64 BuildDate=2023-03-05T12:32:20Z VendorInfo=gohugoio
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="2创建一个新的网站">2.创建一个新的网站<a hidden class="anchor" aria-hidden="true" href="#2创建一个新的网站">#</a></h3>
+</div><h3 id="2-创建一个新的网站">2. 创建一个新的网站<a hidden class="anchor" aria-hidden="true" href="#2-创建一个新的网站">#</a></h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -487,7 +489,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;theme = &#34;ananke&#34;&#39;</span> &gt;&gt; config.toml
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="4添加一个新的文章">4.添加一个新的文章<a hidden class="anchor" aria-hidden="true" href="#4添加一个新的文章">#</a></h3>
+</div><h3 id="4-添加一个新的文章">4. 添加一个新的文章<a hidden class="anchor" aria-hidden="true" href="#4-添加一个新的文章">#</a></h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -499,7 +501,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>创建的新文章都会放在 <code>content</code> 文件夹下</p>
-<h3 id="5启动-hugo-服务器">5.启动 Hugo 服务器<a hidden class="anchor" aria-hidden="true" href="#5启动-hugo-服务器">#</a></h3>
+<h3 id="5-启动-hugo-服务器">5. 启动 Hugo 服务器<a hidden class="anchor" aria-hidden="true" href="#5-启动-hugo-服务器">#</a></h3>
 <p>使用命令启动服务器</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -529,10 +531,10 @@
 <blockquote>
 <p>Github Pages 本质上是一个静态网站托管系统，你可以使用它为你的每一个仓库制作一个静态网页入口</p>
 </blockquote>
-<h3 id="1-创建一个-github-仓库">1. 创建一个 Github 仓库<a hidden class="anchor" aria-hidden="true" href="#1-创建一个-github-仓库">#</a></h3>
+<h3 id="1--创建一个-github-仓库">1.  创建一个 Github 仓库<a hidden class="anchor" aria-hidden="true" href="#1--创建一个-github-仓库">#</a></h3>
 <p>首先再Github上创建一个 Repository，命名为<code>Github名字.github.io</code>，例如我的仓库：<code>GoodmanBin.github.io</code>，这样就可以生成一个用户页面</p>
 <img src="https://cdn.jsdelivr.net/gh/chance7bin/img-repo@main//blog/202303/202303272122937.png" alt="image-20230313154621530" style="zoom:80%;" /> 
-<h3 id="2在本地构建hugo静态网站">2.在本地构建Hugo静态网站<a hidden class="anchor" aria-hidden="true" href="#2在本地构建hugo静态网站">#</a></h3>
+<h3 id="2-在本地构建hugo静态网站">2. 在本地构建Hugo静态网站<a hidden class="anchor" aria-hidden="true" href="#2-在本地构建hugo静态网站">#</a></h3>
 <p><strong>注意！！！</strong></p>
 <p>在生成静态页面之前要把config.toml文件中的baseURL修改为自己博客的网址</p>
 <div class="highlight"><div class="chroma">
@@ -598,7 +600,12 @@
 </span></span><span class="line"><span class="cl">git push
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="hugo引入图片问题">Hugo引入图片问题<a hidden class="anchor" aria-hidden="true" href="#hugo引入图片问题">#</a></h2>
+</div><h3 id="3解决-hugo-中关于-integrity-的错误">3.解决 hugo 中关于 integrity 的错误<a hidden class="anchor" aria-hidden="true" href="#3解决-hugo-中关于-integrity-的错误">#</a></h3>
+<p><strong>问题描述</strong></p>
+<p>在 Github Pages 上部署 Hugo 博客后，网站样式丢失，打开浏览器 F12 控制台可以发现错误：<code>Failed to find a valid digest in the 'integrity' attribute for resource &quot;xxx.css&quot;, The resource has been blocked.</code></p>
+<p><strong>解决方法</strong></p>
+<p>在 <code>themes\PaperMod\layouts\partials</code> 文件夹下找到一个 <code>head.html</code> 文件，发现里面确实有 <code>integrity=&quot;{{ $stylesheet.Data.Integrity }}&quot;</code> 这么一句代码，把它改为 <code>integrity=&quot;&quot;</code> 然后重新发布</p>
+<h2 id="hugo引入图片问题">Hugo引入图片问题<a hidden class="anchor" aria-hidden="true" href="#hugo引入图片问题">#</a></h2>
 <blockquote>
 <p>直接使用typora的相对路径在生成静态网站的时候图片无法显示出来</p>
 </blockquote>
