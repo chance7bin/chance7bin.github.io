@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>  on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/</link>
+    <description>Recent content in   on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 27 Mar 2023 21:06:06 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>博客</title>
+      <link>https://chance7bin.github.io/tags/%E5%8D%9A%E5%AE%A2/</link>
+      <pubDate>Mon, 27 Mar 2023 21:06:06 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/%E5%8D%9A%E5%AE%A2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>干货</title>
+      <link>https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/</link>
+      <pubDate>Mon, 27 Mar 2023 21:06:06 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
