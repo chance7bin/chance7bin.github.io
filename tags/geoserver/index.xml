@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>geoserver on Hey, It&#39;s Bin!</title>
+    <title>geoserver on Binb&#39;s Blog</title>
     <link>https://chance7bin.github.io/tags/geoserver/</link>
-    <description>Recent content in geoserver on Hey, It&#39;s Bin!</description>
+    <description>Recent content in geoserver on Binb&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sat, 17 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/geoserver/index.xml" rel="self" type="application/rss+xml" />

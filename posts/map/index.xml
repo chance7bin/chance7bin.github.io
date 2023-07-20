@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>🌏 地图专栏 on Hey, It&#39;s Bin!</title>
+    <title>🌏 地图专栏 on Binb&#39;s Blog</title>
     <link>https://chance7bin.github.io/posts/map/</link>
-    <description>Recent content in 🌏 地图专栏 on Hey, It&#39;s Bin!</description>
+    <description>Recent content in 🌏 地图专栏 on Binb&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 17 Jul 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/posts/map/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Mapbox Style Specification</title>
-      <link>https://chance7bin.github.io/posts/map/mapbox-style-specification/</link>
-      <pubDate>Mon, 17 Jul 2023 22:37:33 +0800</pubDate>
-      
-      <guid>https://chance7bin.github.io/posts/map/mapbox-style-specification/</guid>
-      <description></description>
-    </item>
-    
+    <lastBuildDate>Wed, 21 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/posts/map/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>mapbox vector tile 详解</title>
       <link>https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/</link>

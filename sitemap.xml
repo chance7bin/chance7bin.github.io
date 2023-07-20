@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://chance7bin.github.io/posts/map/</loc>
-    <lastmod>2023-07-17T22:37:33+08:00</lastmod>
+    <lastmod>2023-06-21T22:37:33+08:00</lastmod>
   </url><url>
     <loc>https://chance7bin.github.io/posts/design/</loc>
     <lastmod>2023-06-18T00:00:00+00:00</lastmod>
@@ -14,22 +14,13 @@
     <loc>https://chance7bin.github.io/posts/column/</loc>
   </url><url>
     <loc>https://chance7bin.github.io/tags/</loc>
-    <lastmod>2023-07-17T22:37:33+08:00</lastmod>
+    <lastmod>2023-06-21T22:37:33+08:00</lastmod>
   </url><url>
     <loc>https://chance7bin.github.io/posts/</loc>
-    <lastmod>2023-07-17T22:37:33+08:00</lastmod>
+    <lastmod>2023-06-21T22:37:33+08:00</lastmod>
   </url><url>
     <loc>https://chance7bin.github.io/</loc>
-    <lastmod>2023-07-17T22:37:33+08:00</lastmod>
-  </url><url>
-    <loc>https://chance7bin.github.io/tags/mapbox/</loc>
-    <lastmod>2023-07-17T22:37:33+08:00</lastmod>
-  </url><url>
-    <loc>https://chance7bin.github.io/posts/map/mapbox-style-specification/</loc>
-    <lastmod>2023-07-17T22:37:33+08:00</lastmod>
-  </url><url>
-    <loc>https://chance7bin.github.io/tags/%E5%9C%B0%E5%9B%BE/</loc>
-    <lastmod>2023-07-17T22:37:33+08:00</lastmod>
+    <lastmod>2023-06-21T22:37:33+08:00</lastmod>
   </url><url>
     <loc>https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/</loc>
     <lastmod>2023-06-21T22:37:33+08:00</lastmod>
@@ -38,6 +29,9 @@
     <lastmod>2023-06-21T22:37:33+08:00</lastmod>
   </url><url>
     <loc>https://chance7bin.github.io/tags/mvt/</loc>
+    <lastmod>2023-06-21T22:37:33+08:00</lastmod>
+  </url><url>
+    <loc>https://chance7bin.github.io/tags/%E5%9C%B0%E5%9B%BE/</loc>
     <lastmod>2023-06-21T22:37:33+08:00</lastmod>
   </url><url>
     <loc>https://chance7bin.github.io/posts/map/%E4%BD%BF%E7%94%A8mbtiles%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</loc>
@@ -108,6 +102,9 @@
   </url><url>
     <loc>https://chance7bin.github.io/posts/design/restful%E9%A3%8E%E6%A0%BCapi%E8%AE%BE%E8%AE%A1%E6%8C%87%E5%8D%97/</loc>
     <lastmod>2021-07-29T22:37:33+08:00</lastmod>
+  </url><url>
+    <loc>https://chance7bin.github.io/tags/mapbox/</loc>
+    <lastmod>2021-06-10T22:37:33+08:00</lastmod>
   </url><url>
     <loc>https://chance7bin.github.io/tags/uniapp/</loc>
     <lastmod>2021-06-10T22:37:33+08:00</lastmod>
