@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>geoserver on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/geoserver/</link>
+    <description>Recent content in geoserver on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 17 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/geoserver/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java使用Geoserver发布地图服务</title>
+      <link>https://chance7bin.github.io/posts/map/java%E4%BD%BF%E7%94%A8geoserver%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Sat, 17 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/java%E4%BD%BF%E7%94%A8geoserver%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</guid>
+      <description>1. 引入geoserver依赖 1 2 3 4 5 6 &amp;lt;!--geoserver依赖--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;nl.pdok&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;geoserver-manager&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.7.0-pdok2&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 2. 流程 （1）创建geoserver连接对象</description>
+    </item>
+    
+    <item>
+      <title>geoserver连接postgis发布地图服务</title>
+      <link>https://chance7bin.github.io/posts/map/geoserver%E8%BF%9E%E6%8E%A5postgis%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Sun, 03 Jan 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/geoserver%E8%BF%9E%E6%8E%A5postgis%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</guid>
+      <description>一、GeoServer安装和发布服务 参考链接 二、PostgreSQL 和 PostGIS安装 PostGIS要下载和PostgreSQL对应版本！</description>
+    </item>
+    
+  </channel>
+</rss>

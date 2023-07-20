@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>api on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/api/</link>
+    <description>Recent content in api on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 29 Jul 2021 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/api/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>restful风格API设计指南</title>
+      <link>https://chance7bin.github.io/posts/design/restful%E9%A3%8E%E6%A0%BCapi%E8%AE%BE%E8%AE%A1%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Thu, 29 Jul 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/restful%E9%A3%8E%E6%A0%BCapi%E8%AE%BE%E8%AE%A1%E6%8C%87%E5%8D%97/</guid>
+      <description>restful风格API 设计指南 一、协议 API与用户的通信协议，总是使用HTTPs协议。 二、域名 应该尽量将API部署在专用域名之下。 https://api.example.com 如果确</description>
+    </item>
+    
+  </channel>
+</rss>

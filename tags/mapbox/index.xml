@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>mapbox on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/mapbox/</link>
+    <description>Recent content in mapbox on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 17 Jul 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/mapbox/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mapbox Style Specification</title>
+      <link>https://chance7bin.github.io/posts/map/mapbox-style-specification/</link>
+      <pubDate>Mon, 17 Jul 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/mapbox-style-specification/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>uniapp加载mapbox并发布成小程序</title>
+      <link>https://chance7bin.github.io/posts/map/uniapp%E5%8A%A0%E8%BD%BDmapbox%E5%B9%B6%E5%8F%91%E5%B8%83%E6%88%90%E5%B0%8F%E7%A8%8B%E5%BA%8F/</link>
+      <pubDate>Thu, 10 Jun 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/uniapp%E5%8A%A0%E8%BD%BDmapbox%E5%B9%B6%E5%8F%91%E5%B8%83%E6%88%90%E5%B0%8F%E7%A8%8B%E5%BA%8F/</guid>
+      <description>小程序的踩坑之旅 1 uniapp 本身是加载不了mapbox的 下面两个是在vue环境下导入mapbox https://blog.csdn.net/weixin_44402694/article/details/87794850 https://blog.csdn.net/Isaac_Play/article/details/103890231?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3&amp;amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3 ==uniapp中加载mapbox会出现这个错误</description>
+    </item>
+    
+  </channel>
+</rss>

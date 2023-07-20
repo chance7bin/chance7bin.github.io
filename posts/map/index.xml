@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>🌏 地图专栏 on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/posts/map/</link>
+    <description>Recent content in 🌏 地图专栏 on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 17 Jul 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/posts/map/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mapbox Style Specification</title>
+      <link>https://chance7bin.github.io/posts/map/mapbox-style-specification/</link>
+      <pubDate>Mon, 17 Jul 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/mapbox-style-specification/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mapbox vector tile 详解</title>
+      <link>https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Wed, 21 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/</guid>
+      <description>矢量瓦片 GIS中的矢量与栅格数据 矢量切片(Vector tile) 在GIS中的数据分类有很多种方式，其中最常用的一种是根据数据组织结构方式的不同而分类</description>
+    </item>
+    
+    <item>
+      <title>使用mbtiles发布地图服务</title>
+      <link>https://chance7bin.github.io/posts/map/%E4%BD%BF%E7%94%A8mbtiles%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Wed, 21 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/%E4%BD%BF%E7%94%A8mbtiles%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</guid>
+      <description>1.mbtiles简介 mapbox Docs : MBTiles MbTiles 是一种用于在 sqllite 数据库中存储任意瓦片地图数据用于即时使用和高效传输的规范。 MBTiles瓦片存储规范的制定主要</description>
+    </item>
+    
+    <item>
+      <title>Java使用Geoserver发布地图服务</title>
+      <link>https://chance7bin.github.io/posts/map/java%E4%BD%BF%E7%94%A8geoserver%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Sat, 17 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/java%E4%BD%BF%E7%94%A8geoserver%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</guid>
+      <description>1. 引入geoserver依赖 1 2 3 4 5 6 &amp;lt;!--geoserver依赖--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;nl.pdok&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;geoserver-manager&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.7.0-pdok2&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 2. 流程 （1）创建geoserver连接对象</description>
+    </item>
+    
+    <item>
+      <title>uniapp加载mapbox并发布成小程序</title>
+      <link>https://chance7bin.github.io/posts/map/uniapp%E5%8A%A0%E8%BD%BDmapbox%E5%B9%B6%E5%8F%91%E5%B8%83%E6%88%90%E5%B0%8F%E7%A8%8B%E5%BA%8F/</link>
+      <pubDate>Thu, 10 Jun 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/uniapp%E5%8A%A0%E8%BD%BDmapbox%E5%B9%B6%E5%8F%91%E5%B8%83%E6%88%90%E5%B0%8F%E7%A8%8B%E5%BA%8F/</guid>
+      <description>小程序的踩坑之旅 1 uniapp 本身是加载不了mapbox的 下面两个是在vue环境下导入mapbox https://blog.csdn.net/weixin_44402694/article/details/87794850 https://blog.csdn.net/Isaac_Play/article/details/103890231?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3&amp;amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3 ==uniapp中加载mapbox会出现这个错误</description>
+    </item>
+    
+    <item>
+      <title>openlayers wms点击查询报错</title>
+      <link>https://chance7bin.github.io/posts/map/openlayers-wms%E7%82%B9%E5%87%BB%E6%9F%A5%E8%AF%A2%E6%8A%A5%E9%94%99/</link>
+      <pubDate>Wed, 13 Jan 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/openlayers-wms%E7%82%B9%E5%87%BB%E6%9F%A5%E8%AF%A2%E6%8A%A5%E9%94%99/</guid>
+      <description>报错如下： 1 2 3 4 5 6 &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34;?&amp;gt; &amp;lt;ServiceExceptionReport version=&amp;#34;1.3.0&amp;#34; xmlns=&amp;#34;http://www.opengis.net/ogc&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xsi:schemaLocation=&amp;#34;http://www.opengis.net/ogc http://fzzt.fzjhdn.com:10080/geoserver/schemas/wms/1.3.0/exceptions_1_3_0.xsd&amp;#34;&amp;gt; &amp;lt;ServiceException code=&amp;#34;LayerNotQueryable&amp;#34; locator=&amp;#34;QUERY_LAYERS&amp;#34;&amp;gt; Either no layer was queryable, or no layers were specified using QUERY_LAYERS &amp;lt;/ServiceException&amp;gt; &amp;lt;/ServiceExceptionReport&amp;gt; 代码如下： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 var view = map.getView(); var viewResolution =</description>
+    </item>
+    
+    <item>
+      <title>openlayers uniapp 移动端开发问题汇总</title>
+      <link>https://chance7bin.github.io/posts/map/openlayers-uniapp-%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/</link>
+      <pubDate>Fri, 08 Jan 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/openlayers-uniapp-%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/</guid>
+      <description>1.地图无法加载出来的原因 在onLoad方法执行时，map还未渲染出来，无法操作map这个标签的dom，因此地图无法显示出来（也即在onLo</description>
+    </item>
+    
+    <item>
+      <title>openlayers加载地图服务</title>
+      <link>https://chance7bin.github.io/posts/map/openlayers%E5%8A%A0%E8%BD%BD%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Fri, 08 Jan 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/openlayers%E5%8A%A0%E8%BD%BD%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</guid>
+      <description>1.加载在线WFS服务 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59</description>
+    </item>
+    
+    <item>
+      <title>参考资料</title>
+      <link>https://chance7bin.github.io/posts/map/%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99/</link>
+      <pubDate>Fri, 08 Jan 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99/</guid>
+      <description>1.官网API https://openlayers.org/en/latest/apidoc/ 2.openlayers教程（花几天时间从头看到尾基本上就可以熟悉openlayers了） http://primer.openlayers.cn/ol3-primer/ 3.GeoServer安装和发布</description>
+    </item>
+    
+    <item>
+      <title>geoserver连接postgis发布地图服务</title>
+      <link>https://chance7bin.github.io/posts/map/geoserver%E8%BF%9E%E6%8E%A5postgis%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Sun, 03 Jan 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/geoserver%E8%BF%9E%E6%8E%A5postgis%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</guid>
+      <description>一、GeoServer安装和发布服务 参考链接 二、PostgreSQL 和 PostGIS安装 PostGIS要下载和PostgreSQL对应版本！</description>
+    </item>
+    
+    <item>
+      <title>uniapp加载openlayers——组件通信篇</title>
+      <link>https://chance7bin.github.io/posts/map/uniapp%E5%8A%A0%E8%BD%BDopenlayers%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E7%AF%87/</link>
+      <pubDate>Fri, 25 Dec 2020 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/uniapp%E5%8A%A0%E8%BD%BDopenlayers%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E7%AF%87/</guid>
+      <description>renderjs是uni-app中一个运行在视图层的JS。可在App端和H5页面上运行。renderjs的主要作用有2个： （1）极大地减少了</description>
+    </item>
+    
+    <item>
+      <title>移动端的地图开发</title>
+      <link>https://chance7bin.github.io/posts/map/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%9A%84%E5%9C%B0%E5%9B%BE%E5%BC%80%E5%8F%91/</link>
+      <pubDate>Fri, 18 Dec 2020 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%9A%84%E5%9C%B0%E5%9B%BE%E5%BC%80%E5%8F%91/</guid>
+      <description>uniapp中的APP开发使用开源地图的困难之处在于的APP端不支持document、window等对象的API，而开源地图的实例化又是需要</description>
+    </item>
+    
+    <item>
+      <title>openlayers对要素服务的增删改查</title>
+      <link>https://chance7bin.github.io/posts/map/openlayers%E5%AF%B9%E8%A6%81%E7%B4%A0%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/</link>
+      <pubDate>Sun, 13 Dec 2020 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/openlayers%E5%AF%B9%E8%A6%81%E7%B4%A0%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/</guid>
+      <description>要素的查询、通过geserver进行的增删改 都是用到下图这个api，很重要！ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 queryFeature(){ //首先定义一</description>
+    </item>
+    
+  </channel>
+</rss>

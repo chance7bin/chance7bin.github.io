@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>缓存 on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/%E7%BC%93%E5%AD%98/</link>
+    <description>Recent content in 缓存 on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 12 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E7%BC%93%E5%AD%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>redis和mysql缓存一致性实现</title>
+      <link>https://chance7bin.github.io/posts/design/redis%E5%92%8Cmysql%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Mon, 12 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/redis%E5%92%8Cmysql%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%AE%9E%E7%8E%B0/</guid>
+      <description>背景 如果你的业务处于起步阶段，流量非常小，那无论是读请求还是写请求，直接操作数据库即可，这时你的架构模型是这样的： 但随着业务量的增长，你的项</description>
+    </item>
+    
+    <item>
+      <title>参考资料</title>
+      <link>https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/</link>
+      <pubDate>Wed, 31 May 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/</guid>
+      <description>Spring AOP 实现 Redis 缓存切面 @EnableCaching spring boot提供了比较简单的缓存方案。只要使用 @EnableCaching 即可完成简单的缓存功能。 https://blog.csdn.net/micro_hz/article/details/76599632 参考博客 Spring的面向切面编程（AOP） Spring AOP</description>
+    </item>
+    
+  </channel>
+</rss>

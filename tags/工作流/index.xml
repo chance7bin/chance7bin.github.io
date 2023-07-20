@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>工作流 on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/</link>
+    <description>Recent content in 工作流 on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 21 Jun 2022 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>工作流设计与实现</title>
+      <link>https://chance7bin.github.io/posts/design/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Tue, 21 Jun 2022 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</guid>
+      <description>引言 设计工作流的目的： 实现模型的自动化执行：对于一个需要繁琐步骤，通过多种方法计算的需求来说，通过构建工作流，可以省去一些重复的工作 实现模型</description>
+    </item>
+    
+  </channel>
+</rss>

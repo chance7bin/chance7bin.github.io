@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>mbtiles on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/mbtiles/</link>
+    <description>Recent content in mbtiles on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 21 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/mbtiles/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用mbtiles发布地图服务</title>
+      <link>https://chance7bin.github.io/posts/map/%E4%BD%BF%E7%94%A8mbtiles%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Wed, 21 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/%E4%BD%BF%E7%94%A8mbtiles%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/</guid>
+      <description>1.mbtiles简介 mapbox Docs : MBTiles MbTiles 是一种用于在 sqllite 数据库中存储任意瓦片地图数据用于即时使用和高效传输的规范。 MBTiles瓦片存储规范的制定主要</description>
+    </item>
+    
+  </channel>
+</rss>

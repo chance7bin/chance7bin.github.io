@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>mapbox vector tile 详解 | Hey, It&#39;s Bin!</title>
+<meta name="keywords" content="地图, mvt">
+<meta name="description" content="矢量瓦片 GIS中的矢量与栅格数据 矢量切片(Vector tile) 在GIS中的数据分类有很多种方式，其中最常用的一种是根据数据组织结构方式的不同而分类">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="mapbox vector tile 详解" />
+<meta property="og:description" content="矢量瓦片 GIS中的矢量与栅格数据 矢量切片(Vector tile) 在GIS中的数据分类有很多种方式，其中最常用的一种是根据数据组织结构方式的不同而分类" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-06-21T22:37:33+08:00" />
+<meta property="article:modified_time" content="2023-06-21T22:37:33+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="mapbox vector tile 详解"/>
+<meta name="twitter:description" content="矢量瓦片 GIS中的矢量与栅格数据 矢量切片(Vector tile) 在GIS中的数据分类有很多种方式，其中最常用的一种是根据数据组织结构方式的不同而分类"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "🌏 地图专栏",
+      "item": "https://chance7bin.github.io/posts/map/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "mapbox vector tile 详解",
+      "item": "https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "mapbox vector tile 详解",
+  "name": "mapbox vector tile 详解",
+  "description": "矢量瓦片 GIS中的矢量与栅格数据 矢量切片(Vector tile) 在GIS中的数据分类有很多种方式，其中最常用的一种是根据数据组织结构方式的不同而分类",
+  "keywords": [
+    "地图", "mvt"
+  ],
+  "articleBody": "矢量瓦片 GIS中的矢量与栅格数据 矢量切片(Vector tile)\n在GIS中的数据分类有很多种方式，其中最常用的一种是根据数据组织结构方式的不同而分类成矢量数据和栅格数据的两种类型。\n其中栅格数据以二维矩阵的形式来表示地理空间信息的数据结构，其中数据的最小存在单元是以像素的形式存在，可以理解为和图片的组织结构类似，以分辨率等特征作为精度的定义标准。\n而矢量数据则是试图利用点、线、面等几何要素来表现这个世界，其数据结构紧凑精准，数据图形质量好，有利于地理信息检索与网络传输等。其中矢量数据的最小单元是以点的形式存在，点构成线，线组成面，面构造出体。所以，我个人看来矢量数据应该更贴近于信息的精准分析与计算，而栅格数据则偏重于信息的表达（主要受制于当前图像处理技术的瓶颈）。\n栅格数据\r矢量数据数据\r为了带来更好更快的用户体验，目前许多主流WebGIS应用都采用了栅格切片技术，通过缓存切片的形式使得地图数据的浏览体验更顺畅。打开浏览器，F12出控制台，进入任意一家地图供应商提供的地图应用，你会发现大部分的地图数据都是以切片的形式请求获得的。栅格地图的切片应用是很广泛，可在我们的日常工作中遇到的需求往往要比这些功能需求较浅的商业性地图复杂，有的时候用户甚至会提出需要地图配色的编辑修改功能这样的需求，这是商业主流地图所达不到的，因为栅格切片在完成切图之后，所能控制的最小单位是一张图片，失去了对图片上地理信息的交互能力。\n总结来看，栅格切片存在以下的几个缺点：\n地图数据一次渲染，无法修改 无交互能力 那可否用WFS来替代呢？直接用WFS请求获取矢量数据，这样不就获得了交互能力吗？当然，如果在你的应用中矢量数据量不大的情况下，这样做也是可行的，但是一旦数据量大了起来，前端对于数据的请求和响应处理渲染会提高客户端的硬件门槛，而频繁的交互操作也会对服务器产生压力。\n直接加载的矢量数据与对栅格地图进行切片这两种方式看起来好像有些互补，如果能将这二者结合起来的话应该会很美好： 矢量+切片=矢量切片。\n什么是矢量切片？ 和栅格切片一样的思路，以金字塔的方式切割矢量数据，只不过切割的不是栅格图片，而是矢量数据的描述性文件，目前矢量切片主要有以下三种格式：GeoJSON，TopoJSON和MapbBox Vector Tile(MVT)。\n栅格切图后文件存储形式 ：\n矢量切图后文件存储形式：\n切片中的数据结构：\n从上面的两张图可以看出，其实思路是一致的，因此，矢量切图结合了矢量数据与栅格切图的优势互补：\n前端缓存切片，提高地图使用的体验 粒度上来看，矢量切图继承了矢量数据的特性，以要素为单位进行管理，加强了细节上的把控能力 在保证体验的前提下，为用户提供地图数据样式动态修改的功能，加强了地图定制化的程度 数据的实时性 如何生成矢量切片？ 矢量切片生成方式共有以下几种：\n1）ArcGIS 系列产品：利用ArcGIS Pro生成矢量切片，然后发布在ArcGIS Online上；\n2）Mapbox，目前已经提出了一套开放的矢量切片标准，并被多个开源团队所接受；\n3）GeoServer，在2.11beta版中出现了对矢量切片的支持，主要依赖于开源插件geoserver-2.11-SNAPSHOT-vectortiles-plugin以及内嵌的GeoWebcahce完成切片工作。\n==本文采取Mapbox的方式==\nMapbox的矢量瓦片 MVT简介 Mapbox的矢量瓦片（mapbox vector tile）是一种轻量级的数据格式，用于存储地理空间矢量数据，例如点、线和多边形。\n矢量瓦片以 Google Protobufs（PBF）进行编码，这允许对结构化数据进行序列化。\nMapbox矢量瓦片使用的是.mvt的文件后缀。\nMapbox矢量瓦片标准 Mapbox矢量瓦片标准\nVector tiles standards\n几何编码 Encoding geometry\n几何编码将点、线和多边形编码为相对于网格左上角的x/y坐标对，如下图所示\nMoveTo：起点\nLineTo：画线\nClosePath：闭环\n属性编码 Encoding attributes\n属性编码是采用键值对的方式，压缩重复的属性值，将属性的键值对与矢量瓦片的键值对一一对应\n有了矢量瓦片标准，对于在Web里面来说，利用WebGL的moveTo/lineTo之类的API，可以将矢量瓦片绘制出来。\n使用PostGIS生成mvt WebMecator投影瓦片计算规则 在生成mvt前，需要先了解一下瓦片的计算规则\n参考链接：\nhttps://zhuanlan.zhihu.com/p/548171000\nhttps://www.cnblogs.com/beniao/archive/2010/04/18/1714544.html\n墨卡托投影（Mercator Projection），又名“等角正轴圆柱投影”，荷兰地图学家墨卡托（Mercator）在1569年拟定，假设地球被围在一个中空的圆柱里，其赤道与圆柱相接触，然后再假想地球中心有一盏灯，把球面上的图形投影到圆柱体上，再把圆柱体展开，这就是一幅标准纬线为零度（即赤道）的“墨卡托投影”绘制出的世界地图。\n由于赤道半径为6378137米，则赤道周长为2 * PI * r = 40075016.685578486162，因此X轴的取值范围：[-20037508.3427892,20037508.3427892]。当纬度φ接近两极，即90°时，Y值趋向于无穷。因此通常把Y轴的取值范围也限定在[-20037508.3427892,20037508.3427892]之间。因此在墨卡托投影坐标系（米）下的坐标范围是：最小为(-20037508.3427892, -20037508.3427892 )到最大坐标为(20037508.3427892, 20037508.3427892)。\n基础值\n1 2 3 4 地球半径：EARTH_RADIUS = 6378137; X和Y的最大值： worldMercMax = π*EARTH_RADIUS = 20037508.3427892 X和Y的最小值： worldMercMin = -1 * worldMercMax 地球赤道周长： worldMercSize = worldMercMax - worldMercMin= 2 * π * EARTH_RADIUS = 40075016.68557848616 谷歌的瓦片地图规范已经实行多年，并深受认可，Bing、OSM、高德、天地图等都使用谷歌的瓦片地图规范，谷歌瓦片地图规范坐标原点为东经180°，北纬85.05°，==x轴向右，y轴向下==。\n瓦片被切成256*256像素的图片，在不同的zoom等级，\nt瓦片数量为： $2^{level}$\n例如，zoom level为3时，横轴和纵轴方向瓦片数量均为8，瓦片对应坐标如下图所示。\n生成mvt的ST函数 参考链接：\nhttps://www.jianshu.com/p/e15ca286546c\nhttps://blog.csdn.net/qq_35241223/article/details/106439268\n主要函数：\nST_AsMvtGeom 用于将一个图层中位于参数box2d范围内的一个几何图形的所有坐标转换为MapBox Vector Tile坐标空间里的坐标。\nST_AsMVT 用于将基于MapBox Vector Tile坐标空间的几何图形转换为MapBox VectorTile二进制矢量切片\nST_TileEnvelope（3.0以上支持） 根据行列号获取Envelope\n辅助函数：\nST_Transform 坐标转换函数，用它可以做到支持任何坐标系的矢量瓦片\nST_Simplify 简化，用它来做线或者面的简化\nST_SimplifyPreserveTopology 与简化类似\nST_AsMvtGeom 应该将geom转到墨卡托坐标下，4326坐标下制作矢量瓦片有横向的压扁\nST_AsMVT 用于将基于MapBox Vector Tile坐标空间的几何图形转换为MapBox VectorTile二进制矢量切片\nrow —— 至少具有一个geometry列的行数据。 name —— 图层名字，默认为\"default\"。 extent —— 由MVT规范定义的屏幕空间（MVT坐标空间）中的矢量切片范围。 geom_name —— row参数的行数据中geometry列的列名，默认是第一个*geometry类型的列。 feature_id_name —— 行数据中要素ID列的列名。如果未指定或为NULL，则第一个有效数据类型（smallint, integer, bigint）的列将作为要素ID列，其他的列作为要素属性列。 ST_AsMVTGeom 用于将一个图层中位于参数box2d范围内的一个几何图形的所有坐标转换为MapBox Vector Tile坐标空间里的坐标。\ngeom —— 被转换的几何图形信息。 bounds—— 某个矢量切片的范围对应的空间参考坐标系中的几何矩形框（没有缓冲区）。 extent—— 是按规范定义的矢量切片坐标空间中的某个矢量切片的范围。如果为NULL，则默认为4096（边长为4096个单位的正方形）。 buffer—— 矢量坐标空间中缓冲区的距离，位于该缓冲区的几何图形部位根据clip_geom参数被裁剪或保留。如果为NULL，则默认为256。 clip_geom—— 用于选择位于缓冲区的几何图形部位是被裁剪还是原样保留。如果为NULL，则默认为true。 PostGIS生成MVT矢量切片的步骤 使用ST_AsMVTGeom函数将几何图形的所有坐标转换为MapBox Vector Tile坐标空间里的坐标，这样就将基于空间坐标系的几何图形转换成了基于MVT坐标空间的几何图形。 使用ST_AsMVT函数将基于MVT坐标空间的几何图形转换为MVT二进制矢量切片。 可以通过\"||“操作符调用多次这个函数来同时创建多个图层的同一位置的矢量切片。\nPostGIS ST函数 1 2 3 4 5 6 7 8 9 10 11 WITH bounds AS ( SELECT ST_Segmentize(ST_MakeEnvelope(13071343.332991, 3678761.297309, 13149614.849955, 3757032.814273, 3857),19567.879241) AS geom, ST_Segmentize(ST_MakeEnvelope(13071343.332991, 3678761.297309, 13149614.849955, 3757032.814273, 3857),19567.879241)::box2d AS b2d ), mvtgeom AS ( SELECT ST_AsMVTGeom(ST_Transform(t.geom, 3857), bounds.b2d) AS geom, * FROM js_city_point_u_6492c1048429434b637f1be5 t, bounds WHERE ST_Intersects(t.geom, ST_Transform(bounds.geom, 4326)) ) SELECT ST_AsMVT(mvtgeom.* , 'js_city_point_u_6492c1048429434b637f1be5' ) FROM mvtgeom 这段 PostGIS SQL 语句就是用于生成 MVT（Mapbox Vector Tiles）数据。\n让我们逐步解释这段 SQL 语句的意思：\n首先，使用 WITH 子句创建一个名为 bounds 的临时表，其中包含一个几何对象和一个边界框（box2d）。这个几何对象是通过使用 ST_MakeEnvelope 函数创建的，该函数根据提供的坐标范围**（tileToEnvelope函数计算得到）**和坐标系生成一个矩形。然后，使用 ST_Segmentize 函数对几何对象进行分段，以确保生成的矢量瓦片在显示时具有一定的细节和精度。\n接下来，使用 mvtgeom 作为名称创建另一个临时表。在这个临时表中，使用 ST_Transform 函数将 t.geom（js_city_point_u_6492c1048429434b637f1be5 表中的几何列）从源坐标系（4326）转换为目标坐标系（3857）。然后，使用 ST_AsMVTGeom 函数将转换后的几何对象与 bounds.b2d 边界框进行相交（使用 ST_Intersects 函数），从而获得符合条件的几何对象。在结果中，还包含原始表 t 的所有列。\n最后，使用 SELECT 语句从 mvtgeom 表中选择几何对象，并使用 ST_AsMVT 函数将这些几何对象转换为 MVT 格式的瓦片。'js_city_point_u_6492c1048429434b637f1be5' 是指定瓦片的图层名称。\n简而言之，这个 SQL 查询的目的是生成包含符合条件的几何对象的 MVT 瓦片数据。它利用了 PostGIS 的空间函数和转换功能来处理几何对象的坐标系转换和分段，然后将结果转换为 MVT 格式的瓦片数据。\nST_MakeEnvelope需要的范围是如何确定的呢？\n有了前面瓦片的计算规则的基础，就不难理解所求瓦片的x/y最大值最小值范围的计算方法了\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 HashMap\u003cString, Double\u003e tileToEnvelope(int zoom, int x, int y) { double worldMercMax = 20037508.3427892; double worldMercMin = -1 * worldMercMax; double worldMercSize = worldMercMax - worldMercMin; double worldTileSize = Math.pow(2, zoom); double tileMercSize = worldMercSize / worldTileSize; HashMap\u003cString, Double\u003e env = new HashMap\u003cString, Double\u003e(); env.put(\"xmin\", worldMercMin + tileMercSize * x); env.put(\"xmax\", worldMercMin + tileMercSize * (x + 1)); env.put(\"ymin\", worldMercMax - tileMercSize * (y + 1)); env.put(\"ymax\", worldMercMax - tileMercSize * y); return env; } Java代码实现 接口返回的数据是==MVT二进制矢量切片==\nController 1 2 3 4 5 6 7 8 9 @GetMapping(value = \"/mvt/{tableName}/{zoom}/{x}/{y}.pbf\") public void getMvt(@PathVariable(\"tableName\") String tableName, @PathVariable(\"zoom\") int zoom, @PathVariable(\"x\") int x, @PathVariable(\"y\") int y, HttpServletResponse response) { pgService.getMvt(zoom, x, y, tableName, response); } Service 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 public void getMvt(int zoom, int x, int y, String tableName, HttpServletResponse response) { try { String sql = getMvtSql(zoom, x, y, tableName); if (sql == null) { return; } log.info(\"DefaultPgSource: \" + zoom + \", \" + x + \", \" + y + \":\" + sql); byte[] mvtByte = mvtRepository.getMvtFromDefaultPg(sql); returnMvtByte(mvtByte, zoom, x, y, response); } catch (Exception e) { log.error(e.getMessage()); } } public String getMvtSql(int zoom, int x, int y, String tableName) { if (!MvtUtils.tileIsValid(zoom, x, y)) { return null; } HashMap\u003cString, Double\u003e envelope = MvtUtils.tileToEnvelope(zoom, x, y); String sql = MvtUtils.envelopeToSQL(envelope, tableName); return sql; } public void returnMvtByte(byte[] mvtByte, int zoom, int x, int y, HttpServletResponse response) throws IOException { response.setHeader(\"Access-Control-Allow-Origin\", \"*\"); response.setHeader(\"Content-type\", \"application/vnd.mapbox-vector-tile\"); String mtvFileName = String.format(\"%d_%d_%d.mvt\", zoom, x, y); response.setHeader(\"Content-Disposition\", \"attachment;filename=\" + new String(mtvFileName.getBytes(\"UTF-8\"), \"iso-8859-1\")); OutputStream os = response.getOutputStream(); os.write(mvtByte); } Repository 1 2 3 4 5 6 7 8 9 public byte[] getMvtFromDefaultPg(String sql) { try { byte[] reByte = jdbcTemplate.queryForObject(sql, (rs, rowNum) -\u003e rs.getBytes(\"st_asmvt\")); return reByte; } catch (Exception e) { log.error(\"默认数据库瓦片获取失败\" + e.getMessage()); return null; } } MVT工具类 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 public class MvtUtils { public static Boolean tileIsValid(int zoom, int x, int y) { Double size = Math.pow(2, zoom); if (x \u003e= size || y \u003e= size) { return false; } if (x \u003c 0 || y \u003c 0) { return false; } return true; } public static HashMap\u003cString, Double\u003e tileToEnvelope(int zoom, int x, int y) { double worldMercMax = 20037508.3427892; double worldMercMin = -1 * worldMercMax; double worldMercSize = worldMercMax - worldMercMin; double worldTileSize = Math.pow(2, zoom); double tileMercSize = worldMercSize / worldTileSize; HashMap\u003cString, Double\u003e env = new HashMap\u003cString, Double\u003e(); env.put(\"xmin\", worldMercMin + tileMercSize * x); env.put(\"xmax\", worldMercMin + tileMercSize * (x + 1)); env.put(\"ymin\", worldMercMax - tileMercSize * (y + 1)); env.put(\"ymax\", worldMercMax - tileMercSize * y); return env; } public static String envelopeToBoundsSQL(HashMap\u003cString, Double\u003e env) { int DENSIFY_FACTOR = 4; env.put(\"segSize\", (env.get(\"xmax\") - env.get(\"xmin\")) / DENSIFY_FACTOR); String sqlTemp = String.format(\"ST_Segmentize(ST_MakeEnvelope(%f, %f, %f, %f, 3857),%f)\", env.get(\"xmin\"), env.get(\"ymin\"), env.get(\"xmax\"), env.get(\"ymax\"), env.get(\"segSize\")); return sqlTemp; } public static String envelopeToSQL(HashMap\u003cString, Double\u003e env, String tableName) { // lines_pg gis_osm_transport_free_1 HashMap\u003cString, String\u003e table = new HashMap\u003cString, String\u003e(); table.put(\"table\", tableName); table.put(\"srid\", \"4326\"); table.put(\"geomColumn\", \"geom\"); table.put(\"attrColumns\", \" * \"); table.put(\"env\", envelopeToBoundsSQL(env)); String mvtsql = MessageFormat.format(\"WITH\" + \" bounds AS ( SELECT {0} AS geom, {0}::box2d AS b2d),\" + \" mvtgeom AS (\" + \" SELECT ST_AsMVTGeom(ST_Transform(t.{1}, 3857), bounds.b2d) AS geom, {2}\" + \" FROM {3} t, bounds\" + \" WHERE ST_Intersects(t.{1}, ST_Transform(bounds.geom, {4}))\" + \" )\" + \" SELECT ST_AsMVT(mvtgeom.* , ''{3}'' ) FROM mvtgeom\", table.get(\"env\"), table.get(\"geomColumn\"), table.get(\"attrColumns\"), table.get(\"table\"), table.get(\"srid\")); return mvtsql; } } ",
+  "wordCount" : "4881",
+  "inLanguage": "zh",
+  "datePublished": "2023-06-21T22:37:33+08:00",
+  "dateModified": "2023-06-21T22:37:33+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Hey, It's Bin!",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/map/">🌏 地图专栏</a></div>
+    <h1 class="post-title">
+      mapbox vector tile 详解
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-06-21
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>4881字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>10分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E5%9C%B0%E5%9B%BE/" style="color: var(--secondary)!important;">地图</a>
+                &nbsp;<a href="https://chance7bin.github.io/tags/mvt/" style="color: var(--secondary)!important;">mvt</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e7%9f%a2%e9%87%8f%e7%93%a6%e7%89%87" aria-label="矢量瓦片">矢量瓦片</a><ul>
+                            
+                    <li>
+                        <a href="#gis%e4%b8%ad%e7%9a%84%e7%9f%a2%e9%87%8f%e4%b8%8e%e6%a0%85%e6%a0%bc%e6%95%b0%e6%8d%ae" aria-label="GIS中的矢量与栅格数据">GIS中的矢量与栅格数据</a></li>
+                    <li>
+                        <a href="#%e4%bb%80%e4%b9%88%e6%98%af%e7%9f%a2%e9%87%8f%e5%88%87%e7%89%87" aria-label="什么是矢量切片？">什么是矢量切片？</a></li>
+                    <li>
+                        <a href="#%e5%a6%82%e4%bd%95%e7%94%9f%e6%88%90%e7%9f%a2%e9%87%8f%e5%88%87%e7%89%87" aria-label="如何生成矢量切片？">如何生成矢量切片？</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#mapbox%e7%9a%84%e7%9f%a2%e9%87%8f%e7%93%a6%e7%89%87" aria-label="Mapbox的矢量瓦片">Mapbox的矢量瓦片</a><ul>
+                            
+                    <li>
+                        <a href="#mvt%e7%ae%80%e4%bb%8b" aria-label="MVT简介">MVT简介</a></li>
+                    <li>
+                        <a href="#mapbox%e7%9f%a2%e9%87%8f%e7%93%a6%e7%89%87%e6%a0%87%e5%87%86" aria-label="Mapbox矢量瓦片标准">Mapbox矢量瓦片标准</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%87%a0%e4%bd%95%e7%bc%96%e7%a0%81" aria-label="几何编码">几何编码</a></li>
+                    <li>
+                        <a href="#%e5%b1%9e%e6%80%a7%e7%bc%96%e7%a0%81" aria-label="属性编码">属性编码</a></li></ul>
+                    </li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%bd%bf%e7%94%a8postgis%e7%94%9f%e6%88%90mvt" aria-label="使用PostGIS生成mvt">使用PostGIS生成mvt</a><ul>
+                            
+                    <li>
+                        <a href="#webmecator%e6%8a%95%e5%bd%b1%e7%93%a6%e7%89%87%e8%ae%a1%e7%ae%97%e8%a7%84%e5%88%99" aria-label="WebMecator投影瓦片计算规则">WebMecator投影瓦片计算规则</a></li>
+                    <li>
+                        <a href="#%e7%94%9f%e6%88%90mvt%e7%9a%84st%e5%87%bd%e6%95%b0" aria-label="生成mvt的ST函数">生成mvt的ST函数</a><ul>
+                            
+                    <li>
+                        <a href="#st_asmvt" aria-label="ST_AsMVT"><strong>ST_AsMVT</strong></a></li>
+                    <li>
+                        <a href="#st_asmvtgeom" aria-label="ST_AsMVTGeom">ST_AsMVTGeom</a></li>
+                    <li>
+                        <a href="#postgis%e7%94%9f%e6%88%90mvt%e7%9f%a2%e9%87%8f%e5%88%87%e7%89%87%e7%9a%84%e6%ad%a5%e9%aa%a4" aria-label="PostGIS生成MVT矢量切片的步骤">PostGIS生成MVT矢量切片的步骤</a></li>
+                    <li>
+                        <a href="#postgis-st%e5%87%bd%e6%95%b0" aria-label="PostGIS ST函数">PostGIS ST函数</a></li></ul>
+                    </li></ul>
+                    </li>
+                    <li>
+                        <a href="#java%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0" aria-label="Java代码实现">Java代码实现</a><ul>
+                            
+                    <li>
+                        <a href="#controller" aria-label="Controller"><strong>Controller</strong></a></li>
+                    <li>
+                        <a href="#service" aria-label="Service">Service</a></li>
+                    <li>
+                        <a href="#repository" aria-label="Repository">Repository</a></li>
+                    <li>
+                        <a href="#mvt%e5%b7%a5%e5%85%b7%e7%b1%bb" aria-label="MVT工具类"><strong>MVT工具类</strong></a>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><h1 id="矢量瓦片">矢量瓦片<a hidden class="anchor" aria-hidden="true" href="#矢量瓦片">#</a></h1>
+<h2 id="gis中的矢量与栅格数据">GIS中的矢量与栅格数据<a hidden class="anchor" aria-hidden="true" href="#gis中的矢量与栅格数据">#</a></h2>
+<blockquote>
+<p><a href="https://www.cnblogs.com/escage/p/6387529.html">矢量切片(Vector tile)</a></p>
+</blockquote>
+<p>在GIS中的数据分类有很多种方式，其中最常用的一种是根据数据组织结构方式的不同而分类成<strong>矢量数据</strong>和<strong>栅格数据</strong>的两种类型。</p>
+<p>其中栅格数据以二维矩阵的形式来表示地理空间信息的数据结构，其中数据的最小存在单元是以<strong>像素</strong>的形式存在，可以理解为和图片的组织结构类似，以分辨率等特征作为精度的定义标准。</p>
+<p>而矢量数据则是试图利用点、线、面等几何要素来表现这个世界，其数据结构紧凑精准，数据图形质量好，有利于地理信息检索与网络传输等。其中<strong>矢量数据的最小单元是以点的形式存在，点构成线，线组成面，面构造出体</strong>。所以，我个人看来矢量数据应该更贴近于信息的精准分析与计算，而栅格数据则偏重于信息的表达（主要受制于当前图像处理技术的瓶颈）。</p>
+<table>
+    <tr >
+        <td style="text-align: center;" >栅格数据</td>
+        <td style="text-align: center;">矢量数据数据</td>
+    </tr>
+    <tr >
+        <td  style="text-align: center;"><img src="mapbox vector tile 详解.assets/692953-20170210165929932-2055656779.jpg" alt="image-20230621151952777" style="zoom: 40%;" /></td>
+        <td  style="text-align: center;"><img src="mapbox vector tile 详解.assets/692953-20170210184758979-1006660342.png" alt="image-20230621151959576" style="zoom:55%;" /></td>
+    </tr>
+</table>
+<p>为了带来更好更快的用户体验，目前许多主流WebGIS应用都采用了栅格切片技术，通过缓存切片的形式使得地图数据的浏览体验更顺畅。打开浏览器，F12出控制台，进入任意一家地图供应商提供的地图应用，你会发现大部分的地图数据都是以切片的形式请求获得的。栅格地图的切片应用是很广泛，可在我们的日常工作中遇到的需求往往要比这些功能需求较浅的商业性地图复杂，有的时候用户甚至会提出需要地图配色的<strong>编辑修改功能</strong>这样的需求，这是商业主流地图所达不到的，因为<strong>栅格切片在完成切图之后，所能控制的最小单位是一张图片，失去了对图片上地理信息的交互能力</strong>。</p>
+<p><strong>总结来看，栅格切片存在以下的几个缺点：</strong></p>
+<ul>
+<li>地图数据一次渲染，无法修改</li>
+<li>无交互能力</li>
+</ul>
+<p>那可否用WFS来替代呢？直接用WFS请求获取矢量数据，这样不就获得了交互能力吗？当然，如果在你的应用中矢量数据量不大的情况下，这样做也是可行的，但是一旦数据量大了起来，前端对于数据的请求和响应处理渲染会提高客户端的硬件门槛，而频繁的交互操作也会对服务器产生压力。</p>
+<p>直接加载的矢量数据与对栅格地图进行切片这两种方式看起来好像有些互补，如果能将这二者结合起来的话应该会很美好： <strong>矢量</strong>+<strong>切片</strong>=<strong>矢量切片</strong>。</p>
+<h2 id="什么是矢量切片">什么是矢量切片？<a hidden class="anchor" aria-hidden="true" href="#什么是矢量切片">#</a></h2>
+<p>和栅格切片一样的思路，以金字塔的方式切割矢量数据，只不过切割的不是栅格图片，而是矢量数据的描述性文件，目前矢量切片主要有以下三种格式：GeoJSON，TopoJSON和MapbBox Vector Tile(MVT)。</p>
+<p><strong>栅格切图后文件存储形式 ：</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307181422361.png" alt="img"  />
+</p>
+<p><strong>矢量切图后文件存储形式：</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307181422360.png" alt="img"  />
+</p>
+<p><strong>切片中的数据结构：</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307181422377.png" alt="img"  />
+</p>
+<p>从上面的两张图可以看出，其实思路是一致的，因此，<strong>矢量切图结合了矢量数据与栅格切图的优势互补：</strong></p>
+<ul>
+<li>前端缓存切片，提高地图使用的体验</li>
+<li>粒度上来看，矢量切图继承了矢量数据的特性，以要素为单位进行管理，加强了细节上的把控能力</li>
+<li>在保证体验的前提下，为用户提供地图数据样式动态修改的功能，加强了地图定制化的程度</li>
+<li>数据的实时性</li>
+</ul>
+<h2 id="如何生成矢量切片">如何生成矢量切片？<a hidden class="anchor" aria-hidden="true" href="#如何生成矢量切片">#</a></h2>
+<p>矢量切片生成方式共有以下几种：</p>
+<p>1）ArcGIS 系列产品：利用ArcGIS Pro生成矢量切片，然后发布在ArcGIS Online上；</p>
+<p>2）Mapbox，目前已经提出了一套开放的矢量切片标准，并被多个开源团队所接受；</p>
+<p>3）GeoServer，在2.11beta版中出现了对矢量切片的支持，主要依赖于开源插件geoserver-2.11-SNAPSHOT-vectortiles-plugin以及内嵌的GeoWebcahce完成切片工作。</p>
+<p>==本文采取Mapbox的方式==</p>
+<h1 id="mapbox的矢量瓦片">Mapbox的矢量瓦片<a hidden class="anchor" aria-hidden="true" href="#mapbox的矢量瓦片">#</a></h1>
+<h2 id="mvt简介">MVT简介<a hidden class="anchor" aria-hidden="true" href="#mvt简介">#</a></h2>
+<p>Mapbox的矢量瓦片（mapbox vector tile）是一种轻量级的数据格式，用于存储地理空间矢量数据，例如点、线和多边形。</p>
+<p>矢量瓦片以 Google Protobufs（PBF）进行编码，这允许对结构化数据进行序列化。</p>
+<p>Mapbox矢量瓦片使用的是<code>.mvt</code>的文件后缀。</p>
+<h2 id="mapbox矢量瓦片标准">Mapbox矢量瓦片标准<a hidden class="anchor" aria-hidden="true" href="#mapbox矢量瓦片标准">#</a></h2>
+<blockquote>
+<p><a href="https://jingsam.github.io/2016/03/04/vector-tile-spec.html">Mapbox矢量瓦片标准</a></p>
+<p><a href="https://docs.mapbox.com/data/tilesets/guides/vector-tiles-standards/">Vector tiles standards</a></p>
+</blockquote>
+<h3 id="几何编码">几何编码<a hidden class="anchor" aria-hidden="true" href="#几何编码">#</a></h3>
+<blockquote>
+<p><a href="https://docs.mapbox.com/data/tilesets/guides/vector-tiles-standards/#encoding-geometry">Encoding geometry</a></p>
+</blockquote>
+<p>几何编码将点、线和多边形编码为<strong>相对于网格左上角的x/y坐标对</strong>，如下图所示</p>
+<table>
+    <tr style="float:left">
+        <td><img src="mapbox vector tile 详解.assets/image-20230621151952777.png" alt="image-20230621151952777" style="zoom: 67%;" /></td>
+        <td><img src="mapbox vector tile 详解.assets/image-20230621151959576.png" alt="image-20230621151959576" style="zoom:67%;" /></td>
+    </tr>
+</table>
+<p><code>MoveTo</code>：起点</p>
+<p><code>LineTo</code>：画线</p>
+<p><code>ClosePath</code>：闭环</p>
+<h3 id="属性编码">属性编码<a hidden class="anchor" aria-hidden="true" href="#属性编码">#</a></h3>
+<blockquote>
+<p><a href="https://docs.mapbox.com/data/tilesets/guides/vector-tiles-standards/#encoding-attributes">Encoding attributes</a></p>
+</blockquote>
+<p>属性编码是采用键值对的方式，压缩重复的属性值，将属性的键值对与矢量瓦片的键值对一一对应</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307181422380.png" alt="image-20230621152449149"  />
+</p>
+<blockquote>
+<p>有了矢量瓦片标准，对于在Web里面来说，利用WebGL的<code>moveTo/lineTo</code>之类的API，可以将矢量瓦片绘制出来。</p>
+</blockquote>
+<h1 id="使用postgis生成mvt">使用PostGIS生成mvt<a hidden class="anchor" aria-hidden="true" href="#使用postgis生成mvt">#</a></h1>
+<h2 id="webmecator投影瓦片计算规则">WebMecator投影瓦片计算规则<a hidden class="anchor" aria-hidden="true" href="#webmecator投影瓦片计算规则">#</a></h2>
+<blockquote>
+<p><strong>在生成mvt前，需要先了解一下瓦片的计算规则</strong></p>
+<p>参考链接：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/548171000">https://zhuanlan.zhihu.com/p/548171000</a></p>
+<p><a href="https://www.cnblogs.com/beniao/archive/2010/04/18/1714544.html">https://www.cnblogs.com/beniao/archive/2010/04/18/1714544.html</a></p>
+</blockquote>
+<p><strong>墨卡托投影（Mercator Projection）</strong>，又名“等角正轴圆柱投影”，荷兰地图学家墨卡托（Mercator）在1569年拟定，假设地球被围在一个中空的圆柱里，其赤道与圆柱相接触，然后再假想地球中心有一盏灯，把球面上的图形投影到圆柱体上，再把圆柱体展开，这就是一幅标准纬线为零度（即赤道）的“墨卡托投影”绘制出的世界地图。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307181422378.jpg" alt="img"  />
+</p>
+<p>由于赤道半径为6378137米，则赤道周长为<code>2 * PI * r = 40075016.685578486162</code>，因此X轴的取值范围：<code>[-20037508.3427892,20037508.3427892]</code>。当纬度φ接近两极，即90°时，Y值趋向于无穷。因此通常把Y轴的取值范围也限定在<code>[-20037508.3427892,20037508.3427892]</code>之间。因此在墨卡托投影坐标系（米）下的坐标范围是：最小为<code>(-20037508.3427892, -20037508.3427892 )</code>到最大坐标为<code>(20037508.3427892, 20037508.3427892)</code>。</p>
+<p><strong>基础值</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">地球半径：EARTH_RADIUS = 6378137; 
+</span></span><span class="line"><span class="cl">X和Y的最大值： worldMercMax = π*EARTH_RADIUS = 20037508.3427892
+</span></span><span class="line"><span class="cl">X和Y的最小值： worldMercMin = -1 * worldMercMax
+</span></span><span class="line"><span class="cl">地球赤道周长： worldMercSize = worldMercMax - worldMercMin= 2 * π * EARTH_RADIUS = 40075016.68557848616
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>谷歌的瓦片地图规范已经实行多年，并深受认可，Bing、OSM、高德、天地图等都使用谷歌的瓦片地图规范，谷歌瓦片地图规范坐标原点为东经180°，北纬85.05°，==x轴向右，y轴向下==。</p>
+<p>瓦片被切成256*256像素的图片，在不同的zoom等级，</p>
+<p>t瓦片数量为： <strong>$2^{level}$</strong></p>
+<p>例如，zoom level为3时，横轴和纵轴方向瓦片数量均为8，瓦片对应坐标如下图所示。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307181422388.webp" alt="img"  />
+</p>
+<h2 id="生成mvt的st函数">生成mvt的ST函数<a hidden class="anchor" aria-hidden="true" href="#生成mvt的st函数">#</a></h2>
+<blockquote>
+<p>参考链接：</p>
+<p><a href="https://www.jianshu.com/p/e15ca286546c">https://www.jianshu.com/p/e15ca286546c</a></p>
+<p><a href="https://blog.csdn.net/qq_35241223/article/details/106439268">https://blog.csdn.net/qq_35241223/article/details/106439268</a></p>
+</blockquote>
+<p>主要函数：</p>
+<p><code>ST_AsMvtGeom</code> 用于将一个图层中位于参数box2d范围内的一个几何图形的所有坐标转换为<a href="https://docs.mapbox.com/data/tilesets/">MapBox Vector Tile</a>坐标空间里的坐标。</p>
+<p><code>ST_AsMVT</code> 用于将基于<a href="https://docs.mapbox.com/data/tilesets/">MapBox Vector Tile</a>坐标空间的几何图形转换为MapBox VectorTile二进制矢量切片</p>
+<p><code>ST_TileEnvelope</code>（3.0以上支持） 根据行列号获取Envelope</p>
+<p>辅助函数：</p>
+<p><code>ST_Transform</code> 坐标转换函数，用它可以做到支持任何坐标系的矢量瓦片</p>
+<p><code>ST_Simplify</code> 简化，用它来做线或者面的简化</p>
+<p><code>ST_SimplifyPreserveTopology</code> 与简化类似</p>
+<p><em><strong><code>ST_AsMvtGeom</code> 应该将geom转到墨卡托坐标下，4326坐标下制作矢量瓦片有横向的压扁</strong></em></p>
+<h3 id="st_asmvt"><strong>ST_AsMVT</strong><a hidden class="anchor" aria-hidden="true" href="#st_asmvt">#</a></h3>
+<p>用于将基于<a href="https://docs.mapbox.com/data/tilesets/">MapBox Vector Tile</a>坐标空间的几何图形转换为MapBox VectorTile二进制矢量切片</p>
+<ul>
+<li>row —— 至少具有一个geometry列的行数据。</li>
+<li>name —— 图层名字，默认为&quot;default&quot;。</li>
+<li>extent —— 由MVT规范定义的屏幕空间（MVT坐标空间）中的矢量切片范围。</li>
+<li>geom_name —— row参数的行数据中geometry列的列名，默认是第一个*geometry类型的列。</li>
+<li>feature_id_name —— 行数据中要素ID列的列名。如果未指定或为NULL，则第一个有效数据类型（smallint, integer, bigint）的列将作为要素ID列，其他的列作为要素属性列。</li>
+</ul>
+<h3 id="st_asmvtgeom">ST_AsMVTGeom<a hidden class="anchor" aria-hidden="true" href="#st_asmvtgeom">#</a></h3>
+<p>用于将一个图层中位于参数box2d范围内的一个几何图形的所有坐标转换为<a href="https://docs.mapbox.com/data/tilesets/">MapBox Vector Tile</a>坐标空间里的坐标。</p>
+<ul>
+<li><strong>geom</strong> —— 被转换的几何图形信息。</li>
+<li><strong>bounds</strong>—— 某个矢量切片的范围对应的空间参考坐标系中的几何矩形框（没有缓冲区）。</li>
+<li><strong>extent</strong>—— 是按<a href="https://docs.mapbox.com/data/tilesets/guides/vector-tiles-standards/">规范</a>定义的矢量切片坐标空间中的某个矢量切片的范围。如果为NULL，则默认为4096（边长为4096个单位的正方形）。</li>
+<li><strong>buffer</strong>—— 矢量坐标空间中缓冲区的距离，位于该缓冲区的几何图形部位根据clip_geom参数被裁剪或保留。如果为NULL，则默认为256。</li>
+<li><strong>clip_geom</strong>—— 用于选择位于缓冲区的几何图形部位是被裁剪还是原样保留。如果为NULL，则默认为true。</li>
+</ul>
+<h3 id="postgis生成mvt矢量切片的步骤">PostGIS生成MVT矢量切片的步骤<a hidden class="anchor" aria-hidden="true" href="#postgis生成mvt矢量切片的步骤">#</a></h3>
+<ul>
+<li>使用ST_AsMVTGeom函数将几何图形的所有坐标转换为MapBox Vector Tile坐标空间里的坐标，这样就将基于空间坐标系的几何图形转换成了基于MVT坐标空间的几何图形。</li>
+<li>使用ST_AsMVT函数将基于MVT坐标空间的几何图形转换为<strong>MVT二进制矢量切片</strong>。</li>
+</ul>
+<p>可以通过&quot;<strong>||</strong>&ldquo;操作符调用多次这个函数来同时创建多个图层的同一位置的矢量切片。</p>
+<h3 id="postgis-st函数">PostGIS ST函数<a hidden class="anchor" aria-hidden="true" href="#postgis-st函数">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">WITH</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">bounds</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="n">ST_Segmentize</span><span class="p">(</span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">13071343</span><span class="p">.</span><span class="mi">332991</span><span class="p">,</span><span class="w"> </span><span class="mi">3678761</span><span class="p">.</span><span class="mi">297309</span><span class="p">,</span><span class="w"> </span><span class="mi">13149614</span><span class="p">.</span><span class="mi">849955</span><span class="p">,</span><span class="w"> </span><span class="mi">3757032</span><span class="p">.</span><span class="mi">814273</span><span class="p">,</span><span class="w"> </span><span class="mi">3857</span><span class="p">),</span><span class="mi">19567</span><span class="p">.</span><span class="mi">879241</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span><span class="p">,</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="n">ST_Segmentize</span><span class="p">(</span><span class="n">ST_MakeEnvelope</span><span class="p">(</span><span class="mi">13071343</span><span class="p">.</span><span class="mi">332991</span><span class="p">,</span><span class="w"> </span><span class="mi">3678761</span><span class="p">.</span><span class="mi">297309</span><span class="p">,</span><span class="w"> </span><span class="mi">13149614</span><span class="p">.</span><span class="mi">849955</span><span class="p">,</span><span class="w"> </span><span class="mi">3757032</span><span class="p">.</span><span class="mi">814273</span><span class="p">,</span><span class="w"> </span><span class="mi">3857</span><span class="p">),</span><span class="mi">19567</span><span class="p">.</span><span class="mi">879241</span><span class="p">)::</span><span class="n">box2d</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">b2d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">),</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">mvtgeom</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_AsMVTGeom</span><span class="p">(</span><span class="n">ST_Transform</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="mi">3857</span><span class="p">),</span><span class="w"> </span><span class="n">bounds</span><span class="p">.</span><span class="n">b2d</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">	  </span><span class="k">FROM</span><span class="w"> </span><span class="n">js_city_point_u_6492c1048429434b637f1be5</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">bounds</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">	  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">ST_Intersects</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">ST_Transform</span><span class="p">(</span><span class="n">bounds</span><span class="p">.</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="mi">4326</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_AsMVT</span><span class="p">(</span><span class="n">mvtgeom</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;js_city_point_u_6492c1048429434b637f1be5&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="n">mvtgeom</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这段 PostGIS SQL 语句就是用于生成 MVT（Mapbox Vector Tiles）数据。</p>
+<p>让我们逐步解释这段 SQL 语句的意思：</p>
+<ol>
+<li>
+<p>首先，使用 <code>WITH</code> 子句创建一个名为 <code>bounds</code> 的临时表，其中包含一个几何对象和一个边界框（box2d）。这个几何对象是通过使用 <code>ST_MakeEnvelope</code> 函数创建的，该函数根据提供的坐标范围**（<code>tileToEnvelope</code>函数计算得到）**和坐标系生成一个矩形。然后，使用 <code>ST_Segmentize</code> 函数对几何对象进行分段，以确保生成的矢量瓦片在显示时具有一定的细节和精度。</p>
+</li>
+<li>
+<p>接下来，使用 <code>mvtgeom</code> 作为名称创建另一个临时表。在这个临时表中，使用 <code>ST_Transform</code> 函数将 <code>t.geom</code>（<code>js_city_point_u_6492c1048429434b637f1be5</code> 表中的几何列）从源坐标系（4326）转换为目标坐标系（3857）。然后，使用 <code>ST_AsMVTGeom</code> 函数将转换后的几何对象与 <code>bounds.b2d</code> 边界框进行相交（使用 <code>ST_Intersects</code> 函数），从而获得符合条件的几何对象。在结果中，还包含原始表 <code>t</code> 的所有列。</p>
+</li>
+<li>
+<p>最后，使用 <code>SELECT</code> 语句从 <code>mvtgeom</code> 表中选择几何对象，并使用 <code>ST_AsMVT</code> 函数将这些几何对象转换为 MVT 格式的瓦片。<code>'js_city_point_u_6492c1048429434b637f1be5'</code> 是指定瓦片的图层名称。</p>
+</li>
+</ol>
+<p>简而言之，这个 SQL 查询的目的是生成包含符合条件的几何对象的 MVT 瓦片数据。它利用了 PostGIS 的空间函数和转换功能来处理几何对象的坐标系转换和分段，然后将结果转换为 MVT 格式的瓦片数据。</p>
+<p><strong><code>ST_MakeEnvelope</code>需要的范围是如何确定的呢？</strong></p>
+<p>有了前面瓦片的计算规则的基础，就不难理解所求瓦片的x/y最大值最小值范围的计算方法了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="nf">tileToEnvelope</span><span class="o">(</span><span class="kt">int</span> <span class="n">zoom</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">worldMercMax</span> <span class="o">=</span> <span class="mf">20037508.3427892</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">worldMercMin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">worldMercMax</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">worldMercSize</span> <span class="o">=</span> <span class="n">worldMercMax</span> <span class="o">-</span> <span class="n">worldMercMin</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">worldTileSize</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">pow</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">zoom</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">tileMercSize</span> <span class="o">=</span> <span class="n">worldMercSize</span> <span class="o">/</span> <span class="n">worldTileSize</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">env</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;xmin&#34;</span><span class="o">,</span> <span class="n">worldMercMin</span> <span class="o">+</span> <span class="n">tileMercSize</span> <span class="o">*</span> <span class="n">x</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;xmax&#34;</span><span class="o">,</span> <span class="n">worldMercMin</span> <span class="o">+</span> <span class="n">tileMercSize</span> <span class="o">*</span> <span class="o">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;ymin&#34;</span><span class="o">,</span> <span class="n">worldMercMax</span> <span class="o">-</span> <span class="n">tileMercSize</span> <span class="o">*</span> <span class="o">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;ymax&#34;</span><span class="o">,</span> <span class="n">worldMercMax</span> <span class="o">-</span> <span class="n">tileMercSize</span> <span class="o">*</span> <span class="n">y</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">env</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="java代码实现">Java代码实现<a hidden class="anchor" aria-hidden="true" href="#java代码实现">#</a></h1>
+<blockquote>
+<p><strong>接口返回的数据是==MVT二进制矢量切片==</strong></p>
+</blockquote>
+<h2 id="controller"><strong>Controller</strong><a hidden class="anchor" aria-hidden="true" href="#controller">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-JAVA" data-lang="JAVA"><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/mvt/{tableName}/{zoom}/{x}/{y}.pbf&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">getMvt</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&#34;tableName&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">tableName</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">                   <span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&#34;zoom&#34;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">zoom</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">                   <span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&#34;x&#34;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">                   <span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&#34;y&#34;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">                   <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">pgService</span><span class="o">.</span><span class="na">getMvt</span><span class="o">(</span><span class="n">zoom</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">tableName</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="service">Service<a hidden class="anchor" aria-hidden="true" href="#service">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-JAVA" data-lang="JAVA"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">getMvt</span><span class="o">(</span><span class="kt">int</span> <span class="n">zoom</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="n">String</span> <span class="n">tableName</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="n">getMvtSql</span><span class="o">(</span><span class="n">zoom</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">tableName</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">sql</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&#34;DefaultPgSource: &#34;</span> <span class="o">+</span> <span class="n">zoom</span> <span class="o">+</span> <span class="s">&#34;, &#34;</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="s">&#34;, &#34;</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="n">sql</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">byte</span><span class="o">[]</span> <span class="n">mvtByte</span> <span class="o">=</span> <span class="n">mvtRepository</span><span class="o">.</span><span class="na">getMvtFromDefaultPg</span><span class="o">(</span><span class="n">sql</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">returnMvtByte</span><span class="o">(</span><span class="n">mvtByte</span><span class="o">,</span> <span class="n">zoom</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">String</span> <span class="nf">getMvtSql</span><span class="o">(</span><span class="kt">int</span> <span class="n">zoom</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="n">String</span> <span class="n">tableName</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">(!</span><span class="n">MvtUtils</span><span class="o">.</span><span class="na">tileIsValid</span><span class="o">(</span><span class="n">zoom</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">))</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">envelope</span> <span class="o">=</span> <span class="n">MvtUtils</span><span class="o">.</span><span class="na">tileToEnvelope</span><span class="o">(</span><span class="n">zoom</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="n">MvtUtils</span><span class="o">.</span><span class="na">envelopeToSQL</span><span class="o">(</span><span class="n">envelope</span><span class="o">,</span> <span class="n">tableName</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">sql</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">returnMvtByte</span><span class="o">(</span><span class="kt">byte</span><span class="o">[]</span> <span class="n">mvtByte</span><span class="o">,</span> <span class="kt">int</span> <span class="n">zoom</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">&#34;Access-Control-Allow-Origin&#34;</span><span class="o">,</span> <span class="s">&#34;*&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">&#34;Content-type&#34;</span><span class="o">,</span> <span class="s">&#34;application/vnd.mapbox-vector-tile&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">mtvFileName</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&#34;%d_%d_%d.mvt&#34;</span><span class="o">,</span> <span class="n">zoom</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">&#34;Content-Disposition&#34;</span><span class="o">,</span> <span class="s">&#34;attachment;filename=&#34;</span> <span class="o">+</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="n">mtvFileName</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(</span><span class="s">&#34;UTF-8&#34;</span><span class="o">),</span> <span class="s">&#34;iso-8859-1&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OutputStream</span> <span class="n">os</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getOutputStream</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">os</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">mvtByte</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="repository">Repository<a hidden class="anchor" aria-hidden="true" href="#repository">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-JAVA" data-lang="JAVA"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">byte</span><span class="o">[]</span> <span class="nf">getMvtFromDefaultPg</span><span class="o">(</span><span class="n">String</span> <span class="n">sql</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">byte</span><span class="o">[]</span> <span class="n">reByte</span> <span class="o">=</span> <span class="n">jdbcTemplate</span><span class="o">.</span><span class="na">queryForObject</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span> <span class="o">(</span><span class="n">rs</span><span class="o">,</span> <span class="n">rowNum</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(</span><span class="s">&#34;st_asmvt&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">reByte</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&#34;默认数据库瓦片获取失败&#34;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="mvt工具类"><strong>MVT工具类</strong><a hidden class="anchor" aria-hidden="true" href="#mvt工具类">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MvtUtils</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Boolean</span> <span class="nf">tileIsValid</span><span class="o">(</span><span class="kt">int</span> <span class="n">zoom</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Double</span> <span class="n">size</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">pow</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">zoom</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">size</span> <span class="o">||</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="nf">tileToEnvelope</span><span class="o">(</span><span class="kt">int</span> <span class="n">zoom</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">double</span> <span class="n">worldMercMax</span> <span class="o">=</span> <span class="mf">20037508.3427892</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">double</span> <span class="n">worldMercMin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">worldMercMax</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">double</span> <span class="n">worldMercSize</span> <span class="o">=</span> <span class="n">worldMercMax</span> <span class="o">-</span> <span class="n">worldMercMin</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">double</span> <span class="n">worldTileSize</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">pow</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">zoom</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">double</span> <span class="n">tileMercSize</span> <span class="o">=</span> <span class="n">worldMercSize</span> <span class="o">/</span> <span class="n">worldTileSize</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">env</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;xmin&#34;</span><span class="o">,</span> <span class="n">worldMercMin</span> <span class="o">+</span> <span class="n">tileMercSize</span> <span class="o">*</span> <span class="n">x</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;xmax&#34;</span><span class="o">,</span> <span class="n">worldMercMin</span> <span class="o">+</span> <span class="n">tileMercSize</span> <span class="o">*</span> <span class="o">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;ymin&#34;</span><span class="o">,</span> <span class="n">worldMercMax</span> <span class="o">-</span> <span class="n">tileMercSize</span> <span class="o">*</span> <span class="o">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;ymax&#34;</span><span class="o">,</span> <span class="n">worldMercMax</span> <span class="o">-</span> <span class="n">tileMercSize</span> <span class="o">*</span> <span class="n">y</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">env</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">envelopeToBoundsSQL</span><span class="o">(</span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">env</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">DENSIFY_FACTOR</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;segSize&#34;</span><span class="o">,</span> <span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;xmax&#34;</span><span class="o">)</span> <span class="o">-</span> <span class="n">env</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;xmin&#34;</span><span class="o">))</span> <span class="o">/</span> <span class="n">DENSIFY_FACTOR</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">sqlTemp</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&#34;ST_Segmentize(ST_MakeEnvelope(%f, %f, %f, %f, 3857),%f)&#34;</span><span class="o">,</span> <span class="n">env</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;xmin&#34;</span><span class="o">),</span> <span class="n">env</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;ymin&#34;</span><span class="o">),</span> <span class="n">env</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;xmax&#34;</span><span class="o">),</span> <span class="n">env</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;ymax&#34;</span><span class="o">),</span> <span class="n">env</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;segSize&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">sqlTemp</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">envelopeToSQL</span><span class="o">(</span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">env</span><span class="o">,</span> <span class="n">String</span> <span class="n">tableName</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// lines_pg   gis_osm_transport_free_1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">table</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">table</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;table&#34;</span><span class="o">,</span> <span class="n">tableName</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">table</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;srid&#34;</span><span class="o">,</span> <span class="s">&#34;4326&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">table</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;geomColumn&#34;</span><span class="o">,</span> <span class="s">&#34;geom&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">table</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;attrColumns&#34;</span><span class="o">,</span> <span class="s">&#34; * &#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">table</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;env&#34;</span><span class="o">,</span> <span class="n">envelopeToBoundsSQL</span><span class="o">(</span><span class="n">env</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">mvtsql</span> <span class="o">=</span> <span class="n">MessageFormat</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&#34;WITH&#34;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                <span class="s">&#34; bounds AS ( SELECT {0} AS geom, {0}::box2d AS b2d),&#34;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                <span class="s">&#34; mvtgeom AS (&#34;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                <span class="s">&#34; SELECT ST_AsMVTGeom(ST_Transform(t.{1}, 3857), bounds.b2d) AS geom, {2}&#34;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                <span class="s">&#34; FROM {3} t, bounds&#34;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                <span class="s">&#34; WHERE ST_Intersects(t.{1}, ST_Transform(bounds.geom, {4}))&#34;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                <span class="s">&#34; )&#34;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                <span class="s">&#34; SELECT ST_AsMVT(mvtgeom.* , &#39;&#39;{3}&#39;&#39; ) FROM mvtgeom&#34;</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">table</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;env&#34;</span><span class="o">),</span> <span class="n">table</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;geomColumn&#34;</span><span class="o">),</span> <span class="n">table</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;attrColumns&#34;</span><span class="o">),</span> <span class="n">table</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;table&#34;</span><span class="o">),</span> <span class="n">table</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;srid&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">mvtsql</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/map/mapbox-style-specification/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Mapbox Style Specification</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/map/%E4%BD%BF%E7%94%A8mbtiles%E5%8F%91%E5%B8%83%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>使用mbtiles发布地图服务</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Hey, It&#39;s Bin!</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>断点续传 | Hey, It&#39;s Bin!</title>
+<meta name="keywords" content="系统设计, 断点续传">
+<meta name="description" content="本篇文章主要内容是分片上传、断点续传、秒传的实现思路 前言 分片： 分片任务是在前端由vue-simple-uploader插件完成，流程：1.前">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/design/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="断点续传" />
+<meta property="og:description" content="本篇文章主要内容是分片上传、断点续传、秒传的实现思路 前言 分片： 分片任务是在前端由vue-simple-uploader插件完成，流程：1.前" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/design/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-06-09T22:37:33+08:00" />
+<meta property="article:modified_time" content="2023-06-09T22:37:33+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="断点续传"/>
+<meta name="twitter:description" content="本篇文章主要内容是分片上传、断点续传、秒传的实现思路 前言 分片： 分片任务是在前端由vue-simple-uploader插件完成，流程：1.前"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "🎨 系统设计",
+      "item": "https://chance7bin.github.io/posts/design/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "断点续传",
+      "item": "https://chance7bin.github.io/posts/design/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "断点续传",
+  "name": "断点续传",
+  "description": "本篇文章主要内容是分片上传、断点续传、秒传的实现思路 前言 分片： 分片任务是在前端由vue-simple-uploader插件完成，流程：1.前",
+  "keywords": [
+    "系统设计", "断点续传"
+  ],
+  "articleBody": " 本篇文章主要内容是分片上传、断点续传、秒传的实现思路\n前言 分片： 分片任务是在前端由vue-simple-uploader插件完成，流程：1.前端先发送check-file（检查文件MD5）来确认文件是直接秒传还是分片上传，如果计算出文件所有片已经上传完成，则启用秒传（秒传就是不传），如果是新文件，则需要分片上传，由vue-simple-uploader插件将文件按固定大小进行切割，然后逐片上传。\n断点续传： 意思就是一个大文件分了多少片，这些片已经上传了哪些，还有哪些没上传，这些都会记录在文件存储目录下的.conf文件中，当你上传大文件时，传一部分后刷新浏览器或关闭浏览器，这时候传输会中断，然后你再打开页面重新上传该文件，它会先检测还有哪些片没有上传，然后直接上传的上次未传的片，这就是断点续传。\n**秒传：**文件不经过上传的步骤，直接将文件信息保存在服务器中。通过计算文件md5实现\n流程 校验文件上传状态： 前端生成该文件的MD5密文并进行分片，上传之前请求check-md5接口，传入文件名和密文，接口校验文件是未上传 或 上传了一部分 或 已上传完成三个状态，其中未上传返回自定义状态码404，上传一部分则返回状态206+未上传的分片ID，上传完成则返回状态200。 前端逐片上传： 校验完成后，根据校验结果对未上传的分片进行逐个上传，上传分片时参数主要是：总片数、当前片ID、片文件 上传接口： 上传接口会先去获取并解析该文件的conf文件（conf文件是RandomAccessFile，该类是通过提供指针的方式操作文件，文件存储的是一个二进制数组，所以可以用来数组下标标记片ID），使用setLength方法设置conf文件长度，使用seek方法跳到当前上传的片ID的位置，把该位置的值替换成127，然后将该分片使用指针偏移的方式插入到_tmp临时文件（临时文件也是RandomAccessFile文件）中，然后校验是否所有的片都上传完成，是则修改临时文件为正式文件名，至此上传完成，否则直接返回该分片上传完成 上传进度： 前端收到当前片的响应结果后，会根据已上传片数量获取到上传进度 MD5的用法： 用于计算服务器是否已经存在相同md5的文件，用作秒传功能的实现。前端计算文件md5，传入后端进行查找是否已经有相同md5文件，若存在直接返回上传成功，否则走上传的步骤 后端接口 Controller\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 /** * 检查文件MD5（文件MD5若已存在进行秒传） * * @param md5 md5 * @param fileName 文件名称 * @return {@link ApiResponse} * @author 7bin **/ @GetMapping(value = \"/check\") public ApiResponse checkFileMd5(String md5, String fileName) { // Result result = fileService.checkFileMd5(md5, fileName); // return NovelWebUtils.forReturn(result); return ApiResponse.success(); } /** * 断点续传方式上传文件：用于大文件上传 * * @param chunkDTO 参数 * @param request 请求 * @return {@link ApiResponse} * @author 7bin **/ @PostMapping(value = \"/breakpoint-upload\", consumes = \"multipart/*\", headers = \"content-type=multipart/form-data\", produces = \"application/json;charset=UTF-8\") public ApiResponse breakpointResumeUpload(Chunk chunkDTO, HttpServletRequest request) { String id = chunkDTO.getIdentifier(); int chunks = Math.toIntExact(chunkDTO.getTotalChunks()); int chunk = chunkDTO.getChunkNumber() - 1; long size = chunkDTO.getCurrentChunkSize(); String name = chunkDTO.getFilename(); MultipartFile file = chunkDTO.getFile(); String md5 = chunkDTO.getIdentifier(); UploadFileParam param = new UploadFileParam(id, chunks, chunk, size, name, file, md5); // return ApiResponse.success(); Result result = fileService.breakpointResumeUpload(param, request); return NovelWebUtils.forReturn(result); } /** * 检查文件MD5（文件MD5若已存在进行秒传） * @param chunkMap * @return {@link ApiResponse} * @author 7bin **/ @GetMapping(value = \"/breakpoint-upload\") public ApiResponse breakpointResumeUploadPre( @RequestParam Map\u003cString, String\u003e chunkMap) { String md5 = chunkMap.get(\"identifier\"); String filename = chunkMap.get(\"filename\"); Result\u003cJSONArray\u003e result = fileService.checkFileMd5(md5, filename); JSONObject res = new JSONObject(); // 数据库中存在该md5则秒传 if (result == null){ res.put(\"skipUpload\",true); return ApiResponse.success(res); } boolean skipUpload = false; if (\"200\".equals(result.getCode()) || \"201\".equals(result.getCode())) { skipUpload = true; } else if (\"206\".equals(result.getCode())) { // 已经上传部分分块 // data中存放的是还未上传的分块 JSONArray data = result.getData(); res.put(\"missChunks\",data); } res.put(\"skipUpload\",skipUpload); return ApiResponse.success(res); // Result result = fileService.breakpointResumeUpload(param, request); // return NovelWebUtils.forReturn(result); } Service\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 @Override public Result\u003cJSONArray\u003e checkFileMd5(String md5, String fileName) { boolean exist = fileMapper.fileIsExist(md5); if (exist){ return null; } Result\u003cJSONArray\u003e result; try { // String realFilename = md5 + \"_\" + fileName; String realFilename = md5; result = LocalUpload.checkFileMd5(md5, realFilename, confFilePath, savePath); } catch (Exception e) { // e.printStackTrace(); log.error(e.getMessage()); throw new ServiceException(e.getMessage()); } return result; } @Override public Result breakpointResumeUpload(UploadFileParam param, HttpServletRequest request) { Result result; try { // 这里的 chunkSize(分片大小) 要与前端传过来的大小一致 // long chunkSize = Objects.isNull(param.getChunkSize()) ? 5 * 1024 * 1024 // : param.getChunkSize(); // 实际存储的文件格式为 [{md5}_{filename}] // String realFilename = param.getMd5() + \"_\" + param.getName(); String realFilename = param.getMd5(); param.setName(realFilename); result = LocalUpload.fragmentFileUploader(param, confFilePath, savePath, 5242880L, request); // return NovelWebUtils.forReturn(result); } catch (Exception e) { log.error(e.getMessage()); throw new ServiceException(e.getMessage()); } return result; } 前端代码 SimpleUploader.vue\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255 256 257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272 \u003ctemplate\u003e \u003cdiv id=\"global-uploader\"\u003e \u003cuploader class=\"uploader-app\" :options=\"initOptions\" :file-status-text=\"fileStatusText\" :auto-start=\"false\" @file-added=\"onFileAdded\" @file-success=\"onFileSuccess\" @file-progress=\"onFileProgress\" @file-error=\"onFileError\" \u003e \u003cuploader-unsupport\u003e\u003c/uploader-unsupport\u003e \u003cuploader-drop\u003e \u003cuploader-btn \u003e选择文件\u003c/uploader-btn\u003e \u003cspan style=\"margin-left: 10px\"\u003e（支持上传一个或多个文件）\u003c/span\u003e \u003c/uploader-drop\u003e \u003cuploader-list\u003e \u003ctemplate #default=\"{ fileList }\"\u003e \u003cdiv class=\"file-panel\"\u003e \u003cul class=\"file-list\"\u003e \u003cli v-for=\"file in fileList\" :key=\"file.id\" class=\"file-item\" \u003e \u003cuploader-file ref=\"files\" :class=\"['file_' + file.id, customStatus]\" :file=\"file\" :list=\"true\" \u003e\u003c/uploader-file\u003e \u003c/li\u003e \u003cdiv v-if=\"!fileList.length\" class=\"no-file\"\u003e 暂无待上传文件 \u003c/div\u003e \u003c/ul\u003e \u003c/div\u003e \u003c/template\u003e \u003c/uploader-list\u003e \u003c/uploader\u003e \u003c/div\u003e \u003c/template\u003e \u003cscript setup\u003e import useCurrentInstance from \"@/utils/currentInstance\"; import { generateMD5 } from \"@/components/Uploader/utils/md5\"; import { ElNotification } from \"element-plus\"; import { addFileToDrive } from \"@/api/drive/drive\"; import { checkAuth } from \"@/api/admin/user\"; const { proxy } = useCurrentInstance(); // TODO 上传组件还有bug 上传成功时动作按钮没有隐藏；后端出现错误上传失败时背景色没变红 // props // emits const emits = defineEmits(['uploadSuccess']); const drivePath = import.meta.env.VITE_APP_DRIVE_API; const initOptions = { target: drivePath + \"/file/breakpoint-upload\", chunkSize: '5242880', forceChunkSize: true, fileParameterName: 'file', maxChunkRetries: 3, // 是否开启服务器分片校验 testChunks: true, // 服务器分片校验函数，秒传及断点续传基础 checkChunkUploadedByResponse: function (chunk, message) { let skip = false // console.log(\"checkChunkUploadedByResponse chunk:\", chunk); // console.log(\"checkChunkUploadedByResponse message:\", message); try { let objMessage = JSON.parse(message) // console.log(\"objMessage:\", objMessage); if (objMessage.code === 200) { if (objMessage.data.skipUpload) { skip = true } else if (objMessage.data.missChunks == null){ skip = false; } else { skip = (objMessage.data.missChunks || []).indexOf(chunk.offset.toString()) \u003c 0 } } } catch (e) {} // console.log(\"skip: \" + chunk.offset + \" \" + skip); return skip }, query: (file, chunk) =\u003e { // console.log(\"query:\", file); return { ...file.params } } } const customStatus = ref('') const fileStatusText = { success: '上传成功', error: '上传失败', uploading: '上传中', paused: '已暂停', waiting: '等待上传' } // const uploaderRef = ref() // const uploader = computed(() =\u003e uploaderRef.value?.uploader) async function onFileAdded(file) { // 判断用户是否已经登录了，登录才可以添加 await checkAuth(); // 暂停文件 // 选择文件后暂停文件上传，上传时手动启动 file.pause() // console.log(\"onFileAdded file: \", file); // panelShow.value = true // trigger('fileAdded') // 将额外的参数赋值到每个文件上，以不同文件使用不同params的需求 // file.params = customParams.value // 计算MD5 const md5 = await computeMD5(file) startUpload(file, md5) } function computeMD5(file) { // 文件状态设为\"计算MD5\" statusSet(file.id, 'md5') // 计算MD5时隐藏\"开始\"按钮 nextTick(() =\u003e { // document.querySelector(`.file_${file.id} .uploader-file-resume`).style.display = 'none' document.querySelector(`.file_${file.id} .uploader-file-actions`).style.display = 'none' }) // 开始计算MD5 return new Promise((resolve, reject) =\u003e { generateMD5(file, { onProgress(currentChunk, chunks) { // 实时展示MD5的计算进度 nextTick(() =\u003e { const md5ProgressText = '校验MD5 ' + ((currentChunk / chunks) * 100).toFixed(0) + '%' document.querySelector(`.custom-status-${file.id}`).innerText = md5ProgressText }) }, onSuccess(md5) { statusRemove(file.id) resolve(md5) }, onError() { error(`文件${file.name}读取出错，请检查该文件`) file.cancel() statusRemove(file.id) reject() } }) }) } // md5计算完毕，开始上传 function startUpload(file, md5) { file.uniqueIdentifier = md5 file.resume() } function onFileProgress(rootFile, file, chunk) { console.log( `上传中 ${file.name}，chunk：${chunk.startByte / 1024 / 1024} ~ ${ chunk.endByte / 1024 / 1024 }` ) } const onFileError = (rootFile, file, response, chunk) =\u003e { // console.log('error', file) error(response) } function error(msg) { ElNotification({ title: '错误', message: msg, type: 'error', duration: 2000 }) } const onFileSuccess = (rootFile, file, response, chunk) =\u003e { // console.log(\"上传成功\") // console.log(\"rootFile\",rootFile) // file的relativePath是文件夹的相对路径(如果上传的是文件夹的话) // console.log(\"file\",file) // console.log(\"response\",JSON.parse(response)) // console.log(\"chunk\",chunk) // addFileToDrive(file.name, file.uniqueIdentifier, file.size).then(() =\u003e { // proxy.$modal.msgSuccess(\"文件上传成功\"); // }) // 服务端自定义的错误（即http状态码为200，但是是错误的情况），这种错误是Uploader无法拦截的 let res = JSON.parse(response) console.log(\"onFileSuccess res:\", res); if (res.code !== 200) { error(res.message) // 文件状态设为“失败” statusSet(file.id, 'failed') return } emits(\"uploadSuccess\", file); } /** * 新增的自定义的状态: 'md5'、'merging'、'transcoding'、'failed' * @param id * @param status */ function statusSet(id, status) { const statusMap = { md5: { text: '校验MD5', bgc: '#fff' }, failed: { text: '上传失败', bgc: '#e2eeff' } } customStatus.value = status nextTick(() =\u003e { const statusTag = document.createElement('span') statusTag.className = `custom-status-${id} custom-status` statusTag.innerText = statusMap[status].text statusTag.style.backgroundColor = statusMap[status].bgc // custom-status 样式不生效 // 由于 style脚本 设置了 scoped，深层的样式修改不了 // 通过给当前组件设置一个id，在该id下设置样式，就可以保证样式不全局污染 // statusTag.style.position = 'absolute'; // statusTag.style.top = '0'; // statusTag.style.left = '0'; // statusTag.style.right = '0'; // statusTag.style.bottom = '0'; // statusTag.style.zIndex = '1'; const statusWrap = document.querySelector(`.file_${id} .uploader-file-status`) statusWrap.appendChild(statusTag) }) } function statusRemove(id) { customStatus.value = '' nextTick(() =\u003e { const statusTag = document.querySelector(`.custom-status-${id}`) document.querySelector(`.file_${id} .uploader-file-actions`).style.display = 'block' statusTag.remove() }) } \u003c/script\u003e md5.js\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 import SparkMD5 from 'spark-md5' /** * 分段计算MD5 * @param file {File} * @param options {Object} - onProgress | onSuccess | onError */ export function generateMD5(file, options = {}) { const fileReader = new FileReader() const time = new Date().getTime() const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice const chunkSize = 10 * 1024 * 1000 const chunks = Math.ceil(file.size / chunkSize) let currentChunk = 0 const spark = new SparkMD5.ArrayBuffer() const loadNext = () =\u003e { let start = currentChunk * chunkSize let end = start + chunkSize \u003e= file.size ? file.size : start + chunkSize fileReader.readAsArrayBuffer(blobSlice.call(file.file, start, end)) } loadNext() fileReader.onload = (e) =\u003e { spark.append(e.target.result) if (currentChunk \u003c chunks) { currentChunk++ loadNext() if (options.onProgress \u0026\u0026 typeof options.onProgress == 'function') { options.onProgress(currentChunk, chunks) } } else { let md5 = spark.end() // md5计算完毕 if (options.onSuccess \u0026\u0026 typeof options.onSuccess == 'function') { options.onSuccess(md5) } console.log( `MD5计算完毕：${file.name} \\nMD5：${md5} \\n分片：${chunks} 大小:${file.size} 用时：${ new Date().getTime() - time } ms` ) } } fileReader.onerror = function () { console.log('MD5计算失败') if (options.onError \u0026\u0026 typeof options.onError == 'function') { options.onError() } } } ",
+  "wordCount" : "3780",
+  "inLanguage": "zh",
+  "datePublished": "2023-06-09T22:37:33+08:00",
+  "dateModified": "2023-06-09T22:37:33+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/design/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Hey, It's Bin!",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/design/">🎨 系统设计</a></div>
+    <h1 class="post-title">
+      断点续传
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-06-09
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>3780字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>8分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="color: var(--secondary)!important;">系统设计</a>
+                &nbsp;<a href="https://chance7bin.github.io/tags/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/" style="color: var(--secondary)!important;">断点续传</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e5%89%8d%e8%a8%80" aria-label="前言">前言</a></li>
+                    <li>
+                        <a href="#%e6%b5%81%e7%a8%8b" aria-label="流程">流程</a></li>
+                    <li>
+                        <a href="#%e5%90%8e%e7%ab%af%e6%8e%a5%e5%8f%a3" aria-label="后端接口">后端接口</a></li>
+                    <li>
+                        <a href="#%e5%89%8d%e7%ab%af%e4%bb%a3%e7%a0%81" aria-label="前端代码">前端代码</a>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><blockquote>
+<p>本篇文章主要内容是分片上传、断点续传、秒传的实现思路</p>
+</blockquote>
+<h2 id="前言">前言<a hidden class="anchor" aria-hidden="true" href="#前言">#</a></h2>
+<p><strong>分片：</strong> 分片任务是在前端由<code>vue-simple-uploader</code>插件完成，流程：1.前端先发送check-file（检查文件MD5）来确认文件是直接秒传还是分片上传，如果计算出文件所有片已经上传完成，则启用秒传（秒传就是不传），如果是新文件，则需要分片上传，由<code>vue-simple-uploader</code>插件将文件按固定大小进行切割，然后逐片上传。</p>
+<p><strong>断点续传：</strong> 意思就是一个大文件分了多少片，这些片已经上传了哪些，还有哪些没上传，这些都会记录在文件存储目录下的<code>.conf</code>文件中，当你上传大文件时，传一部分后刷新浏览器或关闭浏览器，这时候传输会中断，然后你再打开页面重新上传该文件，它会先检测还有哪些片没有上传，然后直接上传的上次未传的片，这就是断点续传。</p>
+<p>**秒传：**文件不经过上传的步骤，直接将文件信息保存在服务器中。通过计算文件md5实现</p>
+<h2 id="流程">流程<a hidden class="anchor" aria-hidden="true" href="#流程">#</a></h2>
+<ol>
+<li><strong>校验文件上传状态：</strong> 前端生成该文件的MD5密文并进行分片，上传之前请求check-md5接口，传入文件名和密文，接口校验文件是<code>未上传</code> 或 <code>上传了一部分</code> 或 <code>已上传完成</code>三个状态，其中未上传返回自定义<code>状态码404</code>，上传一部分则返回<code>状态206+未上传的分片ID</code>，上传完成则返回<code>状态200</code>。</li>
+<li><strong>前端逐片上传：</strong> 校验完成后，根据校验结果对未上传的分片进行逐个上传，上传分片时参数主要是：<code>总片数、当前片ID、片文件</code></li>
+<li><strong>上传接口：</strong> 上传接口会先去获取并解析该文件的conf文件（conf文件是RandomAccessFile，该类是通过提供指针的方式操作文件，文件存储的是一个二进制数组，所以可以用来数组下标标记片ID），使用setLength方法设置conf文件长度，使用seek方法跳到当前上传的片ID的位置，把该位置的值替换成127，然后将该分片使用指针偏移的方式插入到_tmp临时文件（临时文件也是RandomAccessFile文件）中，然后校验是否所有的片都上传完成，是则修改临时文件为正式文件名，至此上传完成，否则直接返回该分片上传完成</li>
+<li><strong>上传进度：</strong> 前端收到当前片的响应结果后，会根据已上传片数量获取到上传进度</li>
+<li><strong>MD5的用法：</strong> 用于计算服务器是否已经存在相同md5的文件，用作秒传功能的实现。前端计算文件md5，传入后端进行查找是否已经有相同md5文件，若存在直接返回上传成功，否则走上传的步骤</li>
+</ol>
+<h2 id="后端接口">后端接口<a hidden class="anchor" aria-hidden="true" href="#后端接口">#</a></h2>
+<p><strong><code>Controller</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 检查文件MD5（文件MD5若已存在进行秒传）
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param md5      md5
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param fileName 文件名称
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @return {@link ApiResponse}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @author 7bin
+</span></span></span><span class="line"><span class="cl"><span class="cm"> **/</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/check&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">ApiResponse</span> <span class="nf">checkFileMd5</span><span class="o">(</span><span class="n">String</span> <span class="n">md5</span><span class="o">,</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Result result = fileService.checkFileMd5(md5, fileName);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// return NovelWebUtils.forReturn(result);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="n">ApiResponse</span><span class="o">.</span><span class="na">success</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 断点续传方式上传文件：用于大文件上传
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param chunkDTO   参数
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param request 请求
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @return {@link ApiResponse}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @author 7bin
+</span></span></span><span class="line"><span class="cl"><span class="cm"> **/</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/breakpoint-upload&#34;</span><span class="o">,</span> <span class="n">consumes</span> <span class="o">=</span> <span class="s">&#34;multipart/*&#34;</span><span class="o">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="s">&#34;content-type=multipart/form-data&#34;</span><span class="o">,</span> <span class="n">produces</span> <span class="o">=</span> <span class="s">&#34;application/json;charset=UTF-8&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">ApiResponse</span> <span class="nf">breakpointResumeUpload</span><span class="o">(</span><span class="n">Chunk</span> <span class="n">chunkDTO</span><span class="o">,</span> <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">chunkDTO</span><span class="o">.</span><span class="na">getIdentifier</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">chunks</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">toIntExact</span><span class="o">(</span><span class="n">chunkDTO</span><span class="o">.</span><span class="na">getTotalChunks</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">chunk</span> <span class="o">=</span> <span class="n">chunkDTO</span><span class="o">.</span><span class="na">getChunkNumber</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">size</span> <span class="o">=</span> <span class="n">chunkDTO</span><span class="o">.</span><span class="na">getCurrentChunkSize</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">chunkDTO</span><span class="o">.</span><span class="na">getFilename</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MultipartFile</span> <span class="n">file</span> <span class="o">=</span> <span class="n">chunkDTO</span><span class="o">.</span><span class="na">getFile</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">md5</span> <span class="o">=</span> <span class="n">chunkDTO</span><span class="o">.</span><span class="na">getIdentifier</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">UploadFileParam</span> <span class="n">param</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UploadFileParam</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">chunks</span><span class="o">,</span> <span class="n">chunk</span><span class="o">,</span> <span class="n">size</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">file</span><span class="o">,</span> <span class="n">md5</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// return ApiResponse.success();
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Result</span> <span class="n">result</span> <span class="o">=</span> <span class="n">fileService</span><span class="o">.</span><span class="na">breakpointResumeUpload</span><span class="o">(</span><span class="n">param</span><span class="o">,</span> <span class="n">request</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">NovelWebUtils</span><span class="o">.</span><span class="na">forReturn</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 检查文件MD5（文件MD5若已存在进行秒传）
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param chunkMap
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @return {@link ApiResponse}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @author 7bin
+</span></span></span><span class="line"><span class="cl"><span class="cm"> **/</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/breakpoint-upload&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">ApiResponse</span> <span class="nf">breakpointResumeUploadPre</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@RequestParam</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">chunkMap</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">md5</span> <span class="o">=</span> <span class="n">chunkMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;identifier&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">chunkMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;filename&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Result</span><span class="o">&lt;</span><span class="n">JSONArray</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">fileService</span><span class="o">.</span><span class="na">checkFileMd5</span><span class="o">(</span><span class="n">md5</span><span class="o">,</span> <span class="n">filename</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">JSONObject</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JSONObject</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 数据库中存在该md5则秒传
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">result</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;skipUpload&#34;</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ApiResponse</span><span class="o">.</span><span class="na">success</span><span class="o">(</span><span class="n">res</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">boolean</span> <span class="n">skipUpload</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">(</span><span class="s">&#34;200&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getCode</span><span class="o">())</span> <span class="o">||</span> <span class="s">&#34;201&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getCode</span><span class="o">()))</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">skipUpload</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">&#34;206&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getCode</span><span class="o">()))</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 已经上传部分分块
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// data中存放的是还未上传的分块
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">JSONArray</span> <span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getData</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;missChunks&#34;</span><span class="o">,</span><span class="n">data</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">res</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;skipUpload&#34;</span><span class="o">,</span><span class="n">skipUpload</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ApiResponse</span><span class="o">.</span><span class="na">success</span><span class="o">(</span><span class="n">res</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Result result = fileService.breakpointResumeUpload(param, request);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// return NovelWebUtils.forReturn(result);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><code>Service</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">JSONArray</span><span class="o">&gt;</span> <span class="nf">checkFileMd5</span><span class="o">(</span><span class="n">String</span> <span class="n">md5</span><span class="o">,</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">boolean</span> <span class="n">exist</span> <span class="o">=</span> <span class="n">fileMapper</span><span class="o">.</span><span class="na">fileIsExist</span><span class="o">(</span><span class="n">md5</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">(</span><span class="n">exist</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Result</span><span class="o">&lt;</span><span class="n">JSONArray</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// String realFilename = md5 + &#34;_&#34; + fileName;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">String</span> <span class="n">realFilename</span> <span class="o">=</span> <span class="n">md5</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">LocalUpload</span><span class="o">.</span><span class="na">checkFileMd5</span><span class="o">(</span><span class="n">md5</span><span class="o">,</span> <span class="n">realFilename</span><span class="o">,</span> <span class="n">confFilePath</span><span class="o">,</span> <span class="n">savePath</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// e.printStackTrace();
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="k">new</span> <span class="n">ServiceException</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">Result</span> <span class="nf">breakpointResumeUpload</span><span class="o">(</span><span class="n">UploadFileParam</span> <span class="n">param</span><span class="o">,</span> <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 这里的 chunkSize(分片大小) 要与前端传过来的大小一致
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// long chunkSize = Objects.isNull(param.getChunkSize()) ? 5 * 1024 * 1024
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">//     : param.getChunkSize();
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 实际存储的文件格式为 [{md5}_{filename}]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// String realFilename = param.getMd5() + &#34;_&#34; + param.getName();
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">String</span> <span class="n">realFilename</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="na">getMd5</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">param</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">realFilename</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">LocalUpload</span><span class="o">.</span><span class="na">fragmentFileUploader</span><span class="o">(</span><span class="n">param</span><span class="o">,</span> <span class="n">confFilePath</span><span class="o">,</span> <span class="n">savePath</span><span class="o">,</span> <span class="mi">5242880L</span><span class="o">,</span> <span class="n">request</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// return NovelWebUtils.forReturn(result);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="k">new</span> <span class="n">ServiceException</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="前端代码">前端代码<a hidden class="anchor" aria-hidden="true" href="#前端代码">#</a></h2>
+<p><strong><code>SimpleUploader.vue</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span><span class="lnt">248
+</span><span class="lnt">249
+</span><span class="lnt">250
+</span><span class="lnt">251
+</span><span class="lnt">252
+</span><span class="lnt">253
+</span><span class="lnt">254
+</span><span class="lnt">255
+</span><span class="lnt">256
+</span><span class="lnt">257
+</span><span class="lnt">258
+</span><span class="lnt">259
+</span><span class="lnt">260
+</span><span class="lnt">261
+</span><span class="lnt">262
+</span><span class="lnt">263
+</span><span class="lnt">264
+</span><span class="lnt">265
+</span><span class="lnt">266
+</span><span class="lnt">267
+</span><span class="lnt">268
+</span><span class="lnt">269
+</span><span class="lnt">270
+</span><span class="lnt">271
+</span><span class="lnt">272
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;global-uploader&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">uploader</span>
+</span></span><span class="line"><span class="cl">      <span class="na">class</span><span class="o">=</span><span class="s">&#34;uploader-app&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="na">:options</span><span class="o">=</span><span class="s">&#34;initOptions&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="na">:file-status-text</span><span class="o">=</span><span class="s">&#34;fileStatusText&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="na">:auto-start</span><span class="o">=</span><span class="s">&#34;false&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="err">@</span><span class="na">file-added</span><span class="o">=</span><span class="s">&#34;onFileAdded&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="err">@</span><span class="na">file-success</span><span class="o">=</span><span class="s">&#34;onFileSuccess&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="err">@</span><span class="na">file-progress</span><span class="o">=</span><span class="s">&#34;onFileProgress&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="err">@</span><span class="na">file-error</span><span class="o">=</span><span class="s">&#34;onFileError&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">uploader-unsupport</span><span class="p">&gt;&lt;/</span><span class="nt">uploader-unsupport</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">uploader-drop</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">uploader-btn</span> <span class="p">&gt;</span>选择文件<span class="p">&lt;/</span><span class="nt">uploader-btn</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;margin-left: 10px&#34;</span><span class="p">&gt;</span>（支持上传一个或多个文件）<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="c">&lt;!--&lt;uploader-btn directory&gt;上传文件夹 &lt;/uploader-btn&gt;--&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">uploader-drop</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!--&lt;uploader-btn id=&#34;global-uploader-btn&#34; ref=&#34;uploadBtnRef&#34;&gt;选择文件&lt;/uploader-btn&gt;--&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!--&lt;span&gt;（支持上传一个或多个文件）&lt;/span&gt;--&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">uploader-list</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">template</span> <span class="err">#</span><span class="na">default</span><span class="o">=</span><span class="s">&#34;{ fileList }&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;file-panel&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="c">&lt;!--&lt;div class=&#34;file-title&#34;&gt;--&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="c">&lt;!--  &lt;div class=&#34;title&#34;&gt;文件列表&lt;/div&gt;--&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="c">&lt;!--&lt;/div&gt;--&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;file-list&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">&lt;</span><span class="nt">li</span>
+</span></span><span class="line"><span class="cl">                  <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;file in fileList&#34;</span>
+</span></span><span class="line"><span class="cl">                  <span class="na">:key</span><span class="o">=</span><span class="s">&#34;file.id&#34;</span>
+</span></span><span class="line"><span class="cl">                  <span class="na">class</span><span class="o">=</span><span class="s">&#34;file-item&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">uploader-file</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">ref</span><span class="o">=</span><span class="s">&#34;files&#34;</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">:class</span><span class="o">=</span><span class="s">&#34;[&#39;file_&#39; + file.id, customStatus]&#34;</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">:file</span><span class="o">=</span><span class="s">&#34;file&#34;</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">:list</span><span class="o">=</span><span class="s">&#34;true&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&gt;&lt;/</span><span class="nt">uploader-file</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">&lt;</span><span class="nt">div</span> <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;!fileList.length&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;no-file&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="c">&lt;!--&lt;Icon icon=&#34;ri:file-3-line&#34; width=&#34;16&#34; /&gt; 暂无待上传文件--&gt;</span>
+</span></span><span class="line"><span class="cl">                暂无待上传文件
+</span></span><span class="line"><span class="cl">              <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">uploader-list</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">uploader</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">setup</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">useCurrentInstance</span> <span class="nx">from</span> <span class="s2">&#34;@/utils/currentInstance&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">generateMD5</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&#34;@/components/Uploader/utils/md5&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">ElNotification</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&#34;element-plus&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">addFileToDrive</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&#34;@/api/drive/drive&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">checkAuth</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&#34;@/api/admin/user&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="p">{</span> <span class="nx">proxy</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">useCurrentInstance</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// TODO 上传组件还有bug 上传成功时动作按钮没有隐藏；后端出现错误上传失败时背景色没变红
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// props
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// emits
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">emits</span> <span class="o">=</span> <span class="nx">defineEmits</span><span class="p">([</span><span class="s1">&#39;uploadSuccess&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">drivePath</span> <span class="o">=</span> <span class="kr">import</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">VITE_APP_DRIVE_API</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">initOptions</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">target</span><span class="o">:</span> <span class="nx">drivePath</span> <span class="o">+</span> <span class="s2">&#34;/file/breakpoint-upload&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">chunkSize</span><span class="o">:</span> <span class="s1">&#39;5242880&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">forceChunkSize</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">fileParameterName</span><span class="o">:</span> <span class="s1">&#39;file&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">maxChunkRetries</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 是否开启服务器分片校验
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">testChunks</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 服务器分片校验函数，秒传及断点续传基础
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">checkChunkUploadedByResponse</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">,</span> <span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">skip</span> <span class="o">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// console.log(&#34;checkChunkUploadedByResponse chunk:&#34;, chunk);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// console.log(&#34;checkChunkUploadedByResponse message:&#34;, message);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nx">objMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// console.log(&#34;objMessage:&#34;, objMessage);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">if</span> <span class="p">(</span><span class="nx">objMessage</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">objMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">skipUpload</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">skip</span> <span class="o">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">objMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">missChunks</span> <span class="o">==</span> <span class="kc">null</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">skip</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">skip</span> <span class="o">=</span> <span class="p">(</span><span class="nx">objMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">missChunks</span> <span class="o">||</span> <span class="p">[]).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">chunk</span><span class="p">.</span><span class="nx">offset</span><span class="p">.</span><span class="nx">toString</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// console.log(&#34;skip: &#34; + chunk.offset + &#34; &#34; + skip);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="nx">skip</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">query</span><span class="o">:</span> <span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">chunk</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// console.log(&#34;query:&#34;, file);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="p">...</span><span class="nx">file</span><span class="p">.</span><span class="nx">params</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">customStatus</span> <span class="o">=</span> <span class="nx">ref</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">fileStatusText</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">success</span><span class="o">:</span> <span class="s1">&#39;上传成功&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">error</span><span class="o">:</span> <span class="s1">&#39;上传失败&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">uploading</span><span class="o">:</span> <span class="s1">&#39;上传中&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">paused</span><span class="o">:</span> <span class="s1">&#39;已暂停&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">waiting</span><span class="o">:</span> <span class="s1">&#39;等待上传&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// const uploaderRef = ref()
+</span></span></span><span class="line"><span class="cl"><span class="c1">// const uploader = computed(() =&gt; uploaderRef.value?.uploader)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kr">async</span> <span class="kd">function</span> <span class="nx">onFileAdded</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 判断用户是否已经登录了，登录才可以添加
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kr">await</span> <span class="nx">checkAuth</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 暂停文件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// 选择文件后暂停文件上传，上传时手动启动
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">file</span><span class="p">.</span><span class="nx">pause</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// console.log(&#34;onFileAdded file: &#34;, file);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// panelShow.value = true
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// trigger(&#39;fileAdded&#39;)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// 将额外的参数赋值到每个文件上，以不同文件使用不同params的需求
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// file.params = customParams.value
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// 计算MD5
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kr">const</span> <span class="nx">md5</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">computeMD5</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">startUpload</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">md5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">computeMD5</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 文件状态设为&#34;计算MD5&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">statusSet</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="s1">&#39;md5&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 计算MD5时隐藏&#34;开始&#34;按钮
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">nextTick</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// document.querySelector(`.file_${file.id} .uploader-file-resume`).style.display = &#39;none&#39;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="sb">`.file_</span><span class="si">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">id</span><span class="si">}</span><span class="sb"> .uploader-file-actions`</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 开始计算MD5
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">generateMD5</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">onProgress</span><span class="p">(</span><span class="nx">currentChunk</span><span class="p">,</span> <span class="nx">chunks</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 实时展示MD5的计算进度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">nextTick</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="kr">const</span> <span class="nx">md5ProgressText</span> <span class="o">=</span> <span class="s1">&#39;校验MD5 &#39;</span> <span class="o">+</span> <span class="p">((</span><span class="nx">currentChunk</span> <span class="o">/</span> <span class="nx">chunks</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
+</span></span><span class="line"><span class="cl">          <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="sb">`.custom-status-</span><span class="si">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">id</span><span class="si">}</span><span class="sb">`</span><span class="p">).</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">md5ProgressText</span>
+</span></span><span class="line"><span class="cl">        <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">onSuccess</span><span class="p">(</span><span class="nx">md5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">statusRemove</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">resolve</span><span class="p">(</span><span class="nx">md5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">onError</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">error</span><span class="p">(</span><span class="sb">`文件</span><span class="si">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">读取出错，请检查该文件`</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">file</span><span class="p">.</span><span class="nx">cancel</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">statusRemove</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">reject</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// md5计算完毕，开始上传
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">function</span> <span class="nx">startUpload</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">md5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">file</span><span class="p">.</span><span class="nx">uniqueIdentifier</span> <span class="o">=</span> <span class="nx">md5</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">file</span><span class="p">.</span><span class="nx">resume</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">onFileProgress</span><span class="p">(</span><span class="nx">rootFile</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="sb">`上传中 </span><span class="si">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">，chunk：</span><span class="si">${</span><span class="nx">chunk</span><span class="p">.</span><span class="nx">startByte</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span><span class="si">}</span><span class="sb"> ~ </span><span class="si">${</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">chunk</span><span class="p">.</span><span class="nx">endByte</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span>
+</span></span><span class="line"><span class="cl">    <span class="si">}</span><span class="sb">`</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">onFileError</span> <span class="o">=</span> <span class="p">(</span><span class="nx">rootFile</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">chunk</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// console.log(&#39;error&#39;, file)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">error</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">error</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">ElNotification</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;错误&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">message</span><span class="o">:</span> <span class="nx">msg</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">duration</span><span class="o">:</span> <span class="mi">2000</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">onFileSuccess</span> <span class="o">=</span> <span class="p">(</span><span class="nx">rootFile</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">chunk</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// console.log(&#34;上传成功&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// console.log(&#34;rootFile&#34;,rootFile)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// file的relativePath是文件夹的相对路径(如果上传的是文件夹的话)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// console.log(&#34;file&#34;,file)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// console.log(&#34;response&#34;,JSON.parse(response))
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// console.log(&#34;chunk&#34;,chunk)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// addFileToDrive(file.name, file.uniqueIdentifier, file.size).then(() =&gt; {
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">//   proxy.$modal.msgSuccess(&#34;文件上传成功&#34;);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// })
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 服务端自定义的错误（即http状态码为200，但是是错误的情况），这种错误是Uploader无法拦截的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">let</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;onFileSuccess res:&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">code</span> <span class="o">!==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">error</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 文件状态设为“失败”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">statusSet</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="s1">&#39;failed&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">emits</span><span class="p">(</span><span class="s2">&#34;uploadSuccess&#34;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 新增的自定义的状态: &#39;md5&#39;、&#39;merging&#39;、&#39;transcoding&#39;、&#39;failed&#39;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param id
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param status
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">statusSet</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">statusMap</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">md5</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;校验MD5&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">bgc</span><span class="o">:</span> <span class="s1">&#39;#fff&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">failed</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;上传失败&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">bgc</span><span class="o">:</span> <span class="s1">&#39;#e2eeff&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">customStatus</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">status</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">nextTick</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">statusTag</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">statusTag</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="sb">`custom-status-</span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb"> custom-status`</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">statusTag</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">statusMap</span><span class="p">[</span><span class="nx">status</span><span class="p">].</span><span class="nx">text</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">statusTag</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">statusMap</span><span class="p">[</span><span class="nx">status</span><span class="p">].</span><span class="nx">bgc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// custom-status 样式不生效
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 由于 style脚本 设置了 scoped，深层的样式修改不了
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 通过给当前组件设置一个id，在该id下设置样式，就可以保证样式不全局污染
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// statusTag.style.position = &#39;absolute&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// statusTag.style.top = &#39;0&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// statusTag.style.left = &#39;0&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// statusTag.style.right = &#39;0&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// statusTag.style.bottom = &#39;0&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// statusTag.style.zIndex = &#39;1&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">statusWrap</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="sb">`.file_</span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb"> .uploader-file-status`</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">statusWrap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">statusTag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">statusRemove</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">customStatus</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">nextTick</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">statusTag</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="sb">`.custom-status-</span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="sb">`.file_</span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb"> .uploader-file-actions`</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;block&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">statusTag</span><span class="p">.</span><span class="nx">remove</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><code>md5.js</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">SparkMD5</span> <span class="nx">from</span> <span class="s1">&#39;spark-md5&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 分段计算MD5
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param file {File}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param options {Object} - onProgress | onSuccess | onError
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="kd">function</span> <span class="nx">generateMD5</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">fileReader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">time</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">blobSlice</span> <span class="o">=</span> <span class="nx">File</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span> <span class="o">||</span> <span class="nx">File</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">mozSlice</span> <span class="o">||</span> <span class="nx">File</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">webkitSlice</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">chunkSize</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1000</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">size</span> <span class="o">/</span> <span class="nx">chunkSize</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nx">currentChunk</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">spark</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SparkMD5</span><span class="p">.</span><span class="nx">ArrayBuffer</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">loadNext</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">start</span> <span class="o">=</span> <span class="nx">currentChunk</span> <span class="o">*</span> <span class="nx">chunkSize</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">end</span> <span class="o">=</span> <span class="nx">start</span> <span class="o">+</span> <span class="nx">chunkSize</span> <span class="o">&gt;=</span> <span class="nx">file</span><span class="p">.</span><span class="nx">size</span> <span class="o">?</span> <span class="nx">file</span><span class="p">.</span><span class="nx">size</span> <span class="o">:</span> <span class="nx">start</span> <span class="o">+</span> <span class="nx">chunkSize</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">fileReader</span><span class="p">.</span><span class="nx">readAsArrayBuffer</span><span class="p">(</span><span class="nx">blobSlice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">file</span><span class="p">,</span> <span class="nx">start</span><span class="p">,</span> <span class="nx">end</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">loadNext</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">fileReader</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">spark</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">currentChunk</span> <span class="o">&lt;</span> <span class="nx">chunks</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">currentChunk</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">loadNext</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">onProgress</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onProgress</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">options</span><span class="p">.</span><span class="nx">onProgress</span><span class="p">(</span><span class="nx">currentChunk</span><span class="p">,</span> <span class="nx">chunks</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nx">md5</span> <span class="o">=</span> <span class="nx">spark</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c1">// md5计算完毕
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">options</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">(</span><span class="nx">md5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="sb">`MD5计算完毕：</span><span class="si">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb"> \nMD5：</span><span class="si">${</span><span class="nx">md5</span><span class="si">}</span><span class="sb"> \n分片：</span><span class="si">${</span><span class="nx">chunks</span><span class="si">}</span><span class="sb"> 大小:</span><span class="si">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">size</span><span class="si">}</span><span class="sb"> 用时：</span><span class="si">${</span>
+</span></span><span class="line"><span class="cl">          <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">time</span>
+</span></span><span class="line"><span class="cl">        <span class="si">}</span><span class="sb"> ms`</span>
+</span></span><span class="line"><span class="cl">      <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">fileReader</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;MD5计算失败&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">onError</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onError</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">options</span><span class="p">.</span><span class="nx">onError</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/design/redis%E5%92%8Cmysql%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%AE%9E%E7%8E%B0/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>redis和mysql缓存一致性实现</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/design/%E9%98%B2%E9%87%8D%E5%A4%8D%E6%8F%90%E4%BA%A4/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>防重复提交</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Hey, It&#39;s Bin!</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

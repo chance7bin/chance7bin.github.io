@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>移动端 on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/</link>
+    <description>Recent content in 移动端 on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 18 Dec 2020 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>移动端的地图开发</title>
+      <link>https://chance7bin.github.io/posts/map/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%9A%84%E5%9C%B0%E5%9B%BE%E5%BC%80%E5%8F%91/</link>
+      <pubDate>Fri, 18 Dec 2020 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%9A%84%E5%9C%B0%E5%9B%BE%E5%BC%80%E5%8F%91/</guid>
+      <description>uniapp中的APP开发使用开源地图的困难之处在于的APP端不支持document、window等对象的API，而开源地图的实例化又是需要</description>
+    </item>
+    
+  </channel>
+</rss>

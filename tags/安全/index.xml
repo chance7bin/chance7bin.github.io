@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>安全 on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/%E5%AE%89%E5%85%A8/</link>
+    <description>Recent content in 安全 on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 14 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E5%AE%89%E5%85%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>xss</title>
+      <link>https://chance7bin.github.io/posts/design/xss/</link>
+      <pubDate>Wed, 14 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/xss/</guid>
+      <description>XSS是跨站脚本攻击(Cross Site Scripting)，为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，故将跨站脚本攻击缩写为X</description>
+    </item>
+    
+    <item>
+      <title>防重复提交</title>
+      <link>https://chance7bin.github.io/posts/design/%E9%98%B2%E9%87%8D%E5%A4%8D%E6%8F%90%E4%BA%A4/</link>
+      <pubDate>Fri, 09 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/%E9%98%B2%E9%87%8D%E5%A4%8D%E6%8F%90%E4%BA%A4/</guid>
+      <description>日常开发中我们经常会遇到前端多次请求同一个接口的问题，比如前端没有做遮罩层，用户点击了多次按钮。全指望着用户来等待也并不靠谱，如果各个接口自</description>
+    </item>
+    
+    <item>
+      <title>限流</title>
+      <link>https://chance7bin.github.io/posts/design/%E9%99%90%E6%B5%81/</link>
+      <pubDate>Fri, 09 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/%E9%99%90%E6%B5%81/</guid>
+      <description>针对软件系统来说，限流就是对请求的速率进行限制，避免瞬时的大量请求击垮软件系统。毕竟，软件系统的处理能力是有限的。如果说超过了其处理能力的范</description>
+    </item>
+    
+  </channel>
+</rss>

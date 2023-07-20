@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>系统设计 on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</link>
+    <description>Recent content in 系统设计 on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 18 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>权限管理模块实现</title>
+      <link>https://chance7bin.github.io/posts/design/%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9D%97%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Sun, 18 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9D%97%E5%AE%9E%E7%8E%B0/</guid>
+      <description>0 引言 该篇文章是对Spring Security学习的总结，以及系统中认证授权的代码实现 参考链接 SpringSecurity-从入门到精通 1 Spring</description>
+    </item>
+    
+    <item>
+      <title>xss</title>
+      <link>https://chance7bin.github.io/posts/design/xss/</link>
+      <pubDate>Wed, 14 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/xss/</guid>
+      <description>XSS是跨站脚本攻击(Cross Site Scripting)，为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，故将跨站脚本攻击缩写为X</description>
+    </item>
+    
+    <item>
+      <title>redis和mysql缓存一致性实现</title>
+      <link>https://chance7bin.github.io/posts/design/redis%E5%92%8Cmysql%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Mon, 12 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/redis%E5%92%8Cmysql%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%AE%9E%E7%8E%B0/</guid>
+      <description>背景 如果你的业务处于起步阶段，流量非常小，那无论是读请求还是写请求，直接操作数据库即可，这时你的架构模型是这样的： 但随着业务量的增长，你的项</description>
+    </item>
+    
+    <item>
+      <title>断点续传</title>
+      <link>https://chance7bin.github.io/posts/design/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</link>
+      <pubDate>Fri, 09 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</guid>
+      <description>本篇文章主要内容是分片上传、断点续传、秒传的实现思路 前言 分片： 分片任务是在前端由vue-simple-uploader插件完成，流程：1.前</description>
+    </item>
+    
+    <item>
+      <title>防重复提交</title>
+      <link>https://chance7bin.github.io/posts/design/%E9%98%B2%E9%87%8D%E5%A4%8D%E6%8F%90%E4%BA%A4/</link>
+      <pubDate>Fri, 09 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/%E9%98%B2%E9%87%8D%E5%A4%8D%E6%8F%90%E4%BA%A4/</guid>
+      <description>日常开发中我们经常会遇到前端多次请求同一个接口的问题，比如前端没有做遮罩层，用户点击了多次按钮。全指望着用户来等待也并不靠谱，如果各个接口自</description>
+    </item>
+    
+    <item>
+      <title>限流</title>
+      <link>https://chance7bin.github.io/posts/design/%E9%99%90%E6%B5%81/</link>
+      <pubDate>Fri, 09 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/%E9%99%90%E6%B5%81/</guid>
+      <description>针对软件系统来说，限流就是对请求的速率进行限制，避免瞬时的大量请求击垮软件系统。毕竟，软件系统的处理能力是有限的。如果说超过了其处理能力的范</description>
+    </item>
+    
+    <item>
+      <title>参考资料</title>
+      <link>https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/</link>
+      <pubDate>Wed, 31 May 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/</guid>
+      <description>Spring AOP 实现 Redis 缓存切面 @EnableCaching spring boot提供了比较简单的缓存方案。只要使用 @EnableCaching 即可完成简单的缓存功能。 https://blog.csdn.net/micro_hz/article/details/76599632 参考博客 Spring的面向切面编程（AOP） Spring AOP</description>
+    </item>
+    
+    <item>
+      <title>工作流设计与实现</title>
+      <link>https://chance7bin.github.io/posts/design/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Tue, 21 Jun 2022 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</guid>
+      <description>引言 设计工作流的目的： 实现模型的自动化执行：对于一个需要繁琐步骤，通过多种方法计算的需求来说，通过构建工作流，可以省去一些重复的工作 实现模型</description>
+    </item>
+    
+    <item>
+      <title>restful风格API设计指南</title>
+      <link>https://chance7bin.github.io/posts/design/restful%E9%A3%8E%E6%A0%BCapi%E8%AE%BE%E8%AE%A1%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Thu, 29 Jul 2021 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/design/restful%E9%A3%8E%E6%A0%BCapi%E8%AE%BE%E8%AE%A1%E6%8C%87%E5%8D%97/</guid>
+      <description>restful风格API 设计指南 一、协议 API与用户的通信协议，总是使用HTTPs协议。 二、域名 应该尽量将API部署在专用域名之下。 https://api.example.com 如果确</description>
+    </item>
+    
+  </channel>
+</rss>

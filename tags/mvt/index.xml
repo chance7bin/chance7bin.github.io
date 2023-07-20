@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>mvt on Hey, It&#39;s Bin!</title>
+    <link>https://chance7bin.github.io/tags/mvt/</link>
+    <description>Recent content in mvt on Hey, It&#39;s Bin!</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 21 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/mvt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>mapbox vector tile 详解</title>
+      <link>https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Wed, 21 Jun 2023 22:37:33 +0800</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/</guid>
+      <description>矢量瓦片 GIS中的矢量与栅格数据 矢量切片(Vector tile) 在GIS中的数据分类有很多种方式，其中最常用的一种是根据数据组织结构方式的不同而分类</description>
+    </item>
+    
+  </channel>
+</rss>
