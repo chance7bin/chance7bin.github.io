@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Windows配置NFS | Binb&#39;s Blog</title>
+<meta name="keywords" content="NFS, 干货">
+<meta name="description" content="需求： 需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Windows配置NFS" />
+<meta property="og:description" content="需求： 需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-05-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-05-10T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Windows配置NFS"/>
+<meta name="twitter:description" content="需求： 需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻 我的笔记",
+      "item": "https://chance7bin.github.io/posts/note/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Windows配置NFS",
+      "item": "https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Windows配置NFS",
+  "name": "Windows配置NFS",
+  "description": "需求： 需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求",
+  "keywords": [
+    "NFS", "干货"
+  ],
+  "articleBody": " 需求：\n需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求\n1.安装haneWIN HaneWin NFS Server 是一个可以帮助快速搭建NFS服务器的软件\nhttps://www.hanewin.net/nfs-e.htm\n2.破解haneWIN haneWIN NFS Server 1.2.10 注册机下载： haneWIN NFS Server Keygen.7z (8265) (解压密码：astray.cn)\n运行注册机，输入Name，点击左边的按钮，生成Serial\n打开NFS Server，在注册界面输入注册机生成的License key和Your name，并点击Register\n点击help - About 查看是否注册成功\n3.配置exports文件 1 2 # exports example E:\\opengms-lab\\container\\nfs -public 上述配置的意思是将E:\\opengms-lab\\container\\nfs目录共享出去\n将该exports文件覆盖到软件的安装位置\n其他配置参考\n4.linux挂载设置 创建目录\n1 [root@localhost ~]# mkdir /opt/windowsNFS 挂载\n1 [root@localhost ~]# mount -t nfs 172.21.212.240:/e/opengms-lab/container/nfs /opt/windowsNFS 若无nfs功能\n1 2 3 [root@localhost cdrom]# yum install -y nfs-utils #安装nfs功能 #需要联网或者配置本地yum源 5.挂载不上的可能原因 1 2 [root@clustermaster opt]# mount -t nfs 172.21.212.240:/e/opengms-lab/container/nfs /opt/windowsNFS mount.nfs: Connection timed out 防火墙惹得祸：需要禁用防火墙\n设置windows防火墙的入栈规则（TCP，UDP） （另外对配置文件规则，就看你的网络连接是公用、专用、域的哪种了） \u003c经验证，使用hanWinNFS或windows自带的NFS服务 都是仅开放111,1058,2049 就可以了\u003e\n到这里基本就ok了，但正式给某学校应用时发现还是不得，后来发现学校做了阻止策略中把端口全部禁止了，要把禁止策略中的 111,1058,2049给去掉就可以了。\n6.检查挂载是否有问题 mount -a 可跳过， 直接用 df -h 查看\n1 [root@localhost ~]# mount -a 重启检查目录是否挂载\n1 2 3 4 5 6 7 8 9 10 [root@localhost ~]# df -h 文件系统 容量 已用 可用 已用% 挂载点 /dev/mapper/centos-root 47G 7.5G 40G 16% / devtmpfs 895M 0 895M 0% /dev tmpfs 911M 0 911M 0% /dev/shm tmpfs 911M 28M 884M 4% /run tmpfs 911M 0 911M 0% /sys/fs/cgroup /dev/sda1 1014M 170M 845M 17% /boot tmpfs 183M 12K 183M 1% /run/user/42 172.21.212.240:/e/opengms-lab/container/nfs 782G 684G 99G 88% /opt/windowsNFS 7.linux无法写入文件 具体做法：\n1.在haneWIN NFS Server的exports文件中增加 -maproot:0\n2.重新挂载\n1 [root@clustermaster /]# umount 172.21.212.240:/e/opengms-lab/container/nfs 取消挂载后原本挂载的文件夹可能会出现错误\n1 2 3 4 5 6 7 8 [root@clustermaster opt]# ll ls: 无法访问windowsNFS: 失效文件句柄 总用量 4 drwxr-xr-x 3 root root 17 2月 8 10:48 cni drwx--x--x 4 root root 28 2月 7 20:14 containerd drwxr-xr-x 5 root root 4096 4月 27 20:59 k8s drwxr-xr-x. 2 root root 6 9月 7 2017 rh d?????????? ? ? ? ? ? windowsNFS 需执行以下操作修复文件夹\n1 2 3 4 5 6 7 8 [root@clustermaster opt]# umount -l /opt/windowsNFS [root@clustermaster opt]# ll 总用量 4 drwxr-xr-x 3 root root 17 2月 8 10:48 cni drwx--x--x 4 root root 28 2月 7 20:14 containerd drwxr-xr-x 5 root root 4096 4月 27 20:59 k8s drwxr-xr-x. 2 root root 6 9月 7 2017 rh drwxr-xr-x 2 root root 6 5月 10 15:36 windowsNFS 再次挂载nfs\n1 [root@clustermaster opt]# mount -t nfs 172.21.212.240:/e/opengms-lab/container/nfs /opt/windowsNFS ",
+  "wordCount" : "1020",
+  "inLanguage": "zh",
+  "datePublished": "2023-05-10T00:00:00Z",
+  "dateModified": "2023-05-10T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/note/">👨🏻‍💻 我的笔记</a></div>
+    <h1 class="post-title">
+      Windows配置NFS
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-05-10
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>1020字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>3分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/nfs/" style="color: var(--secondary)!important;">NFS</a>
+                &nbsp;<a href="https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/" style="color: var(--secondary)!important;">干货</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#1%e5%ae%89%e8%a3%85hanewin" aria-label="1.安装haneWIN">1.安装haneWIN</a></li>
+                    <li>
+                        <a href="#2%e7%a0%b4%e8%a7%a3hanewin" aria-label="2.破解haneWIN">2.破解haneWIN</a></li>
+                    <li>
+                        <a href="#3%e9%85%8d%e7%bd%aeexports%e6%96%87%e4%bb%b6" aria-label="3.配置exports文件">3.配置exports文件</a></li>
+                    <li>
+                        <a href="#4linux%e6%8c%82%e8%bd%bd%e8%ae%be%e7%bd%ae" aria-label="4.linux挂载设置">4.linux挂载设置</a></li>
+                    <li>
+                        <a href="#5%e6%8c%82%e8%bd%bd%e4%b8%8d%e4%b8%8a%e7%9a%84%e5%8f%af%e8%83%bd%e5%8e%9f%e5%9b%a0" aria-label="5.挂载不上的可能原因">5.挂载不上的可能原因</a></li>
+                    <li>
+                        <a href="#6%e6%a3%80%e6%9f%a5%e6%8c%82%e8%bd%bd%e6%98%af%e5%90%a6%e6%9c%89%e9%97%ae%e9%a2%98" aria-label="6.检查挂载是否有问题">6.检查挂载是否有问题</a></li>
+                    <li>
+                        <a href="#7linux%e6%97%a0%e6%b3%95%e5%86%99%e5%85%a5%e6%96%87%e4%bb%b6" aria-label="7.linux无法写入文件">7.linux无法写入文件</a>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><blockquote>
+<p>需求：</p>
+<p>需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求</p>
+</blockquote>
+<h2 id="1安装hanewin">1.安装haneWIN<a hidden class="anchor" aria-hidden="true" href="#1安装hanewin">#</a></h2>
+<p>HaneWin NFS Server 是一个可以帮助快速搭建NFS服务器的软件</p>
+<p><a href="https://www.hanewin.net/nfs-e.htm">https://www.hanewin.net/nfs-e.htm</a></p>
+<h2 id="2破解hanewin">2.破解haneWIN<a hidden class="anchor" aria-hidden="true" href="#2破解hanewin">#</a></h2>
+<p>haneWIN NFS Server 1.2.10 注册机下载： <a href="https://pan.baidu.com/share/link?shareid=384400&amp;uk=3845392947">haneWIN NFS Server Keygen.7z (8265)</a> (解压密码：astray.cn)</p>
+<p>运行注册机，输入Name，点击左边的按钮，生成Serial</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307262327872.png" alt="image-20230510154915775"  />
+</p>
+<p>打开NFS Server，在注册界面输入注册机生成的License key和Your name，并点击Register</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307262327881.png" alt="image-20230510155110169"  />
+</p>
+<p>点击help - About 查看是否注册成功</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307262327901.png" alt="image-20230510155024015"  />
+</p>
+<h2 id="3配置exports文件">3.配置exports文件<a hidden class="anchor" aria-hidden="true" href="#3配置exports文件">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># exports example
+</span></span><span class="line"><span class="cl">E:\opengms-lab\container\nfs -public
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述配置的意思是将E:\opengms-lab\container\nfs目录共享出去</p>
+<p><strong>将该exports文件覆盖到软件的安装位置</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307262327903.png" alt="image-20230510155212303"  />
+</p>
+<p><strong>其他配置参考</strong></p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307262327905.png" alt="image-20230510160807932" style="zoom:80%;" /> 
+<h2 id="4linux挂载设置">4.linux挂载设置<a hidden class="anchor" aria-hidden="true" href="#4linux挂载设置">#</a></h2>
+<p>创建目录</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@localhost ~<span class="o">]</span><span class="c1"># mkdir /opt/windowsNFS</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>挂载</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@localhost ~<span class="o">]</span><span class="c1"># mount -t nfs 172.21.212.240:/e/opengms-lab/container/nfs /opt/windowsNFS</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>若无nfs功能</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@localhost cdrom<span class="o">]</span><span class="c1"># yum install -y nfs-utils</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#安装nfs功能</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#需要联网或者配置本地yum源</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="5挂载不上的可能原因">5.挂载不上的可能原因<a hidden class="anchor" aria-hidden="true" href="#5挂载不上的可能原因">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@clustermaster opt<span class="o">]</span><span class="c1"># mount -t nfs 172.21.212.240:/e/opengms-lab/container/nfs /opt/windowsNFS</span>
+</span></span><span class="line"><span class="cl">mount.nfs: Connection timed out
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>防火墙惹得祸：需要禁用防火墙</strong></p>
+<p>设置windows防火墙的入栈规则（TCP，UDP） （另外对配置文件规则，就看你的网络连接是公用、专用、域的哪种了） &lt;经验证，使用hanWinNFS或windows自带的NFS服务 都是仅开放111,1058,2049 就可以了&gt;</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307262327908.png" alt="img"  />
+</p>
+<p>到这里基本就ok了，但正式给某学校应用时发现还是不得，后来发现学校做了阻止策略中把端口全部禁止了，要把禁止策略中的 111,1058,2049给去掉就可以了。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307262327251.png" alt="img"  />
+</p>
+<h2 id="6检查挂载是否有问题">6.检查挂载是否有问题<a hidden class="anchor" aria-hidden="true" href="#6检查挂载是否有问题">#</a></h2>
+<p><code>mount -a</code> 可跳过， 直接用 <code>df -h</code> 查看</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@localhost ~<span class="o">]</span><span class="c1"># mount -a</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重启检查目录是否挂载</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ada" data-lang="ada"><span class="line"><span class="cl"><span class="err">[</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span> <span class="err">~]#</span> <span class="n">df</span> <span class="o">-</span><span class="n">h</span>
+</span></span><span class="line"><span class="cl"><span class="err">文件系统</span>                                     <span class="err">容量</span>  <span class="err">已用</span>  <span class="err">可用</span> <span class="err">已用%</span> <span class="err">挂载点</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">mapper</span><span class="o">/</span><span class="n">centos</span><span class="o">-</span><span class="n">root</span>                       <span class="mi">47</span><span class="n">G</span>  <span class="mf">7.5</span><span class="n">G</span>   <span class="mi">40</span><span class="n">G</span>   <span class="mi">16</span><span class="err">%</span> <span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="n">devtmpfs</span>                                     <span class="mi">895</span><span class="n">M</span>     <span class="mi">0</span>  <span class="mi">895</span><span class="n">M</span>    <span class="mi">0</span><span class="err">%</span> <span class="o">/</span><span class="n">dev</span>
+</span></span><span class="line"><span class="cl"><span class="n">tmpfs</span>                                        <span class="mi">911</span><span class="n">M</span>     <span class="mi">0</span>  <span class="mi">911</span><span class="n">M</span>    <span class="mi">0</span><span class="err">%</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">shm</span>
+</span></span><span class="line"><span class="cl"><span class="n">tmpfs</span>                                        <span class="mi">911</span><span class="n">M</span>   <span class="mi">28</span><span class="n">M</span>  <span class="mi">884</span><span class="n">M</span>    <span class="mi">4</span><span class="err">%</span> <span class="o">/</span><span class="n">run</span>
+</span></span><span class="line"><span class="cl"><span class="n">tmpfs</span>                                        <span class="mi">911</span><span class="n">M</span>     <span class="mi">0</span>  <span class="mi">911</span><span class="n">M</span>    <span class="mi">0</span><span class="err">%</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">fs</span><span class="o">/</span><span class="n">cgroup</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span>                                   <span class="mi">1014</span><span class="n">M</span>  <span class="mi">170</span><span class="n">M</span>  <span class="mi">845</span><span class="n">M</span>   <span class="mi">17</span><span class="err">%</span> <span class="o">/</span><span class="n">boot</span>
+</span></span><span class="line"><span class="cl"><span class="n">tmpfs</span>                                        <span class="mi">183</span><span class="n">M</span>   <span class="mi">12</span><span class="n">K</span>  <span class="mi">183</span><span class="n">M</span>    <span class="mi">1</span><span class="err">%</span> <span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="mi">42</span>
+</span></span><span class="line"><span class="cl"><span class="mf">172.21</span><span class="p">.</span><span class="mf">212.240</span><span class="p">:</span><span class="o">/</span><span class="n">e</span><span class="o">/</span><span class="n">opengms</span><span class="o">-</span><span class="n">lab</span><span class="o">/</span><span class="n">container</span><span class="o">/</span><span class="n">nfs</span>  <span class="mi">782</span><span class="n">G</span>  <span class="mi">684</span><span class="n">G</span>   <span class="mi">99</span><span class="n">G</span>   <span class="mi">88</span><span class="err">%</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">windowsNFS</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="7linux无法写入文件">7.linux无法写入文件<a hidden class="anchor" aria-hidden="true" href="#7linux无法写入文件">#</a></h2>
+<p>具体做法：</p>
+<p>1.在haneWIN NFS Server的exports文件中增加 <code>-maproot:0</code></p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307262327269.png" alt="image-20230510163236222" style="zoom: 67%;" />  
+<p>2.重新挂载</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@clustermaster /<span class="o">]</span><span class="c1"># umount 172.21.212.240:/e/opengms-lab/container/nfs</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>取消挂载后原本挂载的文件夹可能会出现错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@clustermaster opt<span class="o">]</span><span class="c1"># ll</span>
+</span></span><span class="line"><span class="cl">ls: 无法访问windowsNFS: 失效文件句柄
+</span></span><span class="line"><span class="cl">总用量 <span class="m">4</span>
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">3</span> root root   <span class="m">17</span> 2月   <span class="m">8</span> 10:48 cni
+</span></span><span class="line"><span class="cl">drwx--x--x  <span class="m">4</span> root root   <span class="m">28</span> 2月   <span class="m">7</span> 20:14 containerd
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">5</span> root root <span class="m">4096</span> 4月  <span class="m">27</span> 20:59 k8s
+</span></span><span class="line"><span class="cl">drwxr-xr-x. <span class="m">2</span> root root    <span class="m">6</span> 9月   <span class="m">7</span> <span class="m">2017</span> rh
+</span></span><span class="line"><span class="cl">d?????????? ? ?    ?       ?            ? windowsNFS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>需执行以下操作修复文件夹</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@clustermaster opt<span class="o">]</span><span class="c1"># umount -l /opt/windowsNFS</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@clustermaster opt<span class="o">]</span><span class="c1"># ll</span>
+</span></span><span class="line"><span class="cl">总用量 <span class="m">4</span>
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">3</span> root root   <span class="m">17</span> 2月   <span class="m">8</span> 10:48 cni
+</span></span><span class="line"><span class="cl">drwx--x--x  <span class="m">4</span> root root   <span class="m">28</span> 2月   <span class="m">7</span> 20:14 containerd
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">5</span> root root <span class="m">4096</span> 4月  <span class="m">27</span> 20:59 k8s
+</span></span><span class="line"><span class="cl">drwxr-xr-x. <span class="m">2</span> root root    <span class="m">6</span> 9月   <span class="m">7</span> <span class="m">2017</span> rh
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">2</span> root root    <span class="m">6</span> 5月  <span class="m">10</span> 15:36 windowsNFS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再次挂载nfs</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>root@clustermaster opt<span class="o">]</span><span class="c1"># mount -t nfs 172.21.212.240:/e/opengms-lab/container/nfs /opt/windowsNFS</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>参考资料</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/note/ubuntu%E9%83%A8%E7%BD%B2node%E9%A1%B9%E7%9B%AE/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>ubuntu部署node项目</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

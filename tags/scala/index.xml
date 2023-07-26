@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Scala on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/scala/</link>
+    <description>Recent content in Scala on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 21 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/scala/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GeoTrellis</title>
+      <link>https://chance7bin.github.io/posts/note/geotrellis/</link>
+      <pubDate>Tue, 21 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/geotrellis/</guid>
+      <description>什么是GeoTrellis？ GeoTrellis 是一个 Scala 库和框架，它使用 Apache Spark 处理栅格数据。 GeoTrellis 以尽可能快的速度读取、写入和操作栅格数据。它实现了许多地图代数操作</description>
+    </item>
+    
+  </channel>
+</rss>

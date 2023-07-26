@@ -6,7 +6,25 @@
     <description>Recent content in   on Binb&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 21 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>docker</title>
+      <link>https://chance7bin.github.io/tags/docker/</link>
+      <pubDate>Mon, 17 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>虚拟机</title>
+      <link>https://chance7bin.github.io/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/</link>
+      <pubDate>Mon, 17 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>mbtiles</title>
       <link>https://chance7bin.github.io/tags/mbtiles/</link>
@@ -80,11 +98,56 @@
     </item>
     
     <item>
+      <title>Spring Boot</title>
+      <link>https://chance7bin.github.io/tags/spring-boot/</link>
+      <pubDate>Sat, 10 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/spring-boot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>断点续传</title>
       <link>https://chance7bin.github.io/tags/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</link>
       <pubDate>Fri, 09 Jun 2023 22:37:33 +0800</pubDate>
       
       <guid>https://chance7bin.github.io/tags/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>NFS</title>
+      <link>https://chance7bin.github.io/tags/nfs/</link>
+      <pubDate>Wed, 10 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/nfs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>干货</title>
+      <link>https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/</link>
+      <pubDate>Wed, 10 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nodejs</title>
+      <link>https://chance7bin.github.io/tags/nodejs/</link>
+      <pubDate>Sun, 16 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/nodejs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ubuntu</title>
+      <link>https://chance7bin.github.io/tags/ubuntu/</link>
+      <pubDate>Sun, 16 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/ubuntu/</guid>
       <description></description>
     </item>
     
@@ -98,11 +161,38 @@
     </item>
     
     <item>
-      <title>干货</title>
-      <link>https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/</link>
-      <pubDate>Mon, 27 Mar 2023 21:06:06 +0800</pubDate>
+      <title>Linux</title>
+      <link>https://chance7bin.github.io/tags/linux/</link>
+      <pubDate>Tue, 21 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/</guid>
+      <guid>https://chance7bin.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>软考</title>
+      <link>https://chance7bin.github.io/tags/%E8%BD%AF%E8%80%83/</link>
+      <pubDate>Wed, 02 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/%E8%BD%AF%E8%80%83/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Vue</title>
+      <link>https://chance7bin.github.io/tags/vue/</link>
+      <pubDate>Wed, 14 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/vue/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jupyter</title>
+      <link>https://chance7bin.github.io/tags/jupyter/</link>
+      <pubDate>Tue, 09 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/jupyter/</guid>
       <description></description>
     </item>
     
@@ -112,6 +202,60 @@
       <pubDate>Tue, 21 Jun 2022 22:37:33 +0800</pubDate>
       
       <guid>https://chance7bin.github.io/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://chance7bin.github.io/tags/python/</link>
+      <pubDate>Fri, 03 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GIS</title>
+      <link>https://chance7bin.github.io/tags/gis/</link>
+      <pubDate>Tue, 17 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/gis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>k8s</title>
+      <link>https://chance7bin.github.io/tags/k8s/</link>
+      <pubDate>Wed, 27 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/k8s/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>操作系统</title>
+      <link>https://chance7bin.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Mon, 18 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scala</title>
+      <link>https://chance7bin.github.io/tags/scala/</link>
+      <pubDate>Tue, 21 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/scala/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>web</title>
+      <link>https://chance7bin.github.io/tags/web/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/tags/web/</guid>
       <description></description>
     </item>
     

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>操作系统 on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
+    <description>Recent content in 操作系统 on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 18 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CPU、内核、线程</title>
+      <link>https://chance7bin.github.io/posts/note/cpu%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B/</link>
+      <pubDate>Mon, 18 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/cpu%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B/</guid>
+      <description>Name：表示物理CPU数 NumberOfCores：表示CPU核心数 NumberOfLogicalProcessors：表示CPU线程数 注</description>
+    </item>
+    
+  </channel>
+</rss>

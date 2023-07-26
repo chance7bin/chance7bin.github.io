@@ -6,23 +6,50 @@
     <description>Recent content in 干货 on Binb&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 27 Mar 2023 21:06:06 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 10 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E5%B9%B2%E8%B4%A7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows配置NFS</title>
+      <link>https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/</link>
+      <pubDate>Wed, 10 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/</guid>
+      <description>需求： 需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求</description>
+    </item>
+    
     <item>
       <title>使用 Hugo &#43; Github 搭建个人博客</title>
-      <link>https://chance7bin.github.io/posts/tech/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
+      <link>https://chance7bin.github.io/posts/note/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
       <pubDate>Mon, 27 Mar 2023 21:06:06 +0800</pubDate>
       
-      <guid>https://chance7bin.github.io/posts/tech/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
+      <guid>https://chance7bin.github.io/posts/note/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
       <description>初见Hugo Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。 1. 安装 Hugo 到 Hugo Releases 下载适合你的操作系统的版本。 Wind</description>
     </item>
     
     <item>
       <title>雪花算法详解及springboot集成</title>
-      <link>https://chance7bin.github.io/posts/tech/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/</link>
+      <link>https://chance7bin.github.io/posts/note/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/</link>
       <pubDate>Tue, 11 Oct 2022 22:37:33 +0800</pubDate>
       
-      <guid>https://chance7bin.github.io/posts/tech/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/</guid>
+      <guid>https://chance7bin.github.io/posts/note/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/</guid>
       <description>参考链接： 快速了解雪花算法详解及spring boot集成 SpringBoot快速开发（六）【雪花算法（snowflake）自增ID】 1.介绍</description>
+    </item>
+    
+    <item>
+      <title>csdn导出为md文件</title>
+      <link>https://chance7bin.github.io/posts/note/csdn%E5%AF%BC%E5%87%BA%E4%B8%BAmd%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Thu, 14 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/csdn%E5%AF%BC%E5%87%BA%E4%B8%BAmd%E6%96%87%E4%BB%B6/</guid>
+      <description>CSDNExporter-master 该笔记记录CSDNExporter-master的配置，以及一些代码的修改 安装必要的 Python 库, 如 httpx, requests, BeautifulSoup; 为了解析图片链接, 需要安装 aria2, 并保证能在命</description>
+    </item>
+    
+    <item>
+      <title>Sublime Text3 配置SFTP</title>
+      <link>https://chance7bin.github.io/posts/note/sublime-text3-%E9%85%8D%E7%BD%AEsftp/</link>
+      <pubDate>Mon, 28 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/sublime-text3-%E9%85%8D%E7%BD%AEsftp/</guid>
+      <description>参考链接 https://www.cnblogs.com/daxuan/p/11014529.html https://www.jianshu.com/p/0d36cbdecea8 1.进入到User文件夹下新建一个文件夹当项目目录 C:\Users\binbin\AppData\Roaming\Sublime Text\Packages\User 2.打开sublime，关联远程服务器 3.修改配置文件 4.设置完成之后拉取</description>
     </item>
     
   </channel>

@@ -9,10 +9,10 @@
     <lastBuildDate>Mon, 27 Mar 2023 21:06:06 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E5%8D%9A%E5%AE%A2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用 Hugo &#43; Github 搭建个人博客</title>
-      <link>https://chance7bin.github.io/posts/tech/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
+      <link>https://chance7bin.github.io/posts/note/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
       <pubDate>Mon, 27 Mar 2023 21:06:06 +0800</pubDate>
       
-      <guid>https://chance7bin.github.io/posts/tech/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
+      <guid>https://chance7bin.github.io/posts/note/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
       <description>初见Hugo Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。 1. 安装 Hugo 到 Hugo Releases 下载适合你的操作系统的版本。 Wind</description>
     </item>
     

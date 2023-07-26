@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>软考 程序员 | Binb&#39;s Blog</title>
+<meta name="keywords" content="软考">
+<meta name="description" content="学习攻略 真题 真题，建议从 10 年开始做，10 - 15 年的真题练习用，16 - 18 年真题自己卡时间模拟考 程序员考试重点汇总 计算机系统基础知识 进制之间的转化">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/note/%E8%BD%AF%E8%80%83-%E7%A8%8B%E5%BA%8F%E5%91%98/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="软考 程序员" />
+<meta property="og:description" content="学习攻略 真题 真题，建议从 10 年开始做，10 - 15 年的真题练习用，16 - 18 年真题自己卡时间模拟考 程序员考试重点汇总 计算机系统基础知识 进制之间的转化" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/note/%E8%BD%AF%E8%80%83-%E7%A8%8B%E5%BA%8F%E5%91%98/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-11-02T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="软考 程序员"/>
+<meta name="twitter:description" content="学习攻略 真题 真题，建议从 10 年开始做，10 - 15 年的真题练习用，16 - 18 年真题自己卡时间模拟考 程序员考试重点汇总 计算机系统基础知识 进制之间的转化"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻 我的笔记",
+      "item": "https://chance7bin.github.io/posts/note/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "软考 程序员",
+      "item": "https://chance7bin.github.io/posts/note/%E8%BD%AF%E8%80%83-%E7%A8%8B%E5%BA%8F%E5%91%98/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "软考 程序员",
+  "name": "软考 程序员",
+  "description": "学习攻略 真题 真题，建议从 10 年开始做，10 - 15 年的真题练习用，16 - 18 年真题自己卡时间模拟考 程序员考试重点汇总 计算机系统基础知识 进制之间的转化",
+  "keywords": [
+    "软考"
+  ],
+  "articleBody": " 学习攻略\n真题\n真题，建议从 10 年开始做，10 - 15 年的真题练习用，16 - 18 年真题自己卡时间模拟考\n程序员考试重点汇总 计算机系统基础知识 进制之间的转化 ==表示符：八进制还可以用Q表示==\n==ASCII：美国信息交换标准代码。一般使用7位二进制数来表示字母、数字、标点符号及部分特殊控制字符。==\n十进制和其他进制之间的转换\n==除基取余法：从下往上==\n==乘基取整法：从上往下==\n==不足x位时，小数前在高位加0，小数后在末尾加0==\n==1024 = 2^10^==\n奇校验：整个校验码（有效信息位和校验位）中“1”的个数为奇数。\n偶校验：整个校验码（有效信息位和校验位）中“1”的个数为偶数。\n奇偶校验，可检查1位的错误，不可纠错。\n原、反、补、移码运算和逻辑运算 原码：将数据用二进制形式表示，最高位为符号位, 正数为 0, 负数为 1。\n反码：正数的反码是其本身；负数的反码是在其原码的基础上, 符号位不变，其余各位取反。\n补码：正数的补码是其本身；负数的补码是在其原码的基础上, 符号位不变, 在反码的基础上+1。\n移码：将补码的符号位取反得相应的移码。\n注意：==在补码和移码表示中，0 有唯一的编码，补码中+0 和-0 均为 0000 0000（八位二进制表示下）==。\n多数计算机都采用补码进行加减运算，其符号位和数值位一样参与运算，无须做特殊处理。\n在 n 位二进制表示下：\n原码、反码表示的数据范围为：-（2^n-1^-1）～+（2^n-1^-1）\n补码、移码表示的数据范围为：-2^n-1^～+（2^n-1^-1）\n==补码中，用 1000 0000 表示-128。==\n浮点数 两浮点数进行运算的过程\n运算过程：\n对阶 \u003e 尾数计算 \u003e 结果格式化\n对阶时，小数向大数看齐，对阶是通过==较小数的尾数右移（小数点左移）==实现的\n结果格式化 01、10开头（0.5~1之间）\n逻辑运算 校验码 1、奇偶校验码\n由若干位有效信息（如一个字节），再加上一个二进制位（校验位）组成校验码。\n奇校验：整个校验码（有效信息位和校验位）中“1”的个数为奇数。\n偶校验：整个校验码（有效信息位和校验位）中“1”的个数为偶数。\n奇偶校验，可检查 1 位的错误，不可纠错。\n==奇偶校验，可检查奇数位的错误，不可纠错。如果偶数位发生错误，则发现不了。==\n2、海明码\n在数据位之间插入 K 个校验位，通过扩大码距来实现检错和纠错。\n3、循环冗余校验码（n,k）码\n信息码占 k 位，校验码占 n-k 位，校验码位数越长，校验能力越强。采用了模二运算。\n计算机系统与中央处理器构成 CPU 指令执行过程（流水线技术）\n计算机每执行一条指令都可分为三个阶段：取指令—分析指令—执行指令。\n取指令：根据程序计数器 PC 中的值从程序存储器读出现行指令，送到指令寄存器 IR。\n分析指令：将指令寄存器中的指令操作码取出后进行译码，分析其指令性质。\n执行指令：控制、指挥、协调整个计算机系统的各个子系统, 相互配合、有条不紊的完成各项任务。\n执行程序的过程实际上就是逐条指令地重复上述操作过程，直至遇到停机指令可循环等待指令。\n运算器和控制器的组成\n运算器的构成：\ni. 算术逻辑单元 ALU：数据的算术运算和逻辑运算\nii. 累加寄存器 AC（数据寄存器）：通用寄存器，为 ALU 提供一个工作区，用在暂存数据\niii. 数据缓冲寄存器 DR：写内存时，暂存指令或数据\niv. 状态条件寄存器 PSW：存状态标志与控制标志 （争议：也有将其归为控制器的）\n控制器的构成：\ni. 程序计数器 PC：存储下一条要执行指令的地址\nii. 指令寄存器 IR：存储正在执行的指令\niii. 指令译码器 ID：对指令中的操作码字段进行分析解释\niv. 时序部件：提供时序控制信号\n指令寻址和存储器 指令系统\n立即寻址方式：操作数直接在指令中，速度快，灵活性差\n直接寻址方式：指令中存放的是操作数的地址\n间接寻址方式：指令中存放了一个地址，这个地址对应的内容是操作数的地址\n寄存器寻址方式：寄存器存放操作数\n寄存器间接寻址方式：寄存器内存放的是操作数的地址\n回收站：外存\n剪切板：内存\n容量的换算\n位（b/bit）：存放一位二进制数\n字节（B/Byte）：8 个二进制位为一个字节\n1B=8b\n1KB=1024B\n1MB=1024KB\n1GB=1024MB\n1TB=1024GB\n1PB=1024TB\n1EB=1024PB\n1ZB=1024EB\n1YB=1024ZB\n内存编址\n内存编址：存储器由一块块的空间（存储单元）组成，为了方便寻找到每一块空间，我们需要对每一个空间进行标识，即用地址（唯一的编号）来标识内存每个单元内存容量=每个芯片容量*芯片个数\n每个芯片的容量=一个地址代表的容量*编址总数\n总线系统 总线分类：芯片内总线、元件级总线、系统总线（ ISA 总线、EISA 总线、PCI 总线等）和外总线（RS-232C、SCSI 总线、USB、IEEE-1394 等）\n系统总线的分类：地址总线、数据总线和控制总线\n数据总线：决定 CPU 和外界的数据传送速度。每条传输线一次只能传输 1 位二进制数据。“64 位的CPU”是指 CPU 的数据总线的宽度是 64 位。字长取决于数据总线的宽度。 地址总线：CPU 是通过地址总线来指定存储单元的，其决定了 CPU 所能访问的最大内存空间的大小。例如: 若计算机的地址总线的宽度为 32 位，则最多允许直接访问 4GB 的物理空间，所以最多支持 4G内存。 控制总线：对外部器件进行控制，其宽度决定了 CPU 对外部器件的控制能力。 设有一个64K×32位的存储器(每个存储单元为32位)，其存储单元的地址宽度为64K=2^16^，总共16位。这里32位可以说是每个存储单元为32位，也可以理解为数据总线宽度是32。\n系统总线的性能指标：\n带宽：单位时间上传送的数据量，即每秒钟传送的最大稳态数据传输率\n位宽：能同时传送的二进制数据的位数，或数据总线的位数，32 位、64 位等\nCPU 与外设数据交换方式\nCPU 与外设之间进行交换数据的方式：\n立即程序传送方式：I/O 接口总是准备接收来自主机的数据或向主机输入数据，无需查看接口的状态\n程序查询方式：CPU 通过查询执行程序查询外设的状态进行判断是否准备好\n中断方式：I/O 接口准备好后会发送中断信号通知 CPU，CPU 确认后保存正在执行程序现场转而执行 I/O 中断服务程序\n直接存储器存取 DMA 方式：数据的传送由 DMA 控制器进行控制，不需要 CPU 的干涉，只能进行简单的数据传送操作\n通道控制方式：CPU 按约定格式准备数据和命令，然后启动通道，通道执行相应的通道程序完成所要求的操作\n计算机的性能指标\n计算机系统的主要性能指标：\n响应时间：从用户输入完整的操作命令到系统开始显示应答信息为止的这段时间\n吞吐量：单位时间内系统完成的工作量\n周转时间：用户提交作业到执行后该作业返回给用户所需的时间\n时钟频率：即 CPU 主频，直接反映了机器的速度，通常主频越高其速度越快，主频=外频×倍频\n平均运算速度：指每秒钟所能执行的指令条数，用“百万条指令／秒”（MIPS）来描述\n多媒体基础知识 声音信号数字化过程：采样、量化和编码\n图像分辨率：一幅图像的像素密度，每英寸多少点（dpi）表示图像大小 ；200dpi扫描一幅2x2.5英寸的照片，则可以得到400x500像素点的图像。\n像素深度：存储每个像素所用的二进制数，度量图像的色彩分辨率，图像深度为b位，则该图像最多的颜色数或灰度级为2^b^种\n无损压缩：利用数据的统计冗余进行压缩，可以保证在数据压缩和还原过程中，图像信息没有损耗或失真。（RAR、ZIP、TIFF、BMP、GIF等）\n有损压缩：用于重构信号不一定非要与原始信号完全相同的场合，压缩比高。主要包括：DVD、VCD、MP3 、JPEG、 MPEG 、RMVB、 WMA 、WMV等）\n媒体的种类 1) 多媒体的概念及分类\n传播信息的载体，如语言、文字、图像、视频、音频等；\n存贮信息的载体，如 ROM、RAM、磁带、磁盘、光盘等。\n多媒体的分类：\n感觉媒体：直接用于人的感觉器官，使人产生直接感觉的媒体\n表示媒体：传输感觉媒体的中介媒体，用于数据交换的编码\n表现媒体：进行信息输入输出的媒体\n存储媒体：用于存储表示媒体的物理介质\n传输媒体：传输表示媒体的物理介质\n交换媒体包括存储媒体和传输媒体。\n多媒体编辑软件\n硬件系统：多媒体主机、多媒体输入设备、多媒体输出设备、多媒体存储设备、多媒体板卡、多媒体操作控制设备\n软件系统：多媒体操作系统、多媒体创作工具软件、多媒体素材编辑软件、多媒体应用软件\n多媒体素材编辑软件：\n文本工具：WPS、Notebook（记事本）、Writer（写字板）、word 和 OCR\n图形/图像工具：Photoshop、Illustrator、PhotoDeluxe、PageMaker、Coredraw、AutoCAD、Freehand、3ds Max、Screen Thief等\n动画工具：GIF Construction Set、Xara 3D\n视频工具：Media Studio Pro、Premiere\n音频工具：CoolEditPro、GoldWave、Cake Walk Pro Audio\n播放工具：Media Player、ACDSee\n音频 声音信号的数字化过程\n采样（采样频率，与采样周期成反比）\n量化（量化精度(量化分辨率):样本用二进制表示,位数多少反映精度）\n编码（按照一定格式进行数据编码及组织成文件）\n常见音频文件格式\n（.wav）：微软公司发布的音频文件格式, Windows 系统使用的标准音频文件格式。记录音乐的模拟信号的采样数值。质量高，数据量大。\n（.mod）：乐谱和乐曲使用的各种音色样本\n（.mp3）：最流行的音频文件格式\n（.ra）：网络上的音频格式，流媒体技术，强大压缩比和极小失真\n（.mid）：非波形采样点音乐格式，工业标准，文件非常小\n（.voc）：Create 公司发布的波形音频文件格式\n（.snd）：数字声音文件格式，支持压缩\n（.aif）：APPLE 计算机上的音频格式\n（.au）：Unix 系统中的数字文件格式\n图形和图像 图形/图像区别\n图形：矢量表示，用数学的方式来描述一幅图，放大、缩小、扭曲等变换后不会损失画面细节。（用于线框型图画、工程制图和美术字等）\n图像：像素点表示，用若干二进制位来指定像素的颜色、亮度和属性。放大后会失真。存储空间大，需进行压缩。\n图形图像主要性能指标\n显示分辨率：显示屏上能够显示的像素数目，1024x768 表示显示屏分为 768 行（垂直分辨率），每行（水平分辨率）显示 1024 像素。\n图像分辨率：一幅图像的像素密度，**每英寸多少点（dpi）**表示图像大小 ；200dpi 扫描一幅 2x2.5 英寸的照片，则可以得到400x500 像素点的图像。\n像素深度：存储每个像素所用的二进制数，度量图像的色彩分辨率，图像深度为 b 位，则该图像最多的颜色数或灰度级为 2^b^ 种\n常见图像文件格式\n（.bmp）：windows 标准位图文件格式\n（.gif）：用于网络传输，数据块为单位传输信息，采用无损压缩算法\n（.tif）：扫描仪和桌面出版系统中较为普及\n（.pcx）：PC 画笔的图像文件格式\n（.png）：作为 GIF 替代品\n（.jpg）：有损压缩，压缩比例高，适合于处理大量图像的场合\n（.wmf）：只在 windows 中使用，保存函数调用信息\njpeg：静态图像压缩标准\n动画和视频 常见视频文件格式\n（.gif）：用于网络传输\n（.avi）：微软公司发布的视频文件格式（AVI 文件）\n（.mov/.qt）：Apple 公司发布的视频文件格式，较小存储空间，开放性（Quick Time 文件）\n（.rm/.rmvb）：Real Networks 公司格式，影像实时传输与播放（RealVideo 文件）\n（.mpeg/.mpg/.dat/.mp4）：运动图像压缩标准，压缩效率高，质量好，兼容性好\n（.fli/.foc）:Autodesk 公司出品答得彩色动画文件格式（Flic 文件）\n多媒体相关计算 有损\u0026无损压缩格式\n无损压缩：利用数据的统计冗余进行压缩，可以保证在数据压缩和还原过程中，图像信息没有损耗或失真。（RAR、ZIP、TIFF、BMP、GIF 等）\n有损压缩：用于重构信号不一定非要与原始信号完全相同的场合，压缩比高。主要包括：DVD、VCD、MP3 、JPEG、 MPEG 、RMVB、 WMA 、WMV 等）\n操作系统 信号量S：整型变量，并根据控制对象进行赋值。S≧0表示资源可用数，S\u003c0表示排队进程数。\n互斥模型：多进程共享一台打印机。\n同步模型：单缓冲区生产者、消费者问题；多缓冲区生产者、消费者问题\n操作系统概述 操作系统的基本概念\n操作系统：组织和管理软件、硬件资源以及计算机系统中的工作流程，并控制程序的执行，向用户提供接口。\n特征：并发性、共享性、虚拟性和不确定性。\n功能：进程管理、存储管理、文件管理、作业管理和设备管理。\n类型：批处理、分时、实时、网络、分布式、微机和嵌入式。\n操作系统的五大功能\n进程管理：进程控制、进程同步、进程通信、进程调度\n文件管理：文件存储空间管理、目录管理、文件的读写管理、存取控制\n存储管理：存储分配与回收、存储保护、地址映射（变换）、主存扩充\n设备管理：对硬件设备管理，对输入输出设备的分配、启动、完成和回收\n作业管理：任务、界面管理，人机交互、图形界面、语音控制、虚拟现实\n操作系统的分类\n批处理操作系统：单道批和多道批操作系统\n分时操作系统： 一个计算机系统与多个终端设备连接，特点：多路性、独立性、交互性和及时性\n实时操作系统：实时控制系统和实时信息系统，交互能力要求不高，可靠性要求高\n网络操作系统：方便有效共享网络资源，提供服务软件和有关协议的集合，主要的网络操作系统有：Unix、Linux 和 Windows Server 系统\n分布式操作系统：任意两台计算机可以通过通信交换信息，是网络操作系统的更高级形式，具有透明性、可靠性和高性能等特性\n微机操作系统：Windows：Microsoft 开发的图形用户界面、多任务、多线程操作系统和 Linux：免费使用和自由传播的类 Unix 操作系统，多用户、多任务、多线程和多 CPU 的操作系统\n嵌入式操作系统：运行在智能芯片环境中，特点：微型化、可定制、实时性、可靠性、易移植性\n操作系统能方便用户之间的交流（x） 正确答案是网络\n进程管理 进程三态模型\n三态模型：哪三种状态和状态之间的转换\n信号量机制\n进程通信：各个进程交换信息的过程。\n分类：同步（直接制约）、互斥（申请临界资源间接制约）。\n信号量 S：整型变量，并根据控制对象进行赋值。S≧0 表示资源可用数，S\u003c0 表示排队进程数。\nn个资源m个进程：S的范围是 n-m ~ n\nn个进程，每个进程需要m个资源\n一定不会产生死锁：资源数 \u003e= n * (m - 1) + 1\n一定会产生死锁：资源数 \u003c= m - 1\n分类：公用信号量（互斥）、私用信号量（同步）\nPV 机制、互斥和同步\n互斥模型：多进程共享一台打印机。\n同步模型：单缓冲区生产者、消费者问题；多缓冲区生产者、消费者问题\n在单缓冲区生产者消费模型中：s1、s2 是同步信号量，s1 的初值为 1，s2 的初值为 0。\n如果是多缓冲区生产者消费者问题，则：s1、s2 是同步信号量，s1 的初值为 n，s2 的初值为 0（n 表示缓冲区可以容纳的产品数量）。\n存储管理 存储管理：目的是解决多个用户使用主存的问题。\n分类：分区存储管理、分页存储管理、分段存储管理、段页式存储管理以及虚拟存储管理。\n分页存储管理：用户程序的地址空间被划分成若干固定大小的区域，称为“页”，相应地，内存空间分成若干个物理块，页和块的大小相等。可将用户程序的任一页放在内存的任一块中，实现了离散分配。\n分段存储管理：将用户程序地址空间分成若干个大小不等的段，每段可以定义一组相对完整的逻辑信息。存储分配时，以段为单位，段与段在内存中可以不相邻接，也实现了离散分配。作业的地址空间被划分为若干个段，每个段定义了一组逻辑信息。段的长度由相应的逻辑信息组的长度决定，因而各段长度不等。\n段页式存储管理：用分段方法来分配和管理虚拟存储器。程序的地址空间按逻辑单位分成基本独立的段，而每一段有自己的段名，再把每段分成固定大小的若干页。\n(2) 用分页方法来分配和管理实存。把整个主存分成与上述页大小相等的存储块，可装入作业的任何一页。程序对内存的调入或调出是按页进行的。\n相对地址/虚地址/逻辑地址：在目标程序中，程序指令和数据的位置按照字或字节单位根据它们的相对顺序来确定，称为相对地址，一般从O开始依次进行编号。\n相对地址空间通过地址再定位机构转换到绝对地址空间(物理地址空间)。\n虚拟存储管理\n虚拟存储器：利用外部辅存暂存主存待加载的数据，组成主存+辅存的虚拟存储结构。\n虚拟存储器的最大容量是由计算机系统的地址结构和外存空间决定的。\n采用虚拟存储器的目的是扩大用户的地址空间。\n局限性：时间局限性、空间局限性。\n实现方式：请求分页系统、请求分段系统、请求段页式系统。\n页面置换算法\n页面置换算法：最佳置换算法、先进先出置换算法、最近最少未使用置换算法、最近未用置换算法。\n先根据所采用的方式确定淘汰的页面，然后再淘汰掉这个页面，再把缺的页面置换进去即可。\n逻辑地址都是页号+页内地址\n设备管理 CPU 与外设之间进行交换数据的方式：\n直接程序控制：\n1）立即程序传送方式：I/O 接口总是准备接收来自主机的数据或向主机输入数据，无需查看接口的状态；\n2）程序查询方式：CPU 通过查询执行程序查询外设的状态进行判断是否准备好，I/O 设备不主动反馈信息；\n中断方式：I/O 接口准备好后会发送中断信号通知 CPU，CPU 确认后保存正在执行程序现场转而执行 I/O 中断服务程序；\n直接存储器存取 DMA 方式：数据的传送由 DMA 控制器进行控制，不需要 CPU 的干涉，只能进行简单的数据传送操作；\n通道控制方式：CPU 按约定格式准备数据和命令，然后启动通道，通道执行相应的通道程序完成所要求的操作。\n磁盘调度\n磁盘调度：采用适当的调度算法，使各进程对磁盘的平均访问时间最小。硬/磁盘的主要技术指标：道密度、位密度、存储容量、平均存取时间、寻道时间、等待时间、数据传输率。\n数据读取时间：通常由磁道搜索、扇区搜索、数据传输三个部分组成。\n驱动调度：先来先服务、最短寻道时间优先、扫描算法、单向扫描调度算法。\n磁盘调度算法\n先来先服务算法：该算法实际上不考虑访问者要求访问的物理位置，而只是考虑访问者提出访问请求的先后次序。有可能随时改变移动臂的方向。\n最短寻找时间优先调度算法：从等待的访问者中挑选寻找时间最短的那个请求执行，而不管访问者的先后次序。这也有可能随时改变移动臂的方向。\n电梯调度算法：从移动臂当前位置沿移动方向选择最近的那个柱面的访问者来执行，若该方向上无请求访问时，就改变臂的移动方向再选择。\n单向扫描调度算法：不考虑访问者等待的先后次序，总是从 0 号柱面开始向里道扫描，按照各自所要访问的柱面位置的次序去选择访问者。在移动臂到达最后一个柱面后，立即快速返回到 0 号柱面，返回时不为任何的访问者提供服务，在返回到 0 号柱面后，再次进行扫描。\n文件管理 文件结构\n文件：具有符号名的、在逻辑上具有完整意义的一组相关信息项的集合。\n目录结构：一级目录结构、二级目录结构、三级目录结构\n文件路径\n绝对路径：从根目录开始的路径（如：C:\\username\\desktop\\document\\ABC.docx）\n相对路径：从用户当前工作目录下开始的路径 （如：document\\ABC.docx）\n文件命名要求\n文件夹命名规则：\n1）最大长度为 255 个字符\n2）允许使用英文字母，数字。￥ @ \u0026 +（ ）、下划线、空格、汉字，不允许使用？ \\ * \u003c \u003e ： / | ”\n3）在操作系统中搜索时可以用 * 匹配 0 个或多个字符，用 ? 匹配任何一个字符\n文件管理\n建立文件夹结构：建立适合自己的文件夹结构，注意控制文件夹结构的级数和每个文件夹中文件的个数（级数不要超过 5 级，每个文件夹的个数控制在 100 以内）\n文件和文件夹命名：规范的对文件夹和文件命名方便查看和检索\n数据备份 backup：对关键数据定期及时的备份，以免数据被毁造成重大损失\n文件类型\n文件类型和文件后缀名的对应关系\n系统的安全\n系统的安全：\n系统级：主要任务是不允许未经核准的用户进入系统，主要措施有：注册和登录\n用户级：对所有用户分类和对指定用户分配访问权，设置不同的存储权限分为超级用户、系统操作员和一般用户\n目录级：保护系统中的各种目录而设计的\n文件级：通过系统管理员或文件主对文件属性的设置来控制用户对文件的访问用户对文件的访问，包含：用户访问权、目录访问权限及文件属性权限\n用户权限管理\nwindows 中系统对用户的默认权限情况：\nAdministrators：管理员组，用户对计算机/域有不受限制的完全访问权。\nPower Users：高级用户组可以执行除了为 Administrators 组保留的任务外的其他任何操作系统任务。\nUsers：普通用户组，这个组的用户无法进行有意或无意的改动。\nEveryone：所有的用户，这个计算机上的所有用户都属于这个组。\nGuests：来宾组，来宾组跟普通组 Users 的成员有同等访问权，但来宾账户的限制更多。\n作业管理 正在执行的作业是进程。\n作业调度：先来先服务、短作业优先、响应比高优先、优先级调度、均衡调度。\n用户界面\n用户界面（ User interface ）：计算机中实现用户与计算通信的软件、硬件部分总称，也称之为用户接口或人机界面。\n用户界面设计原则：简易性、用户的语言、记忆负担最小化、一致性、利用用户的熟悉程度、从用户的观点考虑（最关键的判断点）、排列分组、安全性、人性化\n程序设计语言 程序设计语言及其构成 表达式 中缀转后缀：运算顺序保持不变\n后缀表达式运算过程：通过==栈==：先取出来放后面，后取出来放前面\n传值和传址调用 语言处理程序 编译程序 有限自动机和正规式 数据结构和算法知识 栈是只能在一端进行插入和删除操作的线性表，其中允许插入和删除的一端叫做栈顶，另一端叫做栈底。栈是一种后进先出（LIFO）的数据结构，先入栈的元素要比后入栈的元素后出栈。故将一串数据全部入栈后再全部出栈，数据的次序将前后颠倒。栈主要应用于函数调用或中断调用过程中。\n队列是一种先进先出（FIFO）的数据结构，先入队列的元素要先于后入队列的元素出队列。故一串数据无论以何种操作次序通过队列，其次序都不会发生变化。\n如果对一棵有n个结点的完全二叉树的结点按层序编号则对任一结点i（1≤i≤n），有： ①如果i=1，则结点i无父结点，是二叉树的根；如果i\u003e1，则父结点是$\\lfloor i/2 \\rfloor$； ② 如果2i\u003en，则结点i为叶子结点，无左子结点；否则，其左子结点是结点2i； ③ 如果2i+1\u003en，则结点i无右子叶点，否则，其右子结点是结点2i+1。 向下取整\n顺序表和链表 线性结构和非线性结构的区别\n数组 字符串 矩阵 栈和队列 树 树的基本性质 如果对一棵有n个结点的完全二叉树的结点按层序编号则对任一结点i（1≤i≤n），有： ①如果i=1，则结点i无父结点，是二叉树的根；如果i\u003e1，则父结点是$\\lfloor i/2 \\rfloor$； ② 如果2i\u003en，则结点i为叶子结点，无左子结点；否则，其左子结点是结点2i； ③ 如果2i+1\u003en，则结点i无右子叶点，否则，其右子结点是结点2i+1。 向下取整\n树的遍历 特殊二叉树 找最小两个树，先写在图上，然后把两数相加的结果放到待选择列表，并删除这两个数（第一次：删除10、20，添加30）\n图 算法特性和复杂度 查找 排序 软件工程知识点 软件工程概述 软件需求分析 软件设计 软件测试 软件运行与维护 程序员职业素养 面向对象基础知识 面向对象基本概念 UML 设计模式 数据库知识点 数据库基本概念 数据流图 概念模型 关系模型 关系运算 SQL语言 数据库控制 网络基础知识点 网络概述 OSI和TCPIP IP地址与子网划分 浏览器 URL和电子邮件 网络安全 知识产权 其他 文件类型 Excel常考函数 ",
+  "wordCount" : "9292",
+  "inLanguage": "zh",
+  "datePublished": "2022-11-02T00:00:00Z",
+  "dateModified": "2022-11-02T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/note/%E8%BD%AF%E8%80%83-%E7%A8%8B%E5%BA%8F%E5%91%98/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/note/">👨🏻‍💻 我的笔记</a></div>
+    <h1 class="post-title">
+      软考 程序员
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-11-02
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>9292字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>19分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E8%BD%AF%E8%80%83/" style="color: var(--secondary)!important;">软考</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e7%a8%8b%e5%ba%8f%e5%91%98%e8%80%83%e8%af%95%e9%87%8d%e7%82%b9%e6%b1%87%e6%80%bb" aria-label="程序员考试重点汇总">程序员考试重点汇总</a></li>
+                    <li>
+                        <a href="#%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%b3%bb%e7%bb%9f%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86" aria-label="计算机系统基础知识">计算机系统基础知识</a><ul>
+                            
+                    <li>
+                        <a href="#%e8%bf%9b%e5%88%b6%e4%b9%8b%e9%97%b4%e7%9a%84%e8%bd%ac%e5%8c%96" aria-label="进制之间的转化">进制之间的转化</a></li>
+                    <li>
+                        <a href="#%e5%8e%9f%e5%8f%8d%e8%a1%a5%e7%a7%bb%e7%a0%81%e8%bf%90%e7%ae%97%e5%92%8c%e9%80%bb%e8%be%91%e8%bf%90%e7%ae%97" aria-label="原、反、补、移码运算和逻辑运算">原、反、补、移码运算和逻辑运算</a></li>
+                    <li>
+                        <a href="#%e6%b5%ae%e7%82%b9%e6%95%b0" aria-label="浮点数">浮点数</a></li>
+                    <li>
+                        <a href="#%e9%80%bb%e8%be%91%e8%bf%90%e7%ae%97" aria-label="逻辑运算">逻辑运算</a></li>
+                    <li>
+                        <a href="#%e6%a0%a1%e9%aa%8c%e7%a0%81" aria-label="校验码">校验码</a></li>
+                    <li>
+                        <a href="#%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%b3%bb%e7%bb%9f%e4%b8%8e%e4%b8%ad%e5%a4%ae%e5%a4%84%e7%90%86%e5%99%a8%e6%9e%84%e6%88%90" aria-label="计算机系统与中央处理器构成">计算机系统与中央处理器构成</a></li>
+                    <li>
+                        <a href="#%e6%8c%87%e4%bb%a4%e5%af%bb%e5%9d%80%e5%92%8c%e5%ad%98%e5%82%a8%e5%99%a8" aria-label="指令寻址和存储器">指令寻址和存储器</a></li>
+                    <li>
+                        <a href="#%e6%80%bb%e7%ba%bf%e7%b3%bb%e7%bb%9f" aria-label="总线系统"><strong>总线系统</strong></a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%a4%9a%e5%aa%92%e4%bd%93%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86" aria-label="多媒体基础知识">多媒体基础知识</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%aa%92%e4%bd%93%e7%9a%84%e7%a7%8d%e7%b1%bb" aria-label="媒体的种类">媒体的种类</a></li>
+                    <li>
+                        <a href="#%e9%9f%b3%e9%a2%91" aria-label="音频"><strong>音频</strong></a></li>
+                    <li>
+                        <a href="#%e5%9b%be%e5%bd%a2%e5%92%8c%e5%9b%be%e5%83%8f" aria-label="图形和图像">图形和图像</a></li>
+                    <li>
+                        <a href="#%e5%8a%a8%e7%94%bb%e5%92%8c%e8%a7%86%e9%a2%91" aria-label="动画和视频">动画和视频</a></li>
+                    <li>
+                        <a href="#%e5%a4%9a%e5%aa%92%e4%bd%93%e7%9b%b8%e5%85%b3%e8%ae%a1%e7%ae%97" aria-label="多媒体相关计算">多媒体相关计算</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" aria-label="操作系统">操作系统</a><ul>
+                            
+                    <li>
+                        <a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e6%a6%82%e8%bf%b0" aria-label="操作系统概述">操作系统概述</a></li>
+                    <li>
+                        <a href="#%e8%bf%9b%e7%a8%8b%e7%ae%a1%e7%90%86" aria-label="进程管理">进程管理</a></li>
+                    <li>
+                        <a href="#%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86" aria-label="存储管理"><strong>存储管理</strong></a></li>
+                    <li>
+                        <a href="#%e8%ae%be%e5%a4%87%e7%ae%a1%e7%90%86" aria-label="设备管理"><strong>设备管理</strong></a></li>
+                    <li>
+                        <a href="#%e6%96%87%e4%bb%b6%e7%ae%a1%e7%90%86" aria-label="文件管理">文件管理</a></li>
+                    <li>
+                        <a href="#%e4%bd%9c%e4%b8%9a%e7%ae%a1%e7%90%86" aria-label="作业管理"><strong>作业管理</strong></a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1%e8%af%ad%e8%a8%80" aria-label="程序设计语言">程序设计语言</a><ul>
+                            
+                    <li>
+                        <a href="#%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1%e8%af%ad%e8%a8%80%e5%8f%8a%e5%85%b6%e6%9e%84%e6%88%90" aria-label="程序设计语言及其构成">程序设计语言及其构成</a></li>
+                    <li>
+                        <a href="#%e8%a1%a8%e8%be%be%e5%bc%8f" aria-label="表达式">表达式</a></li>
+                    <li>
+                        <a href="#%e4%bc%a0%e5%80%bc%e5%92%8c%e4%bc%a0%e5%9d%80%e8%b0%83%e7%94%a8" aria-label="传值和传址调用">传值和传址调用</a></li>
+                    <li>
+                        <a href="#%e8%af%ad%e8%a8%80%e5%a4%84%e7%90%86%e7%a8%8b%e5%ba%8f" aria-label="语言处理程序">语言处理程序</a></li>
+                    <li>
+                        <a href="#%e7%bc%96%e8%af%91%e7%a8%8b%e5%ba%8f" aria-label="编译程序">编译程序</a></li>
+                    <li>
+                        <a href="#%e6%9c%89%e9%99%90%e8%87%aa%e5%8a%a8%e6%9c%ba%e5%92%8c%e6%ad%a3%e8%a7%84%e5%bc%8f" aria-label="有限自动机和正规式">有限自动机和正规式</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e5%92%8c%e7%ae%97%e6%b3%95%e7%9f%a5%e8%af%86" aria-label="数据结构和算法知识">数据结构和算法知识</a><ul>
+                            
+                    <li>
+                        <a href="#%e9%a1%ba%e5%ba%8f%e8%a1%a8%e5%92%8c%e9%93%be%e8%a1%a8" aria-label="顺序表和链表">顺序表和链表</a></li>
+                    <li>
+                        <a href="#%e6%95%b0%e7%bb%84" aria-label="数组">数组</a></li>
+                    <li>
+                        <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2" aria-label="字符串">字符串</a></li>
+                    <li>
+                        <a href="#%e7%9f%a9%e9%98%b5" aria-label="矩阵">矩阵</a></li>
+                    <li>
+                        <a href="#%e6%a0%88%e5%92%8c%e9%98%9f%e5%88%97" aria-label="栈和队列">栈和队列</a></li>
+                    <li>
+                        <a href="#%e6%a0%91" aria-label="树">树</a><ul>
+                            
+                    <li>
+                        <a href="#%e6%a0%91%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%80%a7%e8%b4%a8" aria-label="树的基本性质">树的基本性质</a></li>
+                    <li>
+                        <a href="#%e6%a0%91%e7%9a%84%e9%81%8d%e5%8e%86" aria-label="树的遍历">树的遍历</a></li>
+                    <li>
+                        <a href="#%e7%89%b9%e6%ae%8a%e4%ba%8c%e5%8f%89%e6%a0%91" aria-label="特殊二叉树">特殊二叉树</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%9b%be" aria-label="图">图</a></li>
+                    <li>
+                        <a href="#%e7%ae%97%e6%b3%95%e7%89%b9%e6%80%a7%e5%92%8c%e5%a4%8d%e6%9d%82%e5%ba%a6" aria-label="算法特性和复杂度">算法特性和复杂度</a></li>
+                    <li>
+                        <a href="#%e6%9f%a5%e6%89%be" aria-label="查找">查找</a></li>
+                    <li>
+                        <a href="#%e6%8e%92%e5%ba%8f" aria-label="排序">排序</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e8%bd%af%e4%bb%b6%e5%b7%a5%e7%a8%8b%e7%9f%a5%e8%af%86%e7%82%b9" aria-label="软件工程知识点">软件工程知识点</a><ul>
+                            
+                    <li>
+                        <a href="#%e8%bd%af%e4%bb%b6%e5%b7%a5%e7%a8%8b%e6%a6%82%e8%bf%b0" aria-label="软件工程概述">软件工程概述</a></li>
+                    <li>
+                        <a href="#%e8%bd%af%e4%bb%b6%e9%9c%80%e6%b1%82%e5%88%86%e6%9e%90" aria-label="软件需求分析">软件需求分析</a></li>
+                    <li>
+                        <a href="#%e8%bd%af%e4%bb%b6%e8%ae%be%e8%ae%a1" aria-label="软件设计">软件设计</a></li>
+                    <li>
+                        <a href="#%e8%bd%af%e4%bb%b6%e6%b5%8b%e8%af%95" aria-label="软件测试">软件测试</a></li>
+                    <li>
+                        <a href="#%e8%bd%af%e4%bb%b6%e8%bf%90%e8%a1%8c%e4%b8%8e%e7%bb%b4%e6%8a%a4" aria-label="软件运行与维护">软件运行与维护</a></li>
+                    <li>
+                        <a href="#%e7%a8%8b%e5%ba%8f%e5%91%98%e8%81%8c%e4%b8%9a%e7%b4%a0%e5%85%bb" aria-label="程序员职业素养">程序员职业素养</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86" aria-label="面向对象基础知识">面向对象基础知识</a><ul>
+                            
+                    <li>
+                        <a href="#%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" aria-label="面向对象基本概念">面向对象基本概念</a></li>
+                    <li>
+                        <a href="#uml" aria-label="UML">UML</a></li>
+                    <li>
+                        <a href="#%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f" aria-label="设计模式">设计模式</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e7%9f%a5%e8%af%86%e7%82%b9" aria-label="数据库知识点">数据库知识点</a><ul>
+                            
+                    <li>
+                        <a href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" aria-label="数据库基本概念">数据库基本概念</a></li>
+                    <li>
+                        <a href="#%e6%95%b0%e6%8d%ae%e6%b5%81%e5%9b%be" aria-label="数据流图">数据流图</a></li>
+                    <li>
+                        <a href="#%e6%a6%82%e5%bf%b5%e6%a8%a1%e5%9e%8b" aria-label="概念模型">概念模型</a></li>
+                    <li>
+                        <a href="#%e5%85%b3%e7%b3%bb%e6%a8%a1%e5%9e%8b" aria-label="关系模型">关系模型</a></li>
+                    <li>
+                        <a href="#%e5%85%b3%e7%b3%bb%e8%bf%90%e7%ae%97" aria-label="关系运算">关系运算</a></li>
+                    <li>
+                        <a href="#sql%e8%af%ad%e8%a8%80" aria-label="SQL语言">SQL语言</a></li>
+                    <li>
+                        <a href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e6%8e%a7%e5%88%b6" aria-label="数据库控制">数据库控制</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e7%bd%91%e7%bb%9c%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86%e7%82%b9" aria-label="网络基础知识点">网络基础知识点</a><ul>
+                            
+                    <li>
+                        <a href="#%e7%bd%91%e7%bb%9c%e6%a6%82%e8%bf%b0" aria-label="网络概述">网络概述</a></li>
+                    <li>
+                        <a href="#osi%e5%92%8ctcpip" aria-label="OSI和TCPIP">OSI和TCPIP</a></li>
+                    <li>
+                        <a href="#ip%e5%9c%b0%e5%9d%80%e4%b8%8e%e5%ad%90%e7%bd%91%e5%88%92%e5%88%86" aria-label="IP地址与子网划分">IP地址与子网划分</a></li>
+                    <li>
+                        <a href="#%e6%b5%8f%e8%a7%88%e5%99%a8" aria-label="浏览器">浏览器</a></li>
+                    <li>
+                        <a href="#url%e5%92%8c%e7%94%b5%e5%ad%90%e9%82%ae%e4%bb%b6" aria-label="URL和电子邮件">URL和电子邮件</a></li>
+                    <li>
+                        <a href="#%e7%bd%91%e7%bb%9c%e5%ae%89%e5%85%a8" aria-label="网络安全">网络安全</a></li>
+                    <li>
+                        <a href="#%e7%9f%a5%e8%af%86%e4%ba%a7%e6%9d%83" aria-label="知识产权">知识产权</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%85%b6%e4%bb%96" aria-label="其他">其他</a><ul>
+                            
+                    <li>
+                        <a href="#%e6%96%87%e4%bb%b6%e7%b1%bb%e5%9e%8b" aria-label="文件类型">文件类型</a></li>
+                    <li>
+                        <a href="#excel%e5%b8%b8%e8%80%83%e5%87%bd%e6%95%b0" aria-label="Excel常考函数">Excel常考函数</a>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><blockquote>
+<p><a href="https://blog.csdn.net/liyuanyue2017/article/details/82389703">学习攻略</a></p>
+<p><a href="https://github.com/callmePicacho/programmer">真题</a></p>
+<p><strong>真题</strong>，建议从 10 年开始做，10 - 15 年的真题练习用，16 - 18 年真题自己卡时间模拟考</p>
+</blockquote>
+<h1 id="程序员考试重点汇总">程序员考试重点汇总<a hidden class="anchor" aria-hidden="true" href="#程序员考试重点汇总">#</a></h1>
+<h1 id="计算机系统基础知识">计算机系统基础知识<a hidden class="anchor" aria-hidden="true" href="#计算机系统基础知识">#</a></h1>
+<h2 id="进制之间的转化">进制之间的转化<a hidden class="anchor" aria-hidden="true" href="#进制之间的转化">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319957.png" alt="image-20221012200918425" style="zoom:80%;" /> 
+<p>==表示符：八进制还可以用Q表示==</p>
+<p>==ASCII：美国信息交换标准代码。一般使用7位二进制数来表示字母、数字、标点符号及部分特殊控制字符。==</p>
+<p>十进制和其他进制之间的转换</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319023.png" alt="image-20221012214009848"  />
+</p>
+<p>==除基取余法：<strong>从下往上</strong>==</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319971.png" alt="image-20221013094208050" style="zoom:80%;" /> 
+<p>==乘基取整法：<strong>从上往下</strong>==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319002.png" alt="image-20221013094157386"  />
+</p>
+<p>==不足x位时，小数前在高位加0，小数后在末尾加0==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319984.png" alt="image-20221013095315185"  />
+</p>
+<p>==1024 = 2^10^==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319054.png" alt="image-20221013095516057"  />
+</p>
+<p>奇校验：整个校验码（有效信息位和校验位）中“1”的个数为奇数。</p>
+<p>偶校验：整个校验码（有效信息位和校验位）中“1”的个数为偶数。</p>
+<p>奇偶校验，可检查1位的错误，不可纠错。</p>
+<h2 id="原反补移码运算和逻辑运算">原、反、补、移码运算和逻辑运算<a hidden class="anchor" aria-hidden="true" href="#原反补移码运算和逻辑运算">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319061.png" alt="image-20221012201010127" style="zoom:80%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319078.png" alt="image-20221012201023602" style="zoom:80%;" /> 
+<p>原码：将数据用二进制形式表示，最高位为符号位, 正数为 0, 负数为 1。</p>
+<p>反码：正数的反码是其本身；负数的反码是在其原码的基础上, 符号位不变，其余各位取反。</p>
+<p>补码：正数的补码是其本身；负数的补码是在其原码的基础上, 符号位不变, 在反码的基础上+1。</p>
+<p>移码：将补码的符号位取反得相应的移码。</p>
+<p>注意：==在补码和移码表示中，0 有唯一的编码，补码中+0 和-0 均为 0000 0000（八位二进制表示下）==。</p>
+<p>多数计算机都采用补码进行加减运算，其符号位和数值位一样参与运算，无须做特殊处理。</p>
+<p>在 n 位二进制表示下：</p>
+<p>原码、反码表示的数据范围为：-（2^n-1^-1）～+（2^n-1^-1）</p>
+<p>补码、移码表示的数据范围为：-2^n-1^～+（2^n-1^-1）</p>
+<p>==补码中，用 1000 0000 表示-128。==</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319092.png" alt="image-20221013221139971" style="zoom: 50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319125.png" alt="image-20221013221457781" style="zoom: 50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319222.png" alt="image-20221013221514982" style="zoom: 50%;" /> 
+<h2 id="浮点数">浮点数<a hidden class="anchor" aria-hidden="true" href="#浮点数">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319253.png" alt="image-20221013222844253" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319090.png" alt="image-20221013223149667" style="zoom:50%;" /> 
+<p>两浮点数进行运算的过程</p>
+<p>运算过程：</p>
+<p>对阶 &gt; 尾数计算 &gt; 结果格式化</p>
+<p>对阶时，小数向大数看齐，对阶是通过==较小数的尾数右移（小数点左移）==实现的</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319121.png" alt="image-20221013223556115" style="zoom:50%;" /> 
+<p>结果格式化 01、10开头（0.5~1之间）</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319145.png" alt="image-20221013230053388" style="zoom:50%;" /> 
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319170.png" alt="image-20221013224943921" style="zoom:50%;" /> 
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319765.png" alt="image-20221013225946363"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319789.png" alt="image-20221013230655632"  />
+</p>
+<h2 id="逻辑运算">逻辑运算<a hidden class="anchor" aria-hidden="true" href="#逻辑运算">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319809.png" alt="image-20221014093335164" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319839.png" alt="image-20221014093427705" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319008.png" alt="image-20221014094211164" style="zoom:50%;" /> 
+<h2 id="校验码">校验码<a hidden class="anchor" aria-hidden="true" href="#校验码">#</a></h2>
+<p>1、奇偶校验码</p>
+<p>由若干位有效信息（如一个字节），再加上一个二进制位（校验位）组成校验码。</p>
+<p>奇校验：整个校验码（有效信息位和校验位）中“1”的个数为奇数。</p>
+<p>偶校验：整个校验码（有效信息位和校验位）中“1”的个数为偶数。</p>
+<p>奇偶校验，可检查 1 位的错误，不可纠错。</p>
+<p>==奇偶校验，可检查奇数位的错误，不可纠错。如果偶数位发生错误，则发现不了。==</p>
+<p>2、海明码</p>
+<p>在数据位之间插入 K 个校验位，通过扩大码距来实现检错和纠错。</p>
+<p>3、循环冗余校验码（n,k）码</p>
+<p>信息码占 k 位，校验码占 n-k 位，校验码位数越长，校验能力越强。采用了模二运算。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319635.png" alt="image-20221014095018407" style="zoom:50%;" /> 
+<h2 id="计算机系统与中央处理器构成">计算机系统与中央处理器构成<a hidden class="anchor" aria-hidden="true" href="#计算机系统与中央处理器构成">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319664.png" alt="image-20221014195730226" style="zoom:50%;" /> 
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319696.png" alt="image-20221012201112166"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319713.png" alt="image-20221012201123579" style="zoom:80%;" /> 
+<p><strong>CPU</strong> <strong>指令执行过程（流水线技术）</strong></p>
+<p>计算机每执行一条指令都可分为三个阶段：<strong>取指令—分析指令—执行指令。</strong></p>
+<p>取指令：根据程序计数器 PC 中的值从程序存储器读出现行指令，送到指令寄存器 IR。</p>
+<p>分析指令：将指令寄存器中的指令操作码取出后进行译码，分析其指令性质。</p>
+<p>执行指令：控制、指挥、协调整个计算机系统的各个子系统, 相互配合、有条不紊的完成各项任务。</p>
+<p>执行程序的过程实际上就是逐条指令地重复上述操作过程，直至遇到停机指令可循环等待指令。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319735.png" alt="image-20221014200438316"  />
+</p>
+<p><strong>运算器和控制器的组成</strong></p>
+<p>运算器的构成：</p>
+<p><strong>i. 算术逻辑单元 ALU</strong>：数据的算术运算和逻辑运算</p>
+<p><strong>ii. 累加寄存器 AC（数据寄存器）</strong>：通用寄存器，为 ALU 提供一个工作区，<strong>用在暂存数据</strong></p>
+<p>iii. 数据缓冲寄存器 DR：写内存时，暂存指令或数据</p>
+<p>iv. 状态条件寄存器 PSW：存状态标志与控制标志 （争议：也有将其归为控制器的）</p>
+<p>控制器的构成：</p>
+<p><strong>i. 程序计数器 PC</strong>：存储下一条要执行指令的地址</p>
+<p><strong>ii. 指令寄存器 IR</strong>：存储正在执行的指令</p>
+<p>iii. 指令译码器 ID：对指令中的操作码字段进行分析解释</p>
+<p>iv. 时序部件：提供时序控制信号</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319217.png" alt="image-20221014200939666" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319508.png" alt="image-20221014201044726" style="zoom:50%;" /> 
+<h2 id="指令寻址和存储器">指令寻址和存储器<a hidden class="anchor" aria-hidden="true" href="#指令寻址和存储器">#</a></h2>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319529.png" alt="image-20221012201144306"  />
+</p>
+<p><strong>指令系统</strong></p>
+<p>立即寻址方式：操作数直接在指令中，速度快，灵活性差</p>
+<p>直接寻址方式：指令中存放的是操作数的地址</p>
+<p>间接寻址方式：指令中存放了一个地址，这个地址对应的内容是操作数的地址</p>
+<p>寄存器寻址方式：寄存器存放操作数</p>
+<p>寄存器间接寻址方式：寄存器内存放的是操作数的地址</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319545.png" alt="image-20221014201705549"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319174.png" alt="image-20221012201211762"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319190.png" alt="image-20221014202533129" style="zoom: 50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319228.png" alt="image-20221014202836758" style="zoom:50%;" /> 
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319320.png" alt="image-20221014203208852"  />
+</p>
+<p>回收站：外存</p>
+<p>剪切板：内存</p>
+<p><strong>容量的换算</strong></p>
+<p>位（b/bit）：存放一位二进制数</p>
+<p>字节（B/Byte）：8 个二进制位为一个字节</p>
+<p>1B=8b</p>
+<p>1KB=1024B</p>
+<p>1MB=1024KB</p>
+<p>1GB=1024MB</p>
+<p>1TB=1024GB</p>
+<p>1PB=1024TB</p>
+<p>1EB=1024PB</p>
+<p>1ZB=1024EB</p>
+<p>1YB=1024ZB</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319364.png" alt="image-20221014203634321"  />
+</p>
+<p><strong>内存编址</strong></p>
+<p>内存编址：存储器由一块块的空间（存储单元）组成，为了方便寻找到每一块空间，我们需要对每一个空间进行标识，即用地址（唯一的编号）来标识内存每个单元内存容量=每个芯片容量*芯片个数</p>
+<p>每个芯片的容量=一个地址代表的容量*编址总数</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319357.png" alt="image-20221014204512843"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319431.png" alt="image-20221014205503631" style="zoom:50%;" /> 
+<h2 id="总线系统"><strong>总线系统</strong><a hidden class="anchor" aria-hidden="true" href="#总线系统">#</a></h2>
+<p><strong>总线分类：芯片内总线、元件级总线、系统总线</strong>（ ISA 总线、EISA 总线、PCI 总线等）<strong>和外总线</strong>（RS-232C、SCSI 总线、USB、IEEE-1394 等）</p>
+<p>系统总线的分类：地址总线、数据总线和控制总线</p>
+<ul>
+<li>数据总线：决定 CPU 和外界的数据传送速度。<strong>每条传输线一次只能传输 1 位二进制数据</strong>。“64 位的CPU”是指 CPU 的数据总线的宽度是 64 位。字长取决于数据总线的宽度。</li>
+<li>地址总线：CPU 是通过地址总线来指定存储单元的，其决定了 CPU 所能访问的最大内存空间的大小。例如: 若计算机的地址总线的宽度为 32 位，则最多允许直接访问 4GB 的物理空间，所以最多支持 4G内存。</li>
+<li>控制总线：对外部器件进行控制，其宽度决定了 CPU 对外部器件的控制能力。</li>
+</ul>
+<p>设有一个64K×32位的存储器(每个存储单元为32位)，其存储单元的地址宽度为64K=2^16^，总共16位。这里32位可以说是每个存储单元为32位，也可以理解为数据总线宽度是32。</p>
+<p><strong>系统总线的性能指标：</strong></p>
+<p>带宽：单位时间上传送的数据量，即每秒钟传送的最大稳态数据传输率</p>
+<p>位宽：能同时传送的二进制数据的位数，或数据总线的位数，32 位、64 位等</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319785.png" alt="image-20221014210026667" style="zoom: 50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319832.png" alt="image-20221014211043824" style="zoom:50%;" /> 
+<p><strong>CPU</strong> <strong>与外设数据交换方式</strong></p>
+<p>CPU 与外设之间进行交换数据的方式：</p>
+<p>立即程序传送方式：I/O 接口总是准备接收来自主机的数据或向主机输入数据，无需查看接口的状态</p>
+<p>程序查询方式：CPU 通过查询执行程序查询外设的状态进行判断是否准备好</p>
+<p>中断方式：I/O 接口准备好后会发送中断信号通知 CPU，CPU 确认后保存正在执行程序现场转而执行 I/O 中断服务程序</p>
+<p>直接存储器存取 DMA 方式：数据的传送由 DMA 控制器进行控制，<strong>不需要 CPU 的干涉</strong>，只能进行简单的数据传送操作</p>
+<p>通道控制方式：CPU 按约定格式准备数据和命令，然后启动通道，通道执行相应的通道程序完成所要求的操作</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319862.png" alt="image-20221014212941083" style="zoom:50%;" /> 
+<p><strong>计算机的性能指标</strong></p>
+<p>计算机系统的主要性能指标：</p>
+<p>响应时间：从用户输入完整的操作命令到系统开始显示应答信息为止的这段时间</p>
+<p>吞吐量：单位时间内系统完成的工作量</p>
+<p>周转时间：用户提交作业到执行后该作业返回给用户所需的时间</p>
+<p>时钟频率：即 CPU 主频，直接反映了机器的速度，通常主频越高其速度越快，主频=外频×倍频</p>
+<p>平均运算速度：指每秒钟所能执行的指令条数，用“百万条指令／秒”（MIPS）来描述</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319893.png" alt="image-20221014213029573" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319812.png" alt="image-20221014213303425" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319850.png" alt="image-20221014213425454" style="zoom:50%;" /> 
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319884.png" alt="image-20221014213603439"  />
+</p>
+<h1 id="多媒体基础知识">多媒体基础知识<a hidden class="anchor" aria-hidden="true" href="#多媒体基础知识">#</a></h1>
+<p>声音信号数字化过程：采样、量化和编码</p>
+<p>图像分辨率：一幅图像的像素密度，每英寸多少点（dpi）表示图像大小 ；200dpi扫描一幅2x2.5英寸的照片，则可以得到400x500像素点的图像。</p>
+<p>像素深度：存储每个像素所用的二进制数，度量图像的色彩分辨率，图像深度为b位，则该图像最多的颜色数或灰度级为2^b^种</p>
+<p>无损压缩：利用数据的统计冗余进行压缩，可以保证在数据压缩和还原过程中，图像信息没有损耗或失真。（RAR、ZIP、TIFF、BMP、GIF等）</p>
+<p>有损压缩：用于重构信号不一定非要与原始信号完全相同的场合，压缩比高。主要包括：DVD、VCD、MP3 、JPEG、 MPEG 、RMVB、 WMA 、WMV等）</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319919.png" alt="image-20221012201233535" style="zoom:80%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319937.png" alt="image-20221012201245033" style="zoom:80%;" /> 
+<h2 id="媒体的种类">媒体的种类<a hidden class="anchor" aria-hidden="true" href="#媒体的种类">#</a></h2>
+<p><strong>1)</strong> <strong>多媒体的概念及分类</strong></p>
+<p>传播信息的载体，如语言、文字、图像、视频、音频等；</p>
+<p>存贮信息的载体，如 ROM、RAM、磁带、磁盘、光盘等。</p>
+<p>多媒体的分类：</p>
+<p>感觉媒体：直接用于人的感觉器官，使人产生直接感觉的媒体</p>
+<p><strong>表示媒体：传输感觉媒体的中介媒体，用于数据交换的编码</strong></p>
+<p>表现媒体：进行信息输入输出的媒体</p>
+<p>存储媒体：用于存储表示媒体的物理介质</p>
+<p>传输媒体：传输表示媒体的物理介质</p>
+<p>交换媒体包括存储媒体和传输媒体。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319953.png" alt="image-20221014215148756" style="zoom:50%;" /> 
+<p><strong>多媒体编辑软件</strong></p>
+<p>硬件系统：多媒体主机、多媒体输入设备、多媒体输出设备、多媒体存储设备、多媒体板卡、多媒体操作控制设备</p>
+<p>软件系统：多媒体操作系统、多媒体创作工具软件、多媒体素材编辑软件、多媒体应用软件</p>
+<p>多媒体素材编辑软件：</p>
+<p>文本工具：WPS、Notebook（记事本）、Writer（写字板）、word 和 OCR</p>
+<p>图形/图像工具：Photoshop、Illustrator、PhotoDeluxe、PageMaker、Coredraw、AutoCAD、Freehand、3ds Max、Screen Thief等</p>
+<p>动画工具：GIF Construction Set、Xara 3D</p>
+<p>视频工具：Media Studio Pro、Premiere</p>
+<p>音频工具：CoolEditPro、GoldWave、Cake Walk Pro Audio</p>
+<p>播放工具：Media Player、ACDSee</p>
+<h2 id="音频"><strong>音频</strong><a hidden class="anchor" aria-hidden="true" href="#音频">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319983.png" alt="image-20221014215424991" style="zoom: 33%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319010.png" alt="image-20221014215540558" style="zoom:33%;" /> 
+<p><strong>声音信号的数字化过程</strong></p>
+<p>采样（采样频率，与采样周期成反比）</p>
+<p>量化（量化精度(量化分辨率):样本用二进制表示,位数多少反映精度）</p>
+<p>编码（按照一定格式进行数据编码及组织成文件）</p>
+<p><strong>常见音频文件格式</strong></p>
+<p>（.wav）：微软公司发布的音频文件格式, Windows 系统使用的标准音频文件格式。记录音乐的模拟信号的采样数值。质量高，数据量大。</p>
+<p>（.mod）：乐谱和乐曲使用的各种音色样本</p>
+<p>（.mp3）：最流行的音频文件格式</p>
+<p>（.ra）：网络上的音频格式，流媒体技术，强大压缩比和极小失真</p>
+<p>（.mid）：非波形采样点音乐格式，工业标准，文件非常小</p>
+<p>（.voc）：Create 公司发布的波形音频文件格式</p>
+<p>（.snd）：数字声音文件格式，支持压缩</p>
+<p>（.aif）：APPLE 计算机上的音频格式</p>
+<p>（.au）：Unix 系统中的数字文件格式</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319047.png" alt="image-20221014215826301" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319076.png" alt="image-20221014215839666" style="zoom:50%;" /> 
+<h2 id="图形和图像">图形和图像<a hidden class="anchor" aria-hidden="true" href="#图形和图像">#</a></h2>
+<p><strong>图形/图像区别</strong></p>
+<p>图形：矢量表示，用数学的方式来描述一幅图，放大、缩小、扭曲等变换后不会损失画面细节。（用于线框型图画、工程制图和美术字等）</p>
+<p>图像：像素点表示，用若干二进制位来指定像素的颜色、亮度和属性。放大后会失真。存储空间大，需进行压缩。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319105.png" alt="image-20221014220428919" style="zoom:50%;" /> 
+<p><strong>图形图像主要性能指标</strong></p>
+<p>显示分辨率：显示屏上能够显示的像素数目，1024x768 表示显示屏分为 768 行（垂直分辨率），每行（水平分辨率）显示 1024 像素。</p>
+<p>图像分辨率：一幅图像的像素密度，**每英寸多少点（dpi）**表示图像大小 ；200dpi 扫描一幅 2x2.5 英寸的照片，则可以得到400x500 像素点的图像。</p>
+<p>像素深度：存储每个像素所用的二进制数，度量图像的色彩分辨率，图像深度为 b 位，则该图像最多的颜色数或灰度级为 2^b^ 种</p>
+<p><strong>常见图像文件格式</strong></p>
+<p>（.bmp）：windows 标准位图文件格式</p>
+<p>（.gif）：用于网络传输，数据块为单位传输信息，采用无损压缩算法</p>
+<p>（.tif）：扫描仪和桌面出版系统中较为普及</p>
+<p>（.pcx）：PC 画笔的图像文件格式</p>
+<p>（.png）：作为 GIF 替代品</p>
+<p>（.jpg）：有损压缩，压缩比例高，适合于处理大量图像的场合</p>
+<p>（.wmf）：只在 windows 中使用，保存函数调用信息</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319266.png" alt="image-20221014220842353" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319284.png" alt="image-20221014220934446" style="zoom:50%;" /> 
+<p>jpeg：静态图像压缩标准</p>
+<h2 id="动画和视频">动画和视频<a hidden class="anchor" aria-hidden="true" href="#动画和视频">#</a></h2>
+<p><strong>常见视频文件格式</strong></p>
+<p>（.gif）：用于网络传输</p>
+<p>（.avi）：微软公司发布的视频文件格式（AVI 文件）</p>
+<p>（.mov/.qt）：Apple 公司发布的视频文件格式，较小存储空间，开放性（Quick Time 文件）</p>
+<p>（.rm/.rmvb）：Real Networks 公司格式，影像实时传输与播放（RealVideo 文件）</p>
+<p>（.mpeg/.mpg/.dat/.mp4）：运动图像压缩标准，压缩效率高，质量好，兼容性好</p>
+<p>（.fli/.foc）:Autodesk 公司出品答得彩色动画文件格式（Flic 文件）</p>
+<h2 id="多媒体相关计算">多媒体相关计算<a hidden class="anchor" aria-hidden="true" href="#多媒体相关计算">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319304.png" alt="image-20221014221248853" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319341.png" alt="image-20221014221317506" style="zoom:50%;" /> 
+<p><strong>有损&amp;无损压缩格式</strong></p>
+<p>无损压缩：利用数据的统计冗余进行压缩，可以保证在数据压缩和还原过程中，图像信息没有损耗或失真。（RAR、ZIP、TIFF、BMP、GIF 等）</p>
+<p>有损压缩：用于重构信号不一定非要与原始信号完全相同的场合，压缩比高。主要包括：DVD、VCD、MP3 、JPEG、 MPEG 、RMVB、 WMA 、WMV 等）</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319791.png" alt="image-20221014221540262" style="zoom:50%;" /> 
+<h1 id="操作系统">操作系统<a hidden class="anchor" aria-hidden="true" href="#操作系统">#</a></h1>
+<p>信号量S：整型变量，并根据控制对象进行赋值。S≧0表示资源可用数，S&lt;0表示排队进程数。</p>
+<p>互斥模型：多进程共享一台打印机。</p>
+<p>同步模型：单缓冲区生产者、消费者问题；多缓冲区生产者、消费者问题</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319824.png" alt="image-20221012201313471"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319847.png" alt="image-20221012201335380"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319863.png" alt="image-20221012201346541"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319876.png" alt="image-20221012201405645" style="zoom:80%;" /> 
+<h2 id="操作系统概述">操作系统概述<a hidden class="anchor" aria-hidden="true" href="#操作系统概述">#</a></h2>
+<p><strong>操作系统的基本概念</strong></p>
+<p>操作系统：组织和管理软件、硬件资源以及计算机系统中的工作流程，并控制程序的执行，向用户提供接口。</p>
+<p>特征：并发性、共享性、虚拟性和不确定性。</p>
+<p>功能：进程管理、存储管理、文件管理、作业管理和设备管理。</p>
+<p>类型：批处理、分时、实时、网络、分布式、微机和嵌入式。</p>
+<p><strong>操作系统的五大功能</strong></p>
+<p>进程管理：进程控制、进程同步、进程通信、进程调度</p>
+<p>文件管理：文件存储空间管理、目录管理、文件的读写管理、存取控制</p>
+<p>存储管理：存储分配与回收、存储保护、地址映射（变换）、主存扩充</p>
+<p>设备管理：对硬件设备管理，对输入输出设备的分配、启动、完成和回收</p>
+<p>作业管理：任务、界面管理，人机交互、图形界面、语音控制、虚拟现实</p>
+<p><strong>操作系统的分类</strong></p>
+<p>批处理操作系统：单道批和多道批操作系统</p>
+<p>分时操作系统： 一个计算机系统与多个终端设备连接，特点：<strong>多路性、独立性、交互性和及时性</strong></p>
+<p>实时操作系统：实时控制系统和实时信息系统，交互能力要求不高，<strong>可靠性要求高</strong></p>
+<p>网络操作系统：方便有效共享网络资源，提供服务软件和有关协议的集合，主要的网络操作系统有：Unix、Linux 和 Windows Server 系统</p>
+<p>分布式操作系统：任意两台计算机可以通过通信交换信息，是网络操作系统的更高级形式，<strong>具有透明性、可靠性和高性能等特性</strong></p>
+<p>微机操作系统：Windows：Microsoft 开发的图形用户界面、多任务、多线程操作系统和 Linux：免费使用和自由传播的类 Unix 操作系统，多用户、多任务、多线程和多 CPU 的操作系统</p>
+<p>嵌入式操作系统：运行在智能芯片环境中，特点：<strong>微型化、可定制、实时性、可靠性、易移植性</strong></p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319539.png" alt="image-20221015145306111" style="zoom:50%;" /> 
+<p><u>操作系统</u>能方便用户之间的交流（x） 正确答案是<strong>网络</strong></p>
+<h2 id="进程管理">进程管理<a hidden class="anchor" aria-hidden="true" href="#进程管理">#</a></h2>
+<p><strong>进程三态模型</strong></p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319565.png" alt="image-20221015145615366" style="zoom:50%;" /> 
+<p>三态模型：哪三种状态和状态之间的转换</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319589.png" alt="image-20221014223406951" style="zoom:50%;" /> 
+<p><strong>信号量机制</strong></p>
+<p>进程通信：各个进程交换信息的过程。</p>
+<p>分类：同步（直接制约）、互斥（申请临界资源间接制约）。</p>
+<p>信号量 S：整型变量，并根据控制对象进行赋值。S≧0 表示资源可用数，S&lt;0 表示排队进程数。</p>
+<blockquote>
+<p>n个资源m个进程：S的范围是 <code>n-m ~ n</code></p>
+</blockquote>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319604.png" alt="image-20221015151021210" style="zoom:50%;" /> 
+<blockquote>
+<p>n个进程，每个进程需要m个资源</p>
+<p>一定不会产生死锁：资源数 &gt;= <code>n * (m - 1) + 1</code></p>
+<p>一定会产生死锁：资源数 &lt;= <code>m - 1</code></p>
+</blockquote>
+<p>分类：公用信号量（互斥）、私用信号量（同步）</p>
+<p><strong>PV</strong> <strong>机制、互斥和同步</strong></p>
+<p>互斥模型：多进程共享一台打印机。</p>
+<p>同步模型：单缓冲区生产者、消费者问题；多缓冲区生产者、消费者问题</p>
+<p>在单缓冲区生产者消费模型中：s1、s2 是同步信号量，s1 的初值为 1，s2 的初值为 0。</p>
+<p>如果是多缓冲区生产者消费者问题，则：s1、s2 是同步信号量，s1 的初值为 n，s2 的初值为 0（n 表示缓冲区可以容纳的产品数量）。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319627.png" alt="image-20221014223455363" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319653.png" alt="image-20221015152254542" style="zoom:67%;" /> 
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319186.png" alt="image-20221015152538157"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319214.png" alt="image-20221015153051518" style="zoom: 67%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319244.png" alt="image-20221015153501082" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319703.png" alt="image-20221015153524976" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319727.png" alt="image-20221015153930109" style="zoom: 50%;" /> 
+<h2 id="存储管理"><strong>存储管理</strong><a hidden class="anchor" aria-hidden="true" href="#存储管理">#</a></h2>
+<p>存储管理：目的是解决多个用户使用主存的问题。</p>
+<p>分类：分区存储管理、分页存储管理、分段存储管理、段页式存储管理以及虚拟存储管理。</p>
+<p>分页存储管理：用户程序的地址空间被划分成若干固定大小的区域，称为“页”，相应地，内存空间分成若干个物理块，页和块的大小相等。可将用户程序的任一页放在内存的任一块中，实现了离散分配。</p>
+<p>分段存储管理：将用户程序地址空间分成若干个大小不等的段，每段可以定义一组相对完整的逻辑信息。存储分配时，以段为单位，段与段在内存中可以不相邻接，也实现了离散分配。作业的地址空间被划分为若干个段，每个段定义了一组逻辑信息。段的长度由相应的逻辑信息组的长度决定，因而各段长度不等。</p>
+<p>段页式存储管理：用分段方法来分配和管理虚拟存储器。程序的地址空间按逻辑单位分成基本独立的段，而每一段有自己的段名，再把每段分成固定大小的若干页。</p>
+<p>(2) 用分页方法来分配和管理实存。把整个主存分成与上述页大小相等的存储块，可装入作业的任何一页。程序对内存的调入或调出是按页进行的。</p>
+<blockquote>
+<p>相对地址/虚地址/逻辑地址：在目标程序中，程序指令和数据的位置按照字或字节单位根据它们的相对顺序来确定，称为相对地址，一般从O开始依次进行编号。</p>
+<p>相对地址空间通过地址再定位机构转换到绝对地址空间(物理地址空间)。</p>
+</blockquote>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319931.png" alt="image-20221015155203910" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319418.png" alt="image-20221015155849614" style="zoom:50%;" /> 
+<p><strong>虚拟存储管理</strong></p>
+<p>虚拟存储器：利用外部辅存暂存主存待加载的数据，组成<strong>主存+辅存</strong>的虚拟存储结构。</p>
+<p>虚拟存储器的最大容量是由计算机系统的地址结构和外存空间决定的。</p>
+<p>采用虚拟存储器的目的是扩大用户的地址空间。</p>
+<p>局限性：时间局限性、空间局限性。</p>
+<p>实现方式：请求分页系统、请求分段系统、请求段页式系统。</p>
+<p><strong>页面置换算法</strong></p>
+<p>页面置换算法：最佳置换算法、先进先出置换算法、最近最少未使用置换算法、最近未用置换算法。</p>
+<p>先根据所采用的方式<strong>确定淘汰的页面，然后再淘汰掉这个页面，再把缺的页面置换进去即可</strong>。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319464.png" alt="image-20221015161322652"  />
+</p>
+<p>逻辑地址都是<strong>页号+页内地址</strong></p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319098.png" alt="image-20221015161115777" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319139.png" alt="image-20221015161240562" style="zoom:50%;" /> 
+<h2 id="设备管理"><strong>设备管理</strong><a hidden class="anchor" aria-hidden="true" href="#设备管理">#</a></h2>
+<p>CPU 与外设之间进行交换数据的方式：</p>
+<p>直接程序控制：</p>
+<p>1）立即程序传送方式：I/O 接口总是准备接收来自主机的数据或向主机输入数据，无需查看接口的状态；</p>
+<p>2）程序查询方式：CPU 通过查询执行程序查询外设的状态进行判断是否准备好，I/O 设备不主动反馈信息；</p>
+<p>中断方式：I/O 接口准备好后会发送中断信号通知 CPU，CPU 确认后保存正在执行程序现场转而执行 I/O 中断服务程序；</p>
+<p>直接存储器存取 DMA 方式：数据的传送由 DMA 控制器进行控制，不需要 CPU 的干涉，只能进行简单的数据传送操作；</p>
+<p>通道控制方式：CPU 按约定格式准备数据和命令，然后启动通道，通道执行相应的通道程序完成所要求的操作。</p>
+<p><strong>磁盘调度</strong></p>
+<p>磁盘调度：采用适当的调度算法，使各进程对磁盘的平均访问时间最小。硬/磁盘的主要技术指标：道密度、位密度、存储容量、平均存取时间、寻道时间、等待时间、数据传输率。</p>
+<p>数据读取时间：通常由磁道搜索、扇区搜索、数据传输三个部分组成。</p>
+<p>驱动调度：先来先服务、最短寻道时间优先、扫描算法、单向扫描调度算法。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319169.png" alt="image-20221015161540985" style="zoom:50%;" /> 
+<p><strong>磁盘调度算法</strong></p>
+<p>先来先服务算法：该算法实际上不考虑访问者要求访问的物理位置，而只是考虑访问者提出访问请求的先后次序。有可能随时改变移动臂的方向。</p>
+<p>最短寻找时间优先调度算法：从等待的访问者中挑选寻找时间最短的那个请求执行，而不管访问者的先后次序。这也有可能随时改变移动臂的方向。</p>
+<p>电梯调度算法：从移动臂当前位置沿移动方向选择最近的那个柱面的访问者来执行，若该方向上无请求访问时，就改变臂的移动方向再选择。</p>
+<p>单向扫描调度算法：不考虑访问者等待的先后次序，总是从 0 号柱面开始向里道扫描，按照各自所要访问的柱面位置的次序去选择访问者。在移动臂到达最后一个柱面后，立即快速返回到 0 号柱面，返回时不为任何的访问者提供服务，在返回到 0 号柱面后，再次进行扫描。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319194.png" alt="image-20221015163341290" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319336.png" alt="image-20221015163420824" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319365.png" alt="image-20221015163447999" style="zoom:50%;" /> 
+<h2 id="文件管理">文件管理<a hidden class="anchor" aria-hidden="true" href="#文件管理">#</a></h2>
+<p><strong>文件结构</strong></p>
+<p>文件：具有符号名的、在逻辑上具有完整意义的一组相关信息项的集合。</p>
+<p>目录结构：一级目录结构、二级目录结构、三级目录结构</p>
+<p><strong>文件路径</strong></p>
+<p>绝对路径：从根目录开始的路径（如：C:\username\desktop\document\ABC.docx）</p>
+<p>相对路径：从用户当前工作目录下开始的路径 （如：document\ABC.docx）</p>
+<p><strong>文件命名要求</strong></p>
+<p>文件夹命名规则：</p>
+<p>1）最大长度为 255 个字符</p>
+<p>2）允许使用英文字母，数字。￥ @ &amp; +（ ）、下划线、空格、汉字，不允许使用？ \ * &lt; &gt; ： / |  ”</p>
+<p>3）在操作系统中搜索时可以用  * 匹配 0 个或多个字符，用 ? 匹配任何一个字符</p>
+<p><strong>文件管理</strong></p>
+<p>建立文件夹结构：建立适合自己的文件夹结构，注意控制文件夹结构的级数和每个文件夹中文件的个数（级数不要超过 5 级，每个文件夹的个数控制在 100 以内）</p>
+<p>文件和文件夹命名：规范的对文件夹和文件命名方便查看和检索</p>
+<p>数据备份 backup：对关键数据定期及时的备份，以免数据被毁造成重大损失</p>
+<p><strong>文件类型</strong></p>
+<p>文件类型和文件后缀名的对应关系</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319391.png" alt="image-20221014223734176"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319402.png" alt="image-20221014223746527"  />
+</p>
+<p><strong>系统的安全</strong></p>
+<p>系统的安全：</p>
+<p>系统级：主要任务是不允许未经核准的用户进入系统，主要措施有：注册和登录</p>
+<p>用户级：对所有用户分类和对指定用户分配访问权，设置不同的存储权限分为超级用户、系统操作员和一般用户</p>
+<p>目录级：保护系统中的各种目录而设计的</p>
+<p>文件级：通过系统管理员或文件主对文件属性的设置来控制用户对文件的访问用户对文件的访问，包含：用户访问权、目录访问权限及文件属性权限</p>
+<p><strong>用户权限管理</strong></p>
+<p>windows 中系统对用户的默认权限情况：</p>
+<p>Administrators：管理员组，用户对计算机/域有不受限制的完全访问权。</p>
+<p>Power Users：高级用户组可以执行除了为 Administrators 组保留的任务外的其他任何操作系统任务。</p>
+<p>Users：普通用户组，这个组的用户无法进行有意或无意的改动。</p>
+<p>Everyone：所有的用户，这个计算机上的所有用户都属于这个组。</p>
+<p>Guests：来宾组，来宾组跟普通组 Users 的成员有同等访问权，但来宾账户的限制更多。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319414.png" alt="image-20221015165450410" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319047.png" alt="image-20221015165509639" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319067.png" alt="image-20221015165551818" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319110.png" alt="image-20221015165715536" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319576.png" alt="image-20221015165743030" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319610.png" alt="image-20221015165826124" style="zoom:50%;" /> 
+<h2 id="作业管理"><strong>作业管理</strong><a hidden class="anchor" aria-hidden="true" href="#作业管理">#</a></h2>
+<p><strong>正在执行的作业是进程。</strong></p>
+<p>作业调度：先来先服务、短作业优先、响应比高优先、优先级调度、均衡调度。</p>
+<p><strong>用户界面</strong></p>
+<p>用户界面（ User interface ）：计算机中实现用户与计算通信的软件、硬件部分总称，也称之为用户接口或人机界面。</p>
+<p>用户界面设计原则：简易性、用户的语言、记忆负担最小化、一致性、利用用户的熟悉程度、<strong>从用户的观点考虑</strong>（最关键的判断点）、排列分组、安全性、人性化</p>
+<h1 id="程序设计语言">程序设计语言<a hidden class="anchor" aria-hidden="true" href="#程序设计语言">#</a></h1>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319667.png" alt="image-20221012201650058" style="zoom:80%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319691.png" alt="image-20221012201711278" style="zoom:80%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319535.png" alt="image-20221012201721715" style="zoom:80%;" /> 
+<h2 id="程序设计语言及其构成">程序设计语言及其构成<a hidden class="anchor" aria-hidden="true" href="#程序设计语言及其构成">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319551.png" alt="image-20221017213744100" style="zoom:50%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319593.png" alt="image-20221017213957698" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319668.png" alt="image-20221017214206420" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319257.png" alt="image-20221017214309047" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319282.png" alt="image-20221017214320425" style="zoom:50%;" /> 
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319310.png" alt="image-20221017214549355" style="zoom:50%;" />
+<h2 id="表达式">表达式<a hidden class="anchor" aria-hidden="true" href="#表达式">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319337.png" alt="image-20221017215332647" style="zoom: 50%;" /> 
+<p>中缀转后缀：运算顺序保持不变</p>
+<p>后缀表达式运算过程：通过==栈==：先取出来放后面，后取出来放前面</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319430.png" alt="image-20221017215902102" style="zoom:50%;" /> 
+<h2 id="传值和传址调用">传值和传址调用<a hidden class="anchor" aria-hidden="true" href="#传值和传址调用">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319458.png" alt="image-20221017220140142" style="zoom:50%;" /> 
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319491.png" alt="image-20221017221802699"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319524.png" alt="image-20221017221930328" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319560.png" alt="image-20221017222052546" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319588.png" alt="image-20221017222656017" style="zoom:50%;" /> 
+<h2 id="语言处理程序">语言处理程序<a hidden class="anchor" aria-hidden="true" href="#语言处理程序">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319641.png" alt="image-20221017223005244" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319660.png" alt="image-20221017223044434" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319701.png" alt="image-20221017223108202" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319722.png" alt="image-20221017223125903" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319754.png" alt="image-20221017223224233" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319501.png" alt="image-20221017223251657" style="zoom:50%;" /> 
+<h2 id="编译程序">编译程序<a hidden class="anchor" aria-hidden="true" href="#编译程序">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319539.png" alt="image-20221017223610519" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319577.png" alt="image-20221017223658533" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319192.png" alt="image-20221017223742750" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319227.png" alt="image-20221017223802892" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319256.png" alt="image-20221017223838050" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319282.png" alt="image-20221017223935888" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319314.png" alt="image-20221017224223643" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319343.png" alt="image-20221017224339825" style="zoom:50%;" /> 
+<h2 id="有限自动机和正规式">有限自动机和正规式<a hidden class="anchor" aria-hidden="true" href="#有限自动机和正规式">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319269.png" alt="image-20221017224922885" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319310.png" alt="image-20221017225152628" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319008.png" alt="image-20221017225231207" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319031.png" alt="image-20221017225307233" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319066.png" alt="image-20221017225650010" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319094.png" alt="image-20221017225741541" style="zoom:50%;" /> 
+<h1 id="数据结构和算法知识">数据结构和算法知识<a hidden class="anchor" aria-hidden="true" href="#数据结构和算法知识">#</a></h1>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319703.png" alt="image-20221012201754310"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319719.png" alt="image-20221012201804892"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319739.png" alt="image-20221012201818269"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319761.png" alt="image-20221012201829509" style="zoom:80%;" />  
+<p>栈是只能在一端进行插入和删除操作的线性表，其中允许插入和删除的一端叫做栈顶，另一端叫做栈底。栈是一种<strong>后进先出</strong>（LIFO）的数据结构，先入栈的元素要比后入栈的元素后出栈。故将一串数据全部入栈后再全部出栈，数据的次序将前后颠倒。栈主要应用于函数调用或中断调用过程中。</p>
+<p>队列是一种<strong>先进先出</strong>（FIFO）的数据结构，先入队列的元素要先于后入队列的元素出队列。故一串数据无论以何种操作次序通过队列，其次序都不会发生变化。</p>
+<p>如果对一棵有n个结点的完全二叉树的结点按层序编号则对任一结点i（1≤i≤n），有： ①如果i=1，则结点i无父结点，是二叉树的根；如果i&gt;1，则<strong>父结点是$\lfloor i/2 \rfloor$</strong>； ② 如果2i&gt;n，则结点i为叶子结点，无左子结点；否则，其<strong>左子结点是结点2i</strong>； ③ 如果2i+1&gt;n，则结点i无右子叶点，否则，其<strong>右子结点是结点2i+1</strong>。 向下取整</p>
+<h2 id="顺序表和链表">顺序表和链表<a hidden class="anchor" aria-hidden="true" href="#顺序表和链表">#</a></h2>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319776.png" alt="image-20221023150414650"  />
+</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/fjswcjswzy/article/details/108531138">线性结构和非线性结构的区别</a></p>
+</blockquote>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319261.png" alt="image-20221023150948500"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319700.png" alt="image-20221023151311083"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319750.png" alt="image-20221023151436543"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319802.png" alt="image-20221023151642454"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319079.png" alt="image-20221023151714682"  />
+</p>
+<h2 id="数组">数组<a hidden class="anchor" aria-hidden="true" href="#数组">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319115.png" alt="image-20221023152001603" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319150.png" alt="image-20221023152124606" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319191.png" alt="image-20221023152559114" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319235.png" alt="image-20221023152548206" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319508.png" alt="image-20221023152756761" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319534.png" alt="image-20221023152859964" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319581.png" alt="image-20221023153003456" style="zoom:50%;" /> 
+<h2 id="字符串">字符串<a hidden class="anchor" aria-hidden="true" href="#字符串">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319314.png" alt="image-20221023155111551" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319345.png" alt="image-20221023160136925" style="zoom:50%;" /> 
+<h2 id="矩阵">矩阵<a hidden class="anchor" aria-hidden="true" href="#矩阵">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319377.png" alt="image-20221023160352426" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319415.png" alt="image-20221023160444020" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319452.png" alt="image-20221023160744941" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319336.png" alt="image-20221023161044405" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252319372.png" alt="image-20221023162045240" style="zoom:50%;" /> 
+<h2 id="栈和队列">栈和队列<a hidden class="anchor" aria-hidden="true" href="#栈和队列">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320265.png" alt="image-20221023162144691" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320285.png" alt="image-20221023162251786" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320306.png" alt="image-20221023162328076" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320337.png" alt="image-20221023162625707" style="zoom:50%;" /> 
+<h2 id="树">树<a hidden class="anchor" aria-hidden="true" href="#树">#</a></h2>
+<h3 id="树的基本性质">树的基本性质<a hidden class="anchor" aria-hidden="true" href="#树的基本性质">#</a></h3>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320990.png" alt="image-20221023163059296" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320014.png" alt="image-20221023163501897" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320065.png" alt="image-20221024144429473" style="zoom:50%;" /> 
+<p>如果对一棵有n个结点的完全二叉树的结点按层序编号则对任一结点i（1≤i≤n），有： ①如果i=1，则结点i无父结点，是二叉树的根；如果i&gt;1，则<strong>父结点是$\lfloor i/2 \rfloor$</strong>； ② 如果2i&gt;n，则结点i为叶子结点，无左子结点；否则，其<strong>左子结点是结点2i</strong>； ③ 如果2i+1&gt;n，则结点i无右子叶点，否则，其<strong>右子结点是结点2i+1</strong>。 向下取整</p>
+<h3 id="树的遍历">树的遍历<a hidden class="anchor" aria-hidden="true" href="#树的遍历">#</a></h3>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320681.png" alt="image-20221024145725048" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320719.png" alt="image-20221024150222516" style="zoom:50%;" /> 
+<h3 id="特殊二叉树">特殊二叉树<a hidden class="anchor" aria-hidden="true" href="#特殊二叉树">#</a></h3>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320753.png" alt="image-20221024150841281" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320786.png" alt="image-20221024151025065" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320826.png" alt="image-20221024151442656" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320579.png" alt="image-20221024152242957" style="zoom:50%;" /> 
+<blockquote>
+<p>找最小两个树，先写在图上，然后把两数相加的结果放到待选择列表，并删除这两个数（第一次：删除10、20，添加30）</p>
+</blockquote>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320605.png" alt="image-20221024152506505" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320634.png" alt="image-20221024152615462" style="zoom:50%;" /> 
+<h2 id="图">图<a hidden class="anchor" aria-hidden="true" href="#图">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320671.png" alt="image-20221024153243617" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320715.png" alt="image-20221024154029934" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320935.png" alt="image-20221024154639895" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320969.png" alt="image-20221024154744809" style="zoom:50%;" /> 
+<h2 id="算法特性和复杂度">算法特性和复杂度<a hidden class="anchor" aria-hidden="true" href="#算法特性和复杂度">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320002.png" alt="image-20221024160021792" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320048.png" alt="image-20221024160319354" style="zoom:50%;" /> 
+<h2 id="查找">查找<a hidden class="anchor" aria-hidden="true" href="#查找">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320275.png" alt="image-20221024160631055" style="zoom:50%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320309.png" alt="image-20221024161223396" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320371.png" alt="image-20221024161509742" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320023.png" alt="image-20221024161607766" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320066.png" alt="image-20221024161819746" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320118.png" alt="image-20221024161903889" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320084.png" alt="image-20221024162500235" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320115.png" alt="image-20221024164008846" style="zoom:50%;" /> 
+<h2 id="排序">排序<a hidden class="anchor" aria-hidden="true" href="#排序">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320146.png" alt="image-20221024164311663" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320191.png" alt="image-20221024164950134" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320232.png" alt="image-20221024165111177" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320203.png" alt="image-20221024170136853" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320260.png" alt="image-20221024170626155" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320300.png" alt="image-20221024170811554" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320337.png" alt="image-20221024172119196" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320484.png" alt="image-20221024172219220" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320531.png" alt="image-20221024202855901" style="zoom:50%;" /> 
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320569.png" alt="image-20221024202911626" style="zoom:50%;" />
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320395.png" alt="image-20221024203345779" style="zoom:50%;" />
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320450.png" alt="image-20221024203604008" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320488.png" alt="image-20221024203901875" style="zoom:50%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320542.png" alt="image-20221024204136453" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320697.png" alt="image-20221024204241518" style="zoom:50%;" /> 
+<h1 id="软件工程知识点">软件工程知识点<a hidden class="anchor" aria-hidden="true" href="#软件工程知识点">#</a></h1>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320739.png" alt="image-20221012202158277" style="zoom:80%;" />  
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320758.png" alt="image-20221012202212230"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320777.png" alt="image-20221012202222742" style="zoom:80%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320793.png" alt="image-20221012202230793" style="zoom:80%;" /> 
+<h2 id="软件工程概述">软件工程概述<a hidden class="anchor" aria-hidden="true" href="#软件工程概述">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320364.png" alt="image-20221025194138185" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320399.png" alt="image-20221025194458095" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320447.png" alt="image-20221025194609991" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320997.png" alt="image-20221025194708992" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320726.png" alt="image-20221025194855238" style="zoom:50%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320752.png" alt="image-20221025195201997" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320789.png" alt="image-20221025195452622" style="zoom:50%;" /> 
+<h2 id="软件需求分析">软件需求分析<a hidden class="anchor" aria-hidden="true" href="#软件需求分析">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320481.png" alt="image-20221025195810102" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320522.png" alt="image-20221025200009278" style="zoom:50%;" /> 
+<h2 id="软件设计">软件设计<a hidden class="anchor" aria-hidden="true" href="#软件设计">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320550.png" alt="image-20221025200126378" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320585.png" alt="image-20221025200311750" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320630.png" alt="image-20221025200342630" style="zoom:50%;" /> 
+<h2 id="软件测试">软件测试<a hidden class="anchor" aria-hidden="true" href="#软件测试">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320666.png" alt="image-20221025200623621" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320697.png" alt="image-20221025200818751" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320761.png" alt="image-20221025200929900" style="zoom:50%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320809.png" alt="image-20221025201236914" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320857.png" alt="image-20221025201414415" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320906.png" alt="image-20221025201606240" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320955.png" alt="image-20221025201839437" style="zoom:50%;" /> 
+<h2 id="软件运行与维护">软件运行与维护<a hidden class="anchor" aria-hidden="true" href="#软件运行与维护">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320086.png" alt="image-20221025201918408" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320114.png" alt="image-20221025202022788" style="zoom:50%;" /> 
+<h2 id="程序员职业素养">程序员职业素养<a hidden class="anchor" aria-hidden="true" href="#程序员职业素养">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320153.png" alt="image-20221025202210065" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320785.png" alt="image-20221025202259287" style="zoom:50%;" /> 
+<h1 id="面向对象基础知识">面向对象基础知识<a hidden class="anchor" aria-hidden="true" href="#面向对象基础知识">#</a></h1>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320827.png" alt="image-20221012202254736"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320843.png" alt="image-20221012202303398"  />
+</p>
+<h2 id="面向对象基本概念">面向对象基本概念<a hidden class="anchor" aria-hidden="true" href="#面向对象基本概念">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320863.png" alt="image-20221025203159962" style="zoom:50%;" />   
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320554.png" alt="image-20221025203305051" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320607.png" alt="image-20221025203714631" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320644.png" alt="image-20221025203748231" style="zoom:50%;" /> 
+<h2 id="uml">UML<a hidden class="anchor" aria-hidden="true" href="#uml">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320688.png" alt="image-20221025204012334" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320622.png" alt="image-20221025204102276" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320661.png" alt="image-20221025204231408" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320706.png" alt="image-20221025204424543" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320685.png" alt="image-20221025204634755" style="zoom:50%;" /> 
+<h2 id="设计模式">设计模式<a hidden class="anchor" aria-hidden="true" href="#设计模式">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320718.png" alt="image-20221025204744474" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320754.png" alt="image-20221025204812996" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320812.png" alt="image-20221025204931439" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320564.png" alt="image-20221025204958152" style="zoom:50%;" /> 
+<h1 id="数据库知识点">数据库知识点<a hidden class="anchor" aria-hidden="true" href="#数据库知识点">#</a></h1>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320619.png" alt="image-20221012201459127" style="zoom:80%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320648.png" alt="image-20221012201510318" style="zoom:80%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320672.png" alt="image-20221012201524008" style="zoom:80%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320423.png" alt="image-20221012201529999" style="zoom:80%;" />
+<h2 id="数据库基本概念">数据库基本概念<a hidden class="anchor" aria-hidden="true" href="#数据库基本概念">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320440.png" alt="image-20221025211233850" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320498.png" alt="image-20221025211506277" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320581.png" alt="image-20221025211653450" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320094.png" alt="image-20221025211846937" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320129.png" alt="image-20221025211931540" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320183.png" alt="image-20221025212017791" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320233.png" alt="image-20221025212139152" style="zoom:50%;" /> 
+<h2 id="数据流图">数据流图<a hidden class="anchor" aria-hidden="true" href="#数据流图">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320279.png" alt="image-20221025212439540" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320320.png" alt="image-20221025212658775" style="zoom:50%;" /> 
+<h2 id="概念模型">概念模型<a hidden class="anchor" aria-hidden="true" href="#概念模型">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320255.png" alt="image-20221025212841245" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320284.png" alt="image-20221025212941146" style="zoom:50%;" /> 
+<h2 id="关系模型">关系模型<a hidden class="anchor" aria-hidden="true" href="#关系模型">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320324.png" alt="image-20221025213529644" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320207.png" alt="image-20221025213623077" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320262.png" alt="image-20221025213805775" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320300.png" alt="image-20221025214021869" style="zoom:50%;" /> 
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320337.png" alt="image-20221025214109787" style="zoom:50%;" />
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320370.png" alt="image-20221025214208217" style="zoom:50%;" /> 
+<h2 id="关系运算">关系运算<a hidden class="anchor" aria-hidden="true" href="#关系运算">#</a></h2>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320406.png" alt="image-20221025220302118"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320429.png" alt="image-20221025220514191" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320478.png" alt="image-20221025220557060" style="zoom:50%;" /> 
+<h2 id="sql语言">SQL语言<a hidden class="anchor" aria-hidden="true" href="#sql语言">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320508.png" alt="image-20221025220923007" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320543.png" alt="image-20221025221027544" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320589.png" alt="image-20221025221039128" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320794.png" alt="image-20221025221354484" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320824.png" alt="image-20221025221509387" style="zoom:50%;" /> 
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320872.png" alt="image-20221025222546204" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320751.png" alt="image-20221025222657429" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320823.png" alt="image-20221025222714954" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320862.png" alt="image-20221025222845555" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320895.png" alt="image-20221025223241266" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320831.png" alt="image-20221025223426448" style="zoom:50%;" /> 
+<h2 id="数据库控制">数据库控制<a hidden class="anchor" aria-hidden="true" href="#数据库控制">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320867.png" alt="image-20221025223644699" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320908.png" alt="image-20221025224523817" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320951.png" alt="image-20221025224735917" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320920.png" alt="image-20221025224933689" style="zoom:50%;" /> 
+<h1 id="网络基础知识点">网络基础知识点<a hidden class="anchor" aria-hidden="true" href="#网络基础知识点">#</a></h1>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320948.png" alt="image-20221012202316690"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320966.png" alt="image-20221012202333378"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320983.png" alt="image-20221012202344611"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320999.png" alt="image-20221012202356593"  />
+</p>
+<h2 id="网络概述">网络概述<a hidden class="anchor" aria-hidden="true" href="#网络概述">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320018.png" alt="image-20221026200547900" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320424.png" alt="image-20221026200817646" style="zoom:50%;" /> 
+<h2 id="osi和tcpip">OSI和TCPIP<a hidden class="anchor" aria-hidden="true" href="#osi和tcpip">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320644.png" alt="image-20221026200946860" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320684.png" alt="image-20221026202628013" style="zoom:50%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320582.png" alt="image-20221026212337823" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320631.png" alt="image-20221026212521755" style="zoom:50%;" /> 
+<h2 id="ip地址与子网划分">IP地址与子网划分<a hidden class="anchor" aria-hidden="true" href="#ip地址与子网划分">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320654.png" alt="image-20221026212853530" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320691.png" alt="image-20221026212942374" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320687.png" alt="image-20221026213350424" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320727.png" alt="image-20221026213701336" style="zoom:50%;" /> 
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320780.png" alt="image-20221026213917085" style="zoom:50%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320827.png" alt="image-20221026213949307" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320224.png" alt="image-20221026214042492" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320268.png" alt="image-20221026214109402" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320318.png" alt="image-20221026214338495" style="zoom:50%;" /> 
+<h2 id="浏览器">浏览器<a hidden class="anchor" aria-hidden="true" href="#浏览器">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320008.png" alt="image-20221026214440304" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320045.png" alt="image-20221026214603299" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320086.png" alt="image-20221026214625451" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320127.png" alt="image-20221026214754869" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320769.png" alt="image-20221026214835196" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320805.png" alt="image-20221026214900694" style="zoom:50%;" /> 
+<h2 id="url和电子邮件">URL和电子邮件<a hidden class="anchor" aria-hidden="true" href="#url和电子邮件">#</a></h2>
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320836.png" alt="image-20221026215151196" style="zoom:50%;" /> 
+ <img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320426.png" alt="image-20221026215419867" style="zoom:50%;" />
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320465.png" alt="image-20221026215512537" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320505.png" alt="image-20221026215544715" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320420.png" alt="image-20221026215618157" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320453.png" alt="image-20221026215656458" style="zoom:50%;" /> 
+<h2 id="网络安全">网络安全<a hidden class="anchor" aria-hidden="true" href="#网络安全">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320483.png" alt="image-20221026215929838" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320529.png" alt="image-20221026215949686" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320482.png" alt="image-20221026221634795" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320506.png" alt="image-20221026221654318" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320555.png" alt="image-20221026221907118" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320976.png" alt="image-20221026222053200" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320033.png" alt="image-20221026222325304" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320638.png" alt="image-20221026222445202" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320664.png" alt="image-20221026222540239" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320700.png" alt="image-20221026222553677" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320400.png" alt="image-20221026222806228" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320432.png" alt="image-20221026222927507" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320469.png" alt="image-20221026223040790" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320506.png" alt="image-20221026223056200" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320537.png" alt="image-20221026223142792" style="zoom:50%;" /> 
+<h2 id="知识产权">知识产权<a hidden class="anchor" aria-hidden="true" href="#知识产权">#</a></h2>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320569.png" alt="image-20221012201601346"  />
+</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320405.png" alt="image-20221012201614016" style="zoom:80%;" />  
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320422.png" alt="image-20221026223406090" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320456.png" alt="image-20221026223639186" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320687.png" alt="image-20221026223657924" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320720.png" alt="image-20221026224037905" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320262.png" alt="image-20221026224151299" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320304.png" alt="image-20221026224401935" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320351.png" alt="image-20221026224434542" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320040.png" alt="image-20221026224636377" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320071.png" alt="image-20221026224718567" style="zoom:50%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320455.png" alt="image-20221026224910684" style="zoom:50%;" /> 
+<h1 id="其他">其他<a hidden class="anchor" aria-hidden="true" href="#其他">#</a></h1>
+<h2 id="文件类型">文件类型<a hidden class="anchor" aria-hidden="true" href="#文件类型">#</a></h2>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320495.png" alt="image-20221012202414862"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320512.png" alt="image-20221012202420481"  />
+</p>
+<h2 id="excel常考函数">Excel常考函数<a hidden class="anchor" aria-hidden="true" href="#excel常考函数">#</a></h2>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252320529.png" alt="image-20221012202432768" style="zoom:80%;" /> 
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/note/springboot-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Springboot 项目搭建</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/note/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>雪花算法详解及springboot集成</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>NFS on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/nfs/</link>
+    <description>Recent content in NFS on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 10 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/nfs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows配置NFS</title>
+      <link>https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/</link>
+      <pubDate>Wed, 10 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/</guid>
+      <description>需求： 需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求</description>
+    </item>
+    
+  </channel>
+</rss>

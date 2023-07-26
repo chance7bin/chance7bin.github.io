@@ -6,7 +6,16 @@
     <description>Recent content on Binb&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 21 Jun 2023 22:37:33 +0800</lastBuildDate><atom:link href="https://chance7bin.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>虚拟机网络——vmware&amp;docker</title>
+      <link>https://chance7bin.github.io/posts/note/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9Cvmwaredocker/</link>
+      <pubDate>Mon, 17 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9Cvmwaredocker/</guid>
+      <description>前言 为什么需要理解虚拟机的网络机制呢？主要原因是我安装了windows的docker之后vmware里面的虚拟机打不开了 一通操作把vmwar</description>
+    </item>
+    
     <item>
       <title>mapbox vector tile 详解</title>
       <link>https://chance7bin.github.io/posts/map/mapbox-vector-tile-%E8%AF%A6%E8%A7%A3/</link>
@@ -62,6 +71,15 @@
     </item>
     
     <item>
+      <title>Spring Security</title>
+      <link>https://chance7bin.github.io/posts/note/spring-security/</link>
+      <pubDate>Sat, 10 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/spring-security/</guid>
+      <description>参考链接： https://blog.csdn.net/liuminglei1987/category_10122574.html 从零搭建若依(Ruoyi-Vue)管理系统(10)&amp;ndash;Spring Security核心内容梳理 SpringSecuri</description>
+    </item>
+    
+    <item>
       <title>断点续传</title>
       <link>https://chance7bin.github.io/posts/design/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</link>
       <pubDate>Fri, 09 Jun 2023 22:37:33 +0800</pubDate>
@@ -98,21 +116,93 @@
     </item>
     
     <item>
+      <title>Windows配置NFS</title>
+      <link>https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/</link>
+      <pubDate>Wed, 10 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/windows%E9%85%8D%E7%BD%AEnfs/</guid>
+      <description>需求： 需要在k8s中使用到NFS，应该是在linux中配置nfs的，但是由于是在windows开发，所以有了在windwos配置nfs的需求</description>
+    </item>
+    
+    <item>
+      <title>ubuntu部署node项目</title>
+      <link>https://chance7bin.github.io/posts/note/ubuntu%E9%83%A8%E7%BD%B2node%E9%A1%B9%E7%9B%AE/</link>
+      <pubDate>Sun, 16 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/ubuntu%E9%83%A8%E7%BD%B2node%E9%A1%B9%E7%9B%AE/</guid>
+      <description>linux 解压 tar 文件 要在Linux上解压缩.tar文件，可以使用以下命令： tar -xvf file.tar 这将解压缩.tar文件并将其提取到当前目录中。您可以将“file.t</description>
+    </item>
+    
+    <item>
       <title>使用 Hugo &#43; Github 搭建个人博客</title>
-      <link>https://chance7bin.github.io/posts/tech/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
+      <link>https://chance7bin.github.io/posts/note/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
       <pubDate>Mon, 27 Mar 2023 21:06:06 +0800</pubDate>
       
-      <guid>https://chance7bin.github.io/posts/tech/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
+      <guid>https://chance7bin.github.io/posts/note/%E4%BD%BF%E7%94%A8-hugo-&#43;-github-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
       <description>初见Hugo Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。 1. 安装 Hugo 到 Hugo Releases 下载适合你的操作系统的版本。 Wind</description>
     </item>
     
     <item>
+      <title>Linux手册</title>
+      <link>https://chance7bin.github.io/posts/note/linux%E6%89%8B%E5%86%8C/</link>
+      <pubDate>Tue, 21 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/linux%E6%89%8B%E5%86%8C/</guid>
+      <description>Ubuntu apt换国内源 https://blog.csdn.net/RadiantJeral/article/details/104184351 https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/ 打开终端输入命令下载vim工具 1 sudo apt-get install vim 1.备份 /etc/apt/sources.list 1 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak 2.编辑 /etc/apt/sources.list 打开 /etc/apt/sources.list： 1</description>
+    </item>
+    
+    <item>
+      <title>Springboot 项目搭建</title>
+      <link>https://chance7bin.github.io/posts/note/springboot-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Tue, 22 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/springboot-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</guid>
+      <description>新建工程和确定工程目录 项目分的模块为： lab-admin项目核心模块 lab-common项目通用工具模块 1. 新建工程及多Module子工程 一、</description>
+    </item>
+    
+    <item>
+      <title>软考 程序员</title>
+      <link>https://chance7bin.github.io/posts/note/%E8%BD%AF%E8%80%83-%E7%A8%8B%E5%BA%8F%E5%91%98/</link>
+      <pubDate>Wed, 02 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/%E8%BD%AF%E8%80%83-%E7%A8%8B%E5%BA%8F%E5%91%98/</guid>
+      <description>学习攻略 真题 真题，建议从 10 年开始做，10 - 15 年的真题练习用，16 - 18 年真题自己卡时间模拟考 程序员考试重点汇总 计算机系统基础知识 进制之间的转化</description>
+    </item>
+    
+    <item>
       <title>雪花算法详解及springboot集成</title>
-      <link>https://chance7bin.github.io/posts/tech/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/</link>
+      <link>https://chance7bin.github.io/posts/note/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/</link>
       <pubDate>Tue, 11 Oct 2022 22:37:33 +0800</pubDate>
       
-      <guid>https://chance7bin.github.io/posts/tech/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/</guid>
+      <guid>https://chance7bin.github.io/posts/note/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3%E5%8F%8Aspringboot%E9%9B%86%E6%88%90/</guid>
       <description>参考链接： 快速了解雪花算法详解及spring boot集成 SpringBoot快速开发（六）【雪花算法（snowflake）自增ID】 1.介绍</description>
+    </item>
+    
+    <item>
+      <title>Vue3学习笔记</title>
+      <link>https://chance7bin.github.io/posts/note/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 14 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>参考链接： 一个 Java 猿眼中 Vue3 和 Vue2 的差异 （建议收藏）Vue3 对比 Vue2.x 差异性、注意点、整体梳理，与React hook比又如何？（面试热点） Vue2升级</description>
+    </item>
+    
+    <item>
+      <title>Vue项目搭建</title>
+      <link>https://chance7bin.github.io/posts/note/vue%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/vue%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</guid>
+      <description>**注意：**该笔记记录的是 Vue3 + TypeScript 的项目搭建流程 参考链接： RuoYi(若依开源框架)-前后端分离版-前端流程简单分析 https://github.com/lin-xin/vue-manage-system https://github.com/Armour/vue-typescript-admin-template vue-typesc</description>
+    </item>
+    
+    <item>
+      <title>Jupyter</title>
+      <link>https://chance7bin.github.io/posts/note/jupyter/</link>
+      <pubDate>Tue, 09 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/jupyter/</guid>
+      <description>Jupyter初探 Jupyter Notebook介绍、安装及使用教程 Jupyter使用详解 Jupyter notebook安装 安装了Anaconda发行版时已经自动安</description>
     </item>
     
     <item>
@@ -125,6 +215,87 @@
     </item>
     
     <item>
+      <title>使用Anaconda</title>
+      <link>https://chance7bin.github.io/posts/note/%E4%BD%BF%E7%94%A8anaconda/</link>
+      <pubDate>Fri, 03 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/%E4%BD%BF%E7%94%A8anaconda/</guid>
+      <description>Anaconda指的是一个开源的python发行版本，其包含了conda、Python等180多个科学包及其依赖项。 Anaconda是一个开</description>
+    </item>
+    
+    <item>
+      <title>Google Earth Engine调研报告</title>
+      <link>https://chance7bin.github.io/posts/note/google-earth-engine%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/</link>
+      <pubDate>Tue, 17 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/google-earth-engine%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/</guid>
+      <description>1.GEE的产品形态和序列 1.1 GEE基本产品形态 已有的 GIS 云服务通常分为基础云服务（IaaS, Infrastructure as a Service）和 软件云服务（SaaS, Software as</description>
+    </item>
+    
+    <item>
+      <title>k8s中各种port的区别</title>
+      <link>https://chance7bin.github.io/posts/note/k8s%E4%B8%AD%E5%90%84%E7%A7%8Dport%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Wed, 27 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/k8s%E4%B8%AD%E5%90%84%E7%A7%8Dport%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>pod containerPort containerPort是在pod控制器中定义的，pod中的容器需要暴露的端口，需要暴露什么端口取决于镜像构建时该服务所暴露的端口 例如</description>
+    </item>
+    
+    <item>
+      <title>CPU、内核、线程</title>
+      <link>https://chance7bin.github.io/posts/note/cpu%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B/</link>
+      <pubDate>Mon, 18 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/cpu%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B/</guid>
+      <description>Name：表示物理CPU数 NumberOfCores：表示CPU核心数 NumberOfLogicalProcessors：表示CPU线程数 注</description>
+    </item>
+    
+    <item>
+      <title>csdn导出为md文件</title>
+      <link>https://chance7bin.github.io/posts/note/csdn%E5%AF%BC%E5%87%BA%E4%B8%BAmd%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Thu, 14 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/csdn%E5%AF%BC%E5%87%BA%E4%B8%BAmd%E6%96%87%E4%BB%B6/</guid>
+      <description>CSDNExporter-master 该笔记记录CSDNExporter-master的配置，以及一些代码的修改 安装必要的 Python 库, 如 httpx, requests, BeautifulSoup; 为了解析图片链接, 需要安装 aria2, 并保证能在命</description>
+    </item>
+    
+    <item>
+      <title>Springboot MongoDB 空间查询</title>
+      <link>https://chance7bin.github.io/posts/note/springboot-mongodb-%E7%A9%BA%E9%97%B4%E6%9F%A5%E8%AF%A2/</link>
+      <pubDate>Fri, 01 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/springboot-mongodb-%E7%A9%BA%E9%97%B4%E6%9F%A5%E8%AF%A2/</guid>
+      <description>引言 https://mongodb.net.cn/manual/geospatial-queries/ 空间查询——查Point元素 查询字段的类型 1 2 // @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE) GeoJsonPoint center; // 图像中心点 构造box参数 box格式 [左下，然后右上] 1 Box box = new Box(new Point(-38, -42), new Point(162, 63));</description>
+    </item>
+    
+    <item>
+      <title>Sublime Text3 配置SFTP</title>
+      <link>https://chance7bin.github.io/posts/note/sublime-text3-%E9%85%8D%E7%BD%AEsftp/</link>
+      <pubDate>Mon, 28 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/sublime-text3-%E9%85%8D%E7%BD%AEsftp/</guid>
+      <description>参考链接 https://www.cnblogs.com/daxuan/p/11014529.html https://www.jianshu.com/p/0d36cbdecea8 1.进入到User文件夹下新建一个文件夹当项目目录 C:\Users\binbin\AppData\Roaming\Sublime Text\Packages\User 2.打开sublime，关联远程服务器 3.修改配置文件 4.设置完成之后拉取</description>
+    </item>
+    
+    <item>
+      <title>GeoTrellis</title>
+      <link>https://chance7bin.github.io/posts/note/geotrellis/</link>
+      <pubDate>Tue, 21 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/geotrellis/</guid>
+      <description>什么是GeoTrellis？ GeoTrellis 是一个 Scala 库和框架，它使用 Apache Spark 处理栅格数据。 GeoTrellis 以尽可能快的速度读取、写入和操作栅格数据。它实现了许多地图代数操作</description>
+    </item>
+    
+    <item>
+      <title>转发和重定向</title>
+      <link>https://chance7bin.github.io/posts/note/%E8%BD%AC%E5%8F%91%E5%92%8C%E9%87%8D%E5%AE%9A%E5%90%91/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/%E8%BD%AC%E5%8F%91%E5%92%8C%E9%87%8D%E5%AE%9A%E5%90%91/</guid>
+      <description>转发和重定向区别详解 作为一名java web开发的程序员，在使用servlet/jsp的时候，我们必须要知道实现页面跳转的两种方式的区别和联系</description>
+    </item>
+    
+    <item>
       <title>restful风格API设计指南</title>
       <link>https://chance7bin.github.io/posts/design/restful%E9%A3%8E%E6%A0%BCapi%E8%AE%BE%E8%AE%A1%E6%8C%87%E5%8D%97/</link>
       <pubDate>Thu, 29 Jul 2021 22:37:33 +0800</pubDate>
@@ -134,12 +305,39 @@
     </item>
     
     <item>
+      <title>SpringBoot整合WebSocket</title>
+      <link>https://chance7bin.github.io/posts/note/springboot%E6%95%B4%E5%90%88websocket/</link>
+      <pubDate>Fri, 02 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/springboot%E6%95%B4%E5%90%88websocket/</guid>
+      <description>WebSocket是一种在单个TCP连接上进行全双工通信的协议，浏览器和服务器只需要完成一次握手，两者之间就可以直接创建持久性的连接，并进行</description>
+    </item>
+    
+    <item>
       <title>uniapp加载mapbox并发布成小程序</title>
       <link>https://chance7bin.github.io/posts/map/uniapp%E5%8A%A0%E8%BD%BDmapbox%E5%B9%B6%E5%8F%91%E5%B8%83%E6%88%90%E5%B0%8F%E7%A8%8B%E5%BA%8F/</link>
       <pubDate>Thu, 10 Jun 2021 22:37:33 +0800</pubDate>
       
       <guid>https://chance7bin.github.io/posts/map/uniapp%E5%8A%A0%E8%BD%BDmapbox%E5%B9%B6%E5%8F%91%E5%B8%83%E6%88%90%E5%B0%8F%E7%A8%8B%E5%BA%8F/</guid>
       <description>小程序的踩坑之旅 1 uniapp 本身是加载不了mapbox的 下面两个是在vue环境下导入mapbox https://blog.csdn.net/weixin_44402694/article/details/87794850 https://blog.csdn.net/Isaac_Play/article/details/103890231?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3&amp;amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3 ==uniapp中加载mapbox会出现这个错误</description>
+    </item>
+    
+    <item>
+      <title>axios跨域问题</title>
+      <link>https://chance7bin.github.io/posts/note/axios%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/axios%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/</guid>
+      <description>axios的使用 1.安装命令：cnpm instal axios &amp;ndash;save 2.main.js引入全局使用 1 2 3 4 //axios import axios from &amp;#39;axios&amp;#39; Vue.prototype.$axios = axios 3.组件或页面中使用 1 2 3 4 5 6 7 8 9 10 11</description>
+    </item>
+    
+    <item>
+      <title>Spring 自动装配 接口</title>
+      <link>https://chance7bin.github.io/posts/note/spring-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D-%E6%8E%A5%E5%8F%A3/</link>
+      <pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/spring-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D-%E6%8E%A5%E5%8F%A3/</guid>
+      <description>在项目中遇到这么一个困惑 在controller层自动装配了一个service的接口 1 2 @Resource ProjectService projectService; ==为什么可以直接使用接口实现类重写的方法？==</description>
     </item>
     
     <item>

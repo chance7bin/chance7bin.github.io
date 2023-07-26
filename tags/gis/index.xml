@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>GIS on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/gis/</link>
+    <description>Recent content in GIS on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 17 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/gis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Google Earth Engine调研报告</title>
+      <link>https://chance7bin.github.io/posts/note/google-earth-engine%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/</link>
+      <pubDate>Tue, 17 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/google-earth-engine%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/</guid>
+      <description>1.GEE的产品形态和序列 1.1 GEE基本产品形态 已有的 GIS 云服务通常分为基础云服务（IaaS, Infrastructure as a Service）和 软件云服务（SaaS, Software as</description>
+    </item>
+    
+    <item>
+      <title>GeoTrellis</title>
+      <link>https://chance7bin.github.io/posts/note/geotrellis/</link>
+      <pubDate>Tue, 21 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/geotrellis/</guid>
+      <description>什么是GeoTrellis？ GeoTrellis 是一个 Scala 库和框架，它使用 Apache Spark 处理栅格数据。 GeoTrellis 以尽可能快的速度读取、写入和操作栅格数据。它实现了许多地图代数操作</description>
+    </item>
+    
+  </channel>
+</rss>

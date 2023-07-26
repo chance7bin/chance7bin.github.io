@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Spring Boot on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/spring-boot/</link>
+    <description>Recent content in Spring Boot on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 10 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Security</title>
+      <link>https://chance7bin.github.io/posts/note/spring-security/</link>
+      <pubDate>Sat, 10 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/spring-security/</guid>
+      <description>参考链接： https://blog.csdn.net/liuminglei1987/category_10122574.html 从零搭建若依(Ruoyi-Vue)管理系统(10)&amp;ndash;Spring Security核心内容梳理 SpringSecuri</description>
+    </item>
+    
+    <item>
+      <title>Springboot 项目搭建</title>
+      <link>https://chance7bin.github.io/posts/note/springboot-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Tue, 22 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/springboot-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</guid>
+      <description>新建工程和确定工程目录 项目分的模块为： lab-admin项目核心模块 lab-common项目通用工具模块 1. 新建工程及多Module子工程 一、</description>
+    </item>
+    
+    <item>
+      <title>Springboot MongoDB 空间查询</title>
+      <link>https://chance7bin.github.io/posts/note/springboot-mongodb-%E7%A9%BA%E9%97%B4%E6%9F%A5%E8%AF%A2/</link>
+      <pubDate>Fri, 01 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/springboot-mongodb-%E7%A9%BA%E9%97%B4%E6%9F%A5%E8%AF%A2/</guid>
+      <description>引言 https://mongodb.net.cn/manual/geospatial-queries/ 空间查询——查Point元素 查询字段的类型 1 2 // @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE) GeoJsonPoint center; // 图像中心点 构造box参数 box格式 [左下，然后右上] 1 Box box = new Box(new Point(-38, -42), new Point(162, 63));</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot整合WebSocket</title>
+      <link>https://chance7bin.github.io/posts/note/springboot%E6%95%B4%E5%90%88websocket/</link>
+      <pubDate>Fri, 02 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/springboot%E6%95%B4%E5%90%88websocket/</guid>
+      <description>WebSocket是一种在单个TCP连接上进行全双工通信的协议，浏览器和服务器只需要完成一次握手，两者之间就可以直接创建持久性的连接，并进行</description>
+    </item>
+    
+    <item>
+      <title>Spring 自动装配 接口</title>
+      <link>https://chance7bin.github.io/posts/note/spring-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D-%E6%8E%A5%E5%8F%A3/</link>
+      <pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/spring-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D-%E6%8E%A5%E5%8F%A3/</guid>
+      <description>在项目中遇到这么一个困惑 在controller层自动装配了一个service的接口 1 2 @Resource ProjectService projectService; ==为什么可以直接使用接口实现类重写的方法？==</description>
+    </item>
+    
+  </channel>
+</rss>

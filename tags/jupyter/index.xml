@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>jupyter on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/jupyter/</link>
+    <description>Recent content in jupyter on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 09 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/jupyter/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jupyter</title>
+      <link>https://chance7bin.github.io/posts/note/jupyter/</link>
+      <pubDate>Tue, 09 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/jupyter/</guid>
+      <description>Jupyter初探 Jupyter Notebook介绍、安装及使用教程 Jupyter使用详解 Jupyter notebook安装 安装了Anaconda发行版时已经自动安</description>
+    </item>
+    
+  </channel>
+</rss>

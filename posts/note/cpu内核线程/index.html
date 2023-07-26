@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>CPU、内核、线程 | Binb&#39;s Blog</title>
+<meta name="keywords" content="操作系统">
+<meta name="description" content="Name：表示物理CPU数 NumberOfCores：表示CPU核心数 NumberOfLogicalProcessors：表示CPU线程数 注">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/note/cpu%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="CPU、内核、线程" />
+<meta property="og:description" content="Name：表示物理CPU数 NumberOfCores：表示CPU核心数 NumberOfLogicalProcessors：表示CPU线程数 注" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/note/cpu%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-18T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-04-18T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CPU、内核、线程"/>
+<meta name="twitter:description" content="Name：表示物理CPU数 NumberOfCores：表示CPU核心数 NumberOfLogicalProcessors：表示CPU线程数 注"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻 我的笔记",
+      "item": "https://chance7bin.github.io/posts/note/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "CPU、内核、线程",
+      "item": "https://chance7bin.github.io/posts/note/cpu%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "CPU、内核、线程",
+  "name": "CPU、内核、线程",
+  "description": "Name：表示物理CPU数 NumberOfCores：表示CPU核心数 NumberOfLogicalProcessors：表示CPU线程数 注",
+  "keywords": [
+    "操作系统"
+  ],
+  "articleBody": "\rName：表示物理CPU数\nNumberOfCores：表示CPU核心数\nNumberOfLogicalProcessors：表示CPU线程数\n注释：VM虚拟机中的CPU选择的核心数实际是代表线程数。\nCPU CPU是指看得见的 芯片个数、也就是指主板上插CPU的插槽个数\n核数 cpu cores 在每一个cpu上面,都可能有多个核(core)，每一个核中都有独立的 一套ALU、FPU、Cache 组件。所以这个概念也被称之为物理核。总的CPU物理内核数=物理CPU数*每颗CPU的内核数\n线程数 processor 这个主要得益于现在的超线程技术，可以让一个物理核模拟处多个逻辑核，processor。起作用也就是当我们有多个计算任务、或者处理逻辑的时候，可以让一个计算任务使用ALU的时候，另一个则取使用FPU。这样可以充分利用物理核的各个组件。使得同一个物理核当中也可以执行多个计算任务。\n总的逻辑CPU数=物理CPU个数*每颗物理CPU的核数*超线程数\n总的逻辑CPU数=总的CPU物理内核数*超线程数\n几核几线程 我们常说的核指的是内核个数。像上面这张图表示6核12线程。基于上面的逻辑核公式可以推算出每个内核可以运行2个线程数量。\n在任务管理器中，看到其实是6个内核，但是逻辑处理器是12个，有多少个逻辑处理器，就可以开多少个线程。 线程数=逻辑处理器个数\n一个物理CPU可以有1个或者多个物理内核， 一个物理内核可以作为1个或者2个逻辑CPU。 操作系统可以使用逻辑CPU来模拟真实CPU。 在没有多核处理器的时候，一个物理CPU只能有一个物理内核， 有了多核技术，一个物理CPU可以有多个物理内核，可以把一个CPU当作多个CPU使用，即逻辑CPU。 没有开启超线程时，逻辑CPU的个数就是总的CPU物理内核数。 开启超线程后，逻辑CPU的个数就是总的CPU物理内核数的两倍。\n逻辑处理器 逻辑处理器指的就是支持超线程技术的处理器在一个单核心的CPU内，利用其中空闲的执行单元，模拟出另外一个核心，使整个CPU有两个逻辑核心，从而提高整个CPU的工作效率。\n注意：因为逻辑处理器是通过在一枚处理器上整合两个逻辑处理器单元，使得具有这种技术的新型CPU，有能同时执行多个线程的能力，这就是我们所说的超线程 。\n单核多CPU与多核单CPU 一台计算机的处理器部分的架构\n单核多CPU，那么每一个CPU都需要有较为独立的电路支持，有自己的Cache，而他们之间通过板上的总线进行通信。（一致性问题）\n假如在这样的架构上，我们要跑一个多线程的程序（常见典型情况），不考虑超线程，那么每一个线程就要跑在一个独立的CPU上，线程间的所有协作都要走总线，而共享的数据更是有可能要在好几个Cache里同时存在。这样的话，总线开销相比较而言是很大的，怎么办？那么多Cache，即使我们不心疼存储能力的浪费，一致性怎么保证？\n多核单CPU，那么我们只需要一套芯片组，一套存储，多核之间通过芯片内部总线进行通信，共享使用内存。在这样的架构上，如果我们跑一个多线程的程序，那么线程间通信将比上一种情形更快。\n多个CPU常见于分布式系统，用于普通消费级市场的不多，多用于cluster，云计算平台什么的。多CPU架构最大的瓶颈就是I/O，尤其是各个CPU之间的通讯，低成本的都用100M以太网做，稍微好一点的用1000M以太网，再好的就用光纤等等，但无论如何速度和通量都比不上主板的主线。所以多CPU适用于大计算量，对速度（时间）不（太）敏感的任务，比如一些工程建模，或者像SATI找外星人这种极端的，跑上几千年都不着急的。而且多CPU架构更简单清晰，可以用消费级产品简单做数量堆叠，成本上有优势。而多核单CPU则适合对通讯I/O速度要求较快的应用，（相同核数量下）成本上也高一些，好像只有在超级计算机里会用到以万为单位的核心数，普通消费级产品也就是到16核封顶了，因为成本控制的原因。\n实现16个逻辑CPU的原理图 线程/进程/多核CPU 1 2 3 \u003e\u003e\u003e from multiprocessing import cpu_count \u003e\u003e\u003e print(cpu_count()) 12 在python中，使用上述代码可以获取当前系统的逻辑cpu个数，也就是支持并发的线程个数。\n这里再区分一下进程，线程，多个CPU和单个多核CPU，多个多核CPU，这些概念区别。\n左图：多个物理CPU，CPU通过总线进行通信，效率比较低。\n右图：多核CPU，不同的核通过L2 cache进行通信，存储和外设通过总线与CPU通信\n进程是程序的一次执行过程，是一个动态概念，是程序在执行过程中分配和管理资源的基本单位，\n线程是CPU调度和分派的基本单位，它可与同属一个进程的其他的线程共享进程所拥有的全部资源。\n**联系：**线程是进程的一部分，一个线程只能属于一个进程，而一个进程可以有多个线程，但至少有一个线程；\n根本区别：进程是操作系统资源分配的基本单位，而线程是任务调度和执行的基本单位\n参考：\n内核/逻辑处理器/线程/多线程/多CPU/多核CPU\nCPU个数、CPU核心数、CPU线程数 CPU、核数、线程数扫盲\n",
+  "wordCount" : "2017",
+  "inLanguage": "zh",
+  "datePublished": "2022-04-18T00:00:00Z",
+  "dateModified": "2022-04-18T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/note/cpu%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/note/">👨🏻‍💻 我的笔记</a></div>
+    <h1 class="post-title">
+      CPU、内核、线程
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-04-18
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>2017字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>5分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="color: var(--secondary)!important;">操作系统</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#cpu" aria-label="CPU">CPU</a></li>
+                    <li>
+                        <a href="#%e6%a0%b8%e6%95%b0-cpu-cores" aria-label="核数 cpu cores">核数 cpu cores</a></li>
+                    <li>
+                        <a href="#%e7%ba%bf%e7%a8%8b%e6%95%b0-processor" aria-label="线程数 processor">线程数 processor</a></li>
+                    <li>
+                        <a href="#%e5%87%a0%e6%a0%b8%e5%87%a0%e7%ba%bf%e7%a8%8b" aria-label="几核几线程">几核几线程</a></li>
+                    <li>
+                        <a href="#%e9%80%bb%e8%be%91%e5%a4%84%e7%90%86%e5%99%a8" aria-label="逻辑处理器">逻辑处理器</a></li>
+                    <li>
+                        <a href="#%e5%8d%95%e6%a0%b8%e5%a4%9acpu%e4%b8%8e%e5%a4%9a%e6%a0%b8%e5%8d%95cpu" aria-label="单核多CPU与多核单CPU"><strong>单核多CPU与多核单CPU</strong></a></li>
+                    <li>
+                        <a href="#%e5%ae%9e%e7%8e%b016%e4%b8%aa%e9%80%bb%e8%be%91cpu%e7%9a%84%e5%8e%9f%e7%90%86%e5%9b%be" aria-label="实现16个逻辑CPU的原理图">实现16个逻辑CPU的原理图</a></li>
+                    <li>
+                        <a href="#%e7%ba%bf%e7%a8%8b%e8%bf%9b%e7%a8%8b%e5%a4%9a%e6%a0%b8cpu" aria-label="线程/进程/多核CPU">线程/进程/多核CPU</a>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252328415.png" alt="img"  />
+</p>
+<p>Name：表示物理CPU数</p>
+<p>NumberOfCores：表示CPU核心数</p>
+<p>NumberOfLogicalProcessors：表示CPU线程数</p>
+<p>注释：VM虚拟机中的CPU选择的核心数实际是代表线程数。</p>
+<h3 id="cpu">CPU<a hidden class="anchor" aria-hidden="true" href="#cpu">#</a></h3>
+<p>CPU是指看得见的 芯片个数、也就是指主板上插CPU的插槽个数</p>
+<h3 id="核数-cpu-cores">核数 cpu cores<a hidden class="anchor" aria-hidden="true" href="#核数-cpu-cores">#</a></h3>
+<p>在每一个cpu上面,都可能有多个核(core)，每一个核中都有独立的 一套ALU、FPU、Cache 组件。所以这个概念也被称之为物理核。<code>总的CPU物理内核数=物理CPU数*每颗CPU的内核数</code></p>
+<h3 id="线程数-processor">线程数 processor<a hidden class="anchor" aria-hidden="true" href="#线程数-processor">#</a></h3>
+<p>这个主要得益于现在的超线程技术，可以让<code>一个物理核模拟处多个逻辑核，processor</code>。起作用也就是当我们有多个计算任务、或者处理逻辑的时候，可以让一个计算任务使用ALU的时候，另一个则取使用FPU。这样可以充分利用物理核的各个组件。使得同一个物理核当中也可以执行多个计算任务。</p>
+<p><code>总的逻辑CPU数=物理CPU个数*每颗物理CPU的核数*超线程数</code></p>
+<p><code>总的逻辑CPU数=总的CPU物理内核数*超线程数</code></p>
+<h3 id="几核几线程">几核几线程<a hidden class="anchor" aria-hidden="true" href="#几核几线程">#</a></h3>
+<p>我们常说的核指的是内核个数。像上面这张图表示6核12线程。基于上面的逻辑核公式可以推算出每个内核可以运行2个线程数量。</p>
+<p>在任务管理器中，看到其实是6个内核，但是逻辑处理器是12个，有多少个逻辑处理器，就可以开多少个线程。
+<code>线程数=逻辑处理器个数</code></p>
+<ul>
+<li>一个<code>物理CPU</code>可以有1个或者多个<code>物理内核</code>，</li>
+<li>一个<code>物理内核</code>可以作为1个或者2个<code>逻辑CPU</code>。</li>
+</ul>
+<blockquote>
+<p>操作系统可以使用逻辑CPU来模拟真实CPU。
+在没有多核处理器的时候，一个物理CPU只能有一个物理内核，
+有了多核技术，一个物理CPU可以有多个物理内核，可以把一个CPU当作多个CPU使用，即逻辑CPU。
+没有开启超线程时，逻辑CPU的个数就是总的CPU物理内核数。
+开启超线程后，逻辑CPU的个数就是总的CPU物理内核数的两倍。</p>
+</blockquote>
+<h3 id="逻辑处理器">逻辑处理器<a hidden class="anchor" aria-hidden="true" href="#逻辑处理器">#</a></h3>
+<p>逻辑处理器指的就是支持超线程技术的处理器在一个单核心的CPU内，利用其中空闲的执行单元，模拟出另外一个核心，使整个CPU有两个逻辑核心，从而提高整个CPU的工作效率。</p>
+<p>注意：因为逻辑处理器是通过在一枚处理器上整合两个逻辑处理器单元，使得具有这种技术的新型CPU，有能同时执行多个线程的能力，这就是我们所说的<code>超线程</code> 。</p>
+<h3 id="单核多cpu与多核单cpu"><strong>单核多CPU与多核单CPU</strong><a hidden class="anchor" aria-hidden="true" href="#单核多cpu与多核单cpu">#</a></h3>
+<p>一台计算机的处理器部分的架构</p>
+<p><strong>单核多CPU</strong>，那么每一个CPU都需要有较为独立的电路支持，有自己的Cache，而他们之间通过板上的总线进行通信。（一致性问题）</p>
+<p>假如在这样的架构上，我们要跑一个多线程的程序（常见典型情况），不考虑超线程，那么每一个线程就要跑在一个独立的CPU上，线程间的所有协作都要走总线，而共享的数据更是有可能要在好几个Cache里同时存在。这样的话，总线开销相比较而言是很大的，怎么办？那么多Cache，即使我们不心疼存储能力的浪费，一致性怎么保证？</p>
+<p><strong>多核单CPU</strong>，那么我们只需要<code>一套芯片组，一套存储，多核之间通过芯片内部总线进行通信，共享使用内存。</code>在这样的架构上，如果我们跑一个多线程的程序，那么线程间通信将比上一种情形更快。</p>
+<p>多个CPU常见于分布式系统，用于普通消费级市场的不多，多用于cluster，云计算平台什么的。多CPU架构最大的瓶颈就是I/O，尤其是各个CPU之间的通讯，低成本的都用100M以太网做，稍微好一点的用1000M以太网，再好的就用光纤等等，但无论如何速度和通量都比不上主板的主线。所以多CPU适用于大计算量，对速度（时间）不（太）敏感的任务，比如一些工程建模，或者像SATI找外星人这种极端的，跑上几千年都不着急的。而且多CPU架构更简单清晰，可以用消费级产品简单做数量堆叠，成本上有优势。而多核单CPU则适合对通讯I/O速度要求较快的应用，（相同核数量下）成本上也高一些，好像只有在超级计算机里会用到以万为单位的核心数，普通消费级产品也就是到16核封顶了，因为成本控制的原因。</p>
+<h3 id="实现16个逻辑cpu的原理图">实现16个逻辑CPU的原理图<a hidden class="anchor" aria-hidden="true" href="#实现16个逻辑cpu的原理图">#</a></h3>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252328422.png" alt="image-20220418105948848"  />
+</p>
+<h3 id="线程进程多核cpu">线程/进程/多核CPU<a hidden class="anchor" aria-hidden="true" href="#线程进程多核cpu">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">cpu_count</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">cpu_count</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="mi">12</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在python中，使用上述代码可以获取当前系统的逻辑cpu个数，也就是支持并发的线程个数。</p>
+<p>这里再区分一下进程，线程，多个CPU和单个多核CPU，多个多核CPU，这些概念区别。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252328428.png" alt="image-20220418110135863"  />
+</p>
+<p>左图：多个物理CPU，CPU通过总线进行通信，效率比较低。</p>
+<p>右图：多核CPU，不同的核通过L2 cache进行通信，存储和外设通过总线与CPU通信</p>
+<p>进程是程序的一次执行过程，是一个动态概念，是程序在执行过程中分配和管理资源的基本单位，</p>
+<p>线程是CPU调度和分派的基本单位，它可与同属一个进程的其他的线程共享进程所拥有的全部资源。</p>
+<p>**联系：**线程是进程的一部分，一个线程只能属于一个进程，而一个进程可以有多个线程，但至少有一个线程；</p>
+<p>根本区别：进程是操作系统资源分配的基本单位，而线程是任务调度和执行的基本单位</p>
+<p>参考：</p>
+<p><a href="https://blog.csdn.net/Castlehe/article/details/117566303">内核/逻辑处理器/线程/多线程/多CPU/多核CPU</a></p>
+<p><a href="https://www.cnblogs.com/kimsimple/p/7787018.html">CPU个数、CPU核心数、CPU线程数 </a></p>
+<p><a href="https://www.jianshu.com/p/ae70152eb2e5">CPU、核数、线程数扫盲</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/note/k8s%E4%B8%AD%E5%90%84%E7%A7%8Dport%E7%9A%84%E5%8C%BA%E5%88%AB/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>k8s中各种port的区别</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/note/csdn%E5%AF%BC%E5%87%BA%E4%B8%BAmd%E6%96%87%E4%BB%B6/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>csdn导出为md文件</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

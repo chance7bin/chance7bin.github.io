@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>软考 on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/%E8%BD%AF%E8%80%83/</link>
+    <description>Recent content in 软考 on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 02 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E8%BD%AF%E8%80%83/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>软考 程序员</title>
+      <link>https://chance7bin.github.io/posts/note/%E8%BD%AF%E8%80%83-%E7%A8%8B%E5%BA%8F%E5%91%98/</link>
+      <pubDate>Wed, 02 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/%E8%BD%AF%E8%80%83-%E7%A8%8B%E5%BA%8F%E5%91%98/</guid>
+      <description>学习攻略 真题 真题，建议从 10 年开始做，10 - 15 年的真题练习用，16 - 18 年真题自己卡时间模拟考 程序员考试重点汇总 计算机系统基础知识 进制之间的转化</description>
+    </item>
+    
+  </channel>
+</rss>

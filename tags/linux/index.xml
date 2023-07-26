@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Linux on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/linux/</link>
+    <description>Recent content in Linux on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 21 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux手册</title>
+      <link>https://chance7bin.github.io/posts/note/linux%E6%89%8B%E5%86%8C/</link>
+      <pubDate>Tue, 21 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/linux%E6%89%8B%E5%86%8C/</guid>
+      <description>Ubuntu apt换国内源 https://blog.csdn.net/RadiantJeral/article/details/104184351 https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/ 打开终端输入命令下载vim工具 1 sudo apt-get install vim 1.备份 /etc/apt/sources.list 1 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak 2.编辑 /etc/apt/sources.list 打开 /etc/apt/sources.list： 1</description>
+    </item>
+    
+  </channel>
+</rss>

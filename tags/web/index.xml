@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>web on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/web/</link>
+    <description>Recent content in web on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 31 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>转发和重定向</title>
+      <link>https://chance7bin.github.io/posts/note/%E8%BD%AC%E5%8F%91%E5%92%8C%E9%87%8D%E5%AE%9A%E5%90%91/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/%E8%BD%AC%E5%8F%91%E5%92%8C%E9%87%8D%E5%AE%9A%E5%90%91/</guid>
+      <description>转发和重定向区别详解 作为一名java web开发的程序员，在使用servlet/jsp的时候，我们必须要知道实现页面跳转的两种方式的区别和联系</description>
+    </item>
+    
+    <item>
+      <title>axios跨域问题</title>
+      <link>https://chance7bin.github.io/posts/note/axios%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/axios%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/</guid>
+      <description>axios的使用 1.安装命令：cnpm instal axios &amp;ndash;save 2.main.js引入全局使用 1 2 3 4 //axios import axios from &amp;#39;axios&amp;#39; Vue.prototype.$axios = axios 3.组件或页面中使用 1 2 3 4 5 6 7 8 9 10 11</description>
+    </item>
+    
+  </channel>
+</rss>

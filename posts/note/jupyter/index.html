@@ -1,0 +1,2030 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Jupyter | Binb&#39;s Blog</title>
+<meta name="keywords" content="jupyter">
+<meta name="description" content="Jupyter初探 Jupyter Notebook介绍、安装及使用教程 Jupyter使用详解 Jupyter notebook安装 安装了Anaconda发行版时已经自动安">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/note/jupyter/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Jupyter" />
+<meta property="og:description" content="Jupyter初探 Jupyter Notebook介绍、安装及使用教程 Jupyter使用详解 Jupyter notebook安装 安装了Anaconda发行版时已经自动安" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/note/jupyter/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-08-09T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-08-09T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Jupyter"/>
+<meta name="twitter:description" content="Jupyter初探 Jupyter Notebook介绍、安装及使用教程 Jupyter使用详解 Jupyter notebook安装 安装了Anaconda发行版时已经自动安"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻 我的笔记",
+      "item": "https://chance7bin.github.io/posts/note/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Jupyter",
+      "item": "https://chance7bin.github.io/posts/note/jupyter/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Jupyter",
+  "name": "Jupyter",
+  "description": "Jupyter初探 Jupyter Notebook介绍、安装及使用教程 Jupyter使用详解 Jupyter notebook安装 安装了Anaconda发行版时已经自动安",
+  "keywords": [
+    "jupyter"
+  ],
+  "articleBody": "Jupyter初探 Jupyter Notebook介绍、安装及使用教程\nJupyter使用详解\nJupyter notebook安装 安装了Anaconda发行版时已经自动安装了Jupyter Notebook\n直接打开命令窗口，输入jupyter notebook启动jupyter notebook\n在浏览器输入url即可进入jupyter\n这些所列的文件目录都存放在直接打开cmd时的初始目录下\n设置Jupyter Notebook文件存放位置 创建配置文件\n1 jupyter notebook --generate-config 修改配置文件\n搜索c.NotebookApp.notebook_dir，设置文件的默认存储位置\n启动时出现的问题：\n[W 14:06:44.163 NotebookApp] 404 GET /api/kernels/39fc6aa7-5b95-4bc9-b561-b524370dbcd4/channels?session_id=0794ad0158734a7096f06b73e6d8cfd2 (127.0.0.1): Kernel does not exist: 39fc6aa7-5b95-4bc9-b561-b524370dbcd4\n解决方案：\n1 pip install --upgrade ipykernel 保存和检查点(checkpoint) 在开始前，要记得定时保存文件，这可以直接采用快捷键 Ctrl + S 保存文件，它是通过一个命令–“保存和检查点”实现的，那么什么是检查点呢？\n每次创建一个新的 notebook，同时也创建了一个 checkpoint 文件，它保存在一个隐藏的子文件夹 .ipynb_checkpoints 中，并且也是一个 .ipynb 文件。默认 Jupyter 会每隔 120 秒自动保存 notebook 的内容到 checkpoint 文件中，而当你手动保存的时候，也会更新 notebook 和 checkpoint 文件。这个文件可以在因为意外原因关闭 notebook 后恢复你未保存的内容，可以在菜单中 File-\u003eRevert to Checkpoint 中恢复。\n拓展功能 关联jupyter与conda环境 有两种方式关联\nnb_conda 关联Jupyter Notebook和conda的环境和包——“nb_conda”\nJupyter Notebook中切换conda虚拟环境\n① 安装\n1 conda install nb_conda ② 使用\n可以在Conda类目下对conda环境和包进行一系列操作。\n可以在笔记本内的“Kernel”类目里的“Change kernel”切换内核。\n③ 卸载\n1 conda remove nb_conda 执行上述命令即可卸载nb_conda包。\nJupyter notebook怎么使用自己新建的conda环境\n以下操作都在命令行中操作：\n1 conda create -n tensorflow_study python=3.6 tensorflow_study是我新建环境的名字，你的环境名字自己根据情况取；python版本也根据自己的需求来选择。\n1 conda activate tensorflow_study 进入新建的环境\n1 conda install nb_conda 安装nb_conda是为了实现不同环境的切换与选择。\n1 Jupyter notebook ==错误1：EnvironmentLocationNotFound: Not a conda environment==\n打开jupyter后点击Conda会弹出这样的错误：\n解决方法：\n找到Anaconda安装路径下nb_conda库的envmanager.py文件\nwin系统在目录：Anaconda3\\Lib\\site-packages\\nb_conda\\envmanager.py\nlinux系统在目录：Anaconda3/pkgs/nb_conda-2.2.1-py36_0/lib/python3.6/site-packages/nb_conda/envmanager.py\n找到该文件后在83~86行有这样一段代码：\n1 2 3 4 return { \"environments\": [root_env] + [get_info(env) for env in info['envs']] } 我们将此段代码改成如下：\n1 2 3 return { \"environments\": [root_env] + [get_info(env) for env in info['envs'] if env != root_env['dir']] } 然后重启jupyter就可以了。\n==错误2：可使用的环境没有我新创建的jupyter环境==\n==nb_conda 要装到你的虚拟环境中才会在jupyter notebook中显示！！！！！！==\n如何在 Jupyter Notebook 中切换/使用 conda 虚拟环境\n使用 nb_conda_kernels 添加所有环境\n这个方法就是一键添加所有 conda 环境\n1 2 3 4 5 6 7 conda activate my-conda-env # this is the environment for your project and code conda install ipykernel conda deactivate conda activate base # could be also some other environment conda install nb_conda_kernels jupyter notebook 注意：这里的 conda install nb_conda_kernels 是在 base 环境下操作的。\n安装好后，打开 jupyter notebook 就会显示所有的 conda 环境啦，点击随意切换。\nipykernel 1、直接在新建一个环境的同时，给该环境安装ipykernel\n1 2 conda create -n 新环境名称 python=3.7 ipykernel # eg: conda create -n new python=3.7 ipykernel 2、激活虚拟环境\n1 2 source activate 环境名称 # eg: source activate new 3、将该环境写入jupyter的kernel中\n1 2 python -m ipykernel install --user --name 环境名称 --display-name \"你想在jupyter中显示的该环境的名称\" # eg: python -m ipykernel install --user --name new --display-name \"jupyter环境\" 4、进入jupyter 服务器\n1 jupyter notebook 安装插件 首先安装扩展库\n1 2 3 conda install -c conda-forge jupyter_contrib_nbextensions jupyter contrib nbextensions install --user conda install -c conda-forge jupyter_nbextensions_configurator -c conda-forge是指明在库conda-forge中下载jupyter_contrib_nbextensions\n1.Markdown生成目录\n不同于有道云笔记的Markdown编译器，Jupyter Notebook无法为Markdown文档通过特定语法添加目录，因此需要通过安装扩展来实现目录的添加。\n1 conda install -c conda-forge jupyter_contrib_nbextensions -c conda-forge是指明在库conda-forge中下载jupyter_contrib_nbextensions\n执行上述命令后，启动Jupyter Notebook，你会发现导航栏多了“Nbextensions”的类目，点击“Nbextensions”，勾选“Table of Contents ⑵”\n之后再在Jupyter Notebook中使用Markdown，点击下图的图标即可使用啦。\n==遇到的问题：==\n插件不显示\n解决方法：\njupyter nbextensions configurator不显示插件\n再执行如下命令\n1 2 conda install -c conda-forge jupyter_nbextensions_configurator jupyter contrib nbextensions install --user 2.代码自动补全扩展\n勾选 Hinterland\n安装插件后出现警告“Config option template_path not recognized by LenvsLatexExporter”\n原因是nbconvert6.0.0版本以上的某些参数的名称发生了更改，与原先版本不兼容，需要将版本降低到5.6.1\n1 pip install nbconvert==5.6.1 -i https://pypi.mirrors.ustc.edu.cn/simple jupyter代码自动补全插件、安装后出现警告“Config option template_path not recognized by LenvsLatexExporter”的解决方案\n3.主题\n4.Autopep8\n这是一个将代码按照PEP8进行格式化的插件，前提是需要通过pip install autopep8安装autopep8，安装完之后需要重启jupyter notebook服务才能生效。同样在Nbextention选项卡中勾选Autopep8，在工具栏中会多一个“锤子”一样的按钮，可以帮助我们排版代码，使其符合pep8标准。\n5.Variable inspector\n该插件可以帮助我们查看当前notebook中所有的变量的名称，类型，大小和值。省去了df.shape，type()等语句的执行，也代替了前文提到的魔法函数“%whos”的执行，读者可以自行尝试一下。\n6.Code folding\n顾名思义，该插件可以对代码进行一定的折叠，例如遇到class，def等关键字，而且主体代码又很长时，折叠代码会方便阅读，这一点也让jupyter notebook更像一个IDE。\n7.Execute time\n该插件可以显示每一个cell中代码的执行时间。\n除此之外还有一些其他常见的插件扩展，例如Notify，Collapsible headings等，读者可以自行探索查看，并配置使用。\nJupyter快捷键 加载指定网页源代码 1 %load URL 其中，URL为指定网站的地址。\n加载本地Python文件 1 %load Python文件的绝对路径 注意\nPython文件的后缀为“.py”。 “%load”后跟的是Python文件的绝对路径。 输入命令后，可以按CTRL 回车来执行命令。第一次执行，是将本地的Python文件内容加载到单元格内。此时，Jupyter Notebook会自动将“%load”命令注释掉（即在前边加井号“#”），以便在执行已加载的文件代码时不重复执行该命令；第二次执行，则是执行已加载文件的代码。 直接运行本地Python文件 执行命令：\n1 %run Python文件的绝对路径 或\n1 !python3 Python文件的绝对路径 或\n1 !python Python文件的绝对路径 注意\nPython文件的后缀为“.py”。 “%run”后跟的是Python文件的绝对路径。 “!python3”用于执行Python 3.x版本的代码。 “!python”用于执行Python 2.x版本的代码。 “!python3”和“!python”属于 !shell命令 语法的使用，即在Jupyter Notebook中执行shell命令的语法。 输入命令后，可以按 control return 来执行命令，执行过程中将不显示本地Python文件的内容，直接显示运行结果。 在Jupyter Notebook使用shell命令 ① 方法一——在笔记本的单元格中\n⑴ 语法\n1 !shell命令 在Jupyter Notebook中的笔记本单元格中用英文感叹号“!”后接shell命令即可执行shell命令。 1 !pip install jieba ② 方法二——在Jupyter Notebook中新建终端\n⑴ 启动方法\n在Jupyter Notebook主界面，即“File”界面中点击“New”；在“New”下拉框中点击“Terminal”即新建了终端。此时终端位置是在你的home目录，可以通过pwd命令查询当前所在位置的绝对路径。\n⑵ 关闭方法\n在Jupyter Notebook的“Running”界面中的“Terminals”类目中可以看到正在运行的终端，点击后边的“Shutdown”即可关闭终端。\nJupyterLab JupyterLab最全详解，如果你还在使用Notebook，那你就out了！\nJupyter Notebook是一个交互式笔记本，支持运行 40 多种编程语言。Jupyter Notebook 的本质是一个 Web 应用程序，便于创建和共享文学化程序文档，支持实时代码、数学方程、可视化和 markdown，用途包括：数据清理和转换，数值模拟，统计建模，机器学习等等 。\nJupyterLab是Jupyter主打的最新数据科学生产工具，在一定程度上是为了取代Jupyter Notebook。它支持安装插件以及有着更好的界面。而 JupyterHub是为多个用户提供Jupyter Notebook的最佳方式。\nJupyter NoteBook / JupyterLab / JupyterHub 区别与关系简介\n搭建环境方案（根据需求调整）：\n线上环境：The Littlest JupyterHub + JupyterLab 开发环境：JupyterHub + JupyterLab Tips\n当前版本的 Jupyter Lab 网页版可视化界面虽然用起来很方便，但是也存在很多问题，==目前最好的解决方法是尽量将对 Jupyter Lab 有改动的操作自己在 Anaconda Prompt 下进行==，最主要的原因就是==即使发生了问题，也可以从Prompt中直观的看到错误原因甚至解释==。这对于解决问题其实是至关重要的一环。\n安装 1 2 3 4 5 #创建环境 conda create --name env_name python=x.x -y conda activate env_name #安装jupyterlab conda install -c conda-forge jupyterlab 在命令行使用jupyter-lab或jupyter lab命令运行Jupyter lab\n作为官方宣传的jupyter lab3.0版本后最大的改变，似乎我们可以不需要nodejs，不通过jupyter labextension install语句，仅仅依靠pip/conda/mamba就可以安装拓展\n1 pip install \"jupyterlab-kite\u003e=2.0.2\" Jupyter Lab配置\n使用命令创建配置文件，其会生成C:\\Users\\用户名\\.jupyter\\jupyter_notebook_config.py或者/home/用户名/.jupyter/jupyter_notebook_config.py\n1 jupyter lab --generate-config 控制台出现的各种警告 安装插件后出现警告“Config option template_path not recognized by LenvsLatexExporter”\n原因是nbconvert6.0.0版本以上的某些参数的名称发生了更改，与原先版本不兼容，需要将版本降低到5.6.1\n1 pip install nbconvert==5.6.1 -i https://pypi.mirrors.ustc.edu.cn/simple ClobberError: This transaction has incompatible packages 或者The package ‘xxx‘ cannot be installed due==（未解决）==\n原因：conda和pip等相关包的版本太低，自动更新不能用。 解决方案：在命令行中输入以下命令：==（没效果）==\n1 2 conda clean --all conda update --all Failed validating ‘additionalProperties’ in schema:==（未解决）==\nWARNING | Config option kernel_spec_manager_class not recognized by LabBuildApp==（未解决）==\n如果出现\n可以先更新pip\n1 python -m pip install --upgrade pip 插件 强烈推荐JupyterLab 6个\"精英\"插件\n15个好用到爆炸的Jupyter Lab插件\n==nodejs版本不能过低==\n同时！！\n==外部的node环境好像不生效，要在conda环境中装node==\n在anaconda prompt中运行下面的语句安装nodejs：\nconda install -c conda-forge nodejs\u003c15\n其次需要注意的一点是：nodejs最好选择14.x.x版本，如果选择了16.x.x可能会遇到各种奇葩问题 。（这是个大坑）\n还有，建议用官方默认源来下载npm资源，yarn同理。别用taobao的源。\ntaobao的源有些不对，也会导致资源下载不成功。而且taobao在2022年5月要改域名了。\n1.jupyterlab-code-snippets（没安装成功）\n1 jupyter labextension install jupyterlab-code-snippets 报错：\n==外部的node环境好像不生效，要在conda环境中装node==\n==遇到的问题：==\n安装之后无法使用\n解决方法：\nelyra-code-snippet-extension（安装成功）\n1 pip install elyra-code-snippet-extension 如果出现\n可以先更新pip\n1 python -m pip install --upgrade pip 1 conda install -c conda-forge elyra-code-snippet-extension \u0026\u0026 jupyter lab build 👆命令装不了\n==控制台安装出错==\n==页面安装出错==\ncode snippets存储路径：$JUPYTER_DATA_DIR/metadata/code-snippets\n1 $ jupyter --data-dir 2.jupyter lsp（安装成功）\njupyter lab 代码提示 代码补全插件 jupyter lsp 配置教程 ：Hinterland mode\n1.安装JupyterLab-lsp\n1 pip install jupyter-lsp 2.安装python-lsp-server\n1 pip install python-lsp-server[all] 3.安装frontend extension\n1 jupyter labextension install @krassowski/jupyterlab-lsp 3.或者启动 jupyter lab，在插件中搜索lsp，点击@krassowski/jupyterlab-lsp下的install安装\n4.点击OK\n5.重新进入jupyter lab，输入代码时按tab键，就可以使用代码提示啦 。\n若想实现jupyter notebook中类似Hinterland mode的自动提示，还需进行下面的设置\n6.依次点击Settings–\u003eAdvanced Settings Editor\n7.选择Code Completion，在右侧输入如下代码，并保存，即可开启Hinterland mode\n1 2 3 { \"continuousHinting\": true } ==可能会出现如下问题：==\n3.ipywidgets（安装成功）\n生成控件(下拉菜单, 滑条等等), 非常方便手动调参, 因为会即使反馈, 根据反馈不断调整参数\n先用pip安装ipywidgets: pip install ipywidgets\n用这个命令（指定为版本7）：pip install ipywidgets==7\n这样安装会出现如下问题：\n**解决方法（这个方法没解决）：**https://www.coder.work/article/3135992\nipywidget 7.5 破坏了 jupyter lab，它也影响了其他库。\nhttps://github.com/plotly/plotly.py/issues/1659\n降级到 7 解决\n安装完成后在Jupyter Notebook中激活：\n1 jupyter nbextension enable --py widgetsnbextension 如果使用Jupyterlab，运行以下代码：\n1 jupyter labextension install @jupyter-widgets/jupyterlab-manager 在Notebook中导入并使用ipywidgets：\n1 2 import ipywidgets as widgets from ipywidgets import interact, interact_manual 交互式控件入门\n假设我们有一个数据框(dataframe)，包含Medium文章的统计信息：\n如何查看总阅读次数超过1000的文章？\n1 df.loc[df['reads'] \u003e 1000] 如果要显示点赞超过500的文章，必须编写一行新的代码：\n1 df.loc[df['claps'] \u003e 500] 如果不用编写更多代码就可以快速更改这些参数，那不是很好吗？尝试ipywidgets：\n1 2 3 @interact def show_articles_more_than(column='claps', x=5000): return df.loc[df[column] \u003e x] 4.jupyterlab_variableinspector（安装成功）\njupyterlab-variableInspector帮助我们在jupyter lab中查看当前环境中存在的变量相关信息，以美观的界面形式对多种类型的对象予以呈现\n1 2 3 4 conda config --add channels conda-forge conda config --set channel_priority strict conda install jupyterlab-variableinspector 如果遇到Solving environment: failed with initial frozen solve. Retrying with flexible solve.参考下面这个博客\nhttps://blog.csdn.net/Sakura_Logic/article/details/108312146\n👇方式安装失败\n1 jupyter labextension install @lckr/jupyterlab_variableinspector ==这个插件build会失败==\n5.代码折叠\n设置如下：codeFolding：true，即可见代码折叠\n6.kite（没安装成功）\nkite插件是能够对代码块进行自动补充和对函数参数进行解释的插件。\n1 pip install \"jupyterlab-kite\u003e=2.0.2\" 安装出错：缺少对应的wheel\n启动时出错\n7.elyra（未安装）\n搭建工作流\nelyra——jupyter lab平台最强插件集\n8.jupyterlab_code_formatter（安装成功）\n1 conda install -c conda-forge jupyterlab_code_formatter 或使用jupyter页面安装\n如果python版本过高会无法使用\n**解决方法：**运行jupyter server extension enable --py jupyterlab_code_formatter并重启jupyter lab\nJupyterHub JupyterHub有两种部署方式：\nThe Littlest JupyterHub Zero to JupyterHub with Kubernetes When to use The Littlest JupyterHub\n安装 安装教程：\nQuickstart\njupyterhub 安装教程\n1.安装miniconda\nhttps://www.jianshu.com/p/47ed480daccc\n解决方案：\n打开一个终端，然后输入命令行打开bashrc文件：\n1 sudo gedit ~/.bashrc 注意这里要有sudo，不然无法编辑里面的内容。\n打开自己的安装目录/opt/software/miniconda3/bin，输入指令pwd查看路径。\n在bashrc文件中输入：\n1 export PATH=\"/opt/software/miniconda3/bin:$PATH\" 保存关闭bashrc文件，在命令行输入：\n1 source ~/.bashrc 随后检测一下：\n1 conda --version 如上图所示，成功。\n2.安装JupyterHub\npip, npm:\n1 2 3 python3 -m pip install jupyterhub npm install -g configurable-http-proxy python3 -m pip install jupyterlab notebook # needed if running the notebook servers in the same environment 建立软连接\n1 ln -s /opt/software/node-v14.8.0-linux-x64/bin/configurable-http-proxy /usr/bin/configurable-http-proxy conda (one command installs jupyterhub and proxy):\n1 2 conda install -c conda-forge jupyterhub # installs jupyterhub and proxy conda install jupyterlab notebook # needed if running the notebook servers in the same environment 测试是否安装成功\n1 2 jupyterhub -h configurable-http-proxy -h 3.启动jupyterhub\n命令行输入\n1 jupyterhub 浏览器输入http://localhost:8000(localhost可换成服务器ip)，通过服务器的用户登录（非root，root默认是无法登录的）\n==遇到的问题：==\n使用pip安装启动jupyterhub时，找不到 ‘configurable-http-proxy’\n建立软连接\n1 ln -s /opt/software/node-v14.8.0-linux-x64/bin/configurable-http-proxy /usr/bin/configurable-http-proxy 多用户需求 Get Started\n多用户多环境Jupyter notebook解决方案\n[Centos/Jupyterhub] 多用户远程登录 Jupyter 详细配置\nAuthentication and User Basics\n安装 JupyterHub 踩坑指南 —— 如何通过 JupyterHub 实现多用户管理\n默认情况下，要真正的实现分配用户账号，需要满足以下两点要求：\nc.Authenticator.whitelist 指定了用户名 在系统中创建了该用户（adduser / useradd） tips: 默认情况下，密码为系统中该用户对应的密码\nJupyterHub支持多种Spawner，可以启动LocalProcess（默认）的JupyterLab，docker容器版的JupyterLab，也可以启动Kubernetes(k8s)集群Pod版的JupyterLab、Hadoop Yarn上的JupyterLab等等。\n针对测试或者自己单用户使用，默认的LocalProcess就可以；若多用户不是很多，隔离性也没那么高要求的，LocalProcess也能满足；如果有意向大量不确定用户提供，还是使用docker容器或者k8s版本的比较好，隔离性好，也能限制资源用量。\n新增用户 每个用户的环境都是独立的\npip install都是安装在 /home/用户/.local/lib/python3.7/site-packages/下\n登录 ==登录时遇到的问题：==\n登录普通用户的时候日志报错\n在输入node -v 时显示未找到命令，而且 configurable-http-proxy 也没了\n软连接失效\n删除软连接，新建软连接，==手动输入==\n==解决方法：新建一个环境！！！重复上述操作==\n配置文件设置 生成配置文件\n1 jupyterhub --generate-config 这个命令会在你的当前目录下生成一个jupyterhub_config.py文件，接下来我们需要在这个文件中配置我们的网络和用户管理。（建议放在编撰的UNIX文件系统位置：/etc/jupyterhub）\n1 jupyterhub -f /etc/jupyterhub/jupyterhub_config.py 上述命令可以根据你的配置文件启动jupyterhub。\n在存放jupyterhub_config.py的文件夹下执行jupyterhub启动服务\n配置 jupyterhub_config.py\n1 c.Spawner.notebook_dir = '/home/cqb/jupyter_workspace' #jupyterhub自定义目录 c.Spawner.notebook_dir设置之后新建工程出现Permission denied: 未命名.ipynb\n==解决方法：==\n修改该文件夹的权限：chmod 777 jupyter_workspace/\n1 2 chmod 770 jupyter_workspace/ chmod +s jupyter_workspace/ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 # c.Spawner.default_url = '/lab' # /lab对应jupyterlab 默认为notebook # c.JupyterHub.port = 80 # 指定暴露端口 c.Authenticator.allowed_users = {'user1', 'user002', 'user003'} # 指定可使用用户 # PAMAuthenticator.whitelist is deprecated in JupyterHub 1.2, use PAMAuthenticator.allowed_users instead c.LocalAuthenticator.create_system_users = True c.Authenticator.admin_users = {'root', 'cqb'} # 指定admin用户 # c.JupyterHub.statsd_prefix = 'jupyterhub' # c.Spawner.cmd=['jupyterhub-singleuser'] c.Spawner.notebook_dir = '~/jupyter_workspace' # 每个用户有单独的工作空间(但是前提是需提前创建好文件夹) # c.LocalAuthenticator.group_whitelist = {'group1'} # c.JupyterHub.statsd_prefix = 'jupyterhub' # 为jupyterhub 添加额外服务，用于处理闲置用户进程。安装jupyterhub-ilde-culler：pip install jupyterhub-ilde-culler（jupyterhub-ilde-culler安装不了） c.JupyterHub.services = [ { 'name': 'idle-culler', 'command': ['python3', '-m', 'jupyterhub_idle_culler', '--timeout=3600'], 'admin':True # 1.5.0 需要服务管理员权限，去kill 部分闲置的进程notebook, 2.0版本已经改了，可以只赋给 idel-culler 部分特定权限，roles } ] 设置管理员，管理员能够查看和启停所有用户的servers\n1 c.Authenticator.admin_users = set(['admin']) 设置普通用户，管理员用户不需要加入白名单\n1 c.Authenticator.whitelist = set(['user1', 'user2', 'user3']) 注意事项\n==须在root管理员下启动jupyterhub，才可以实现多用户（否则会出现权限不足和有些用户无法登录的情况）==；\n==user1登录失败==\n没有权限访问jupyter_workspace文件夹 No such notebook dir: '/home/cqb/jupyter_workspace'\n工作空间配置 工作空间分为共享工作空间（多用户共用一个文件夹）或者是用户独享工作空间\n共享工作空间 共享的话要配置 Linux多用户共同使用同一目录\nhttps://blog.csdn.net/catscanner/article/details/105129846\n例如有alex，bob两个用户，互相无法访问对方的home~文件夹，为了共享文件，可以让root用户在/home中创建一个shared文件夹，然后创建一个用户组dev01\n在root或者sudo下：\n1 groupadd dev01 创建用户组之后添加文件夹并为文件夹更改组\n1 2 mkdir /home/dev_shared chgrp dev01 /home/dev_shared 接下来更改文件夹权限，使得owner以及用户组可以访问,+s是为了确保之后添加进去的文件夹也继承同样的权限\n1 2 chmod 770 /home/dev_shared chmod +s /home/dev_shared 然后将需要共享文件的用户添加到dev01这个用户组\n1 2 usermod -a -G dev01 alex usermod -a -G dev01 bob 注意，使用root环境运行su - ， 而不是root权限su\n至此，两人都可以访问/home/dev_shared文件夹了\n另外，用户可以自行检查自己所在的用户组\n1 groups 如果是全新的账户，root用户可以先建立新用户：\n1 2 useradd alex passwd alex 使用root权限查看所有的group情况\n1 cat /etc/group 独享工作空间 独享的话配置文件设置 c.Spawner.notebook_dir = '~/jupyter_workspace' 每个用户的文件会放在/home/user/jupyter_workspace下\n==遇到的问题：==\n创建文件的时候报错Permission denied: '/home/shared/jupyter_workspace/.ipynb_checkpoints/untitled-checkpoint.dio'\n.ipynb_checkpoint文件夹没有写权限，注意这个文件夹是 user1 创建的，其他用户没有写权限，所以==用户共享一个工作空间的方案不可行==\n解决方法：\n1 2 chmod 770 .ipynb_checkpoints chmod +s .ipynb_checkpoints 注意：\n其他用户创建的文件是无法保存的（既然这样子，那其实就没有必要让用户共享工作空间，因为文件并不能被修改，可以用户拥有自己的工作空间，同时创建一个共享文件夹，用户将需要共享的文件放到该共享文件夹让对方调用）\n用户安装插件 只能使用 pip install 安装\n用户登录的时候通过pip install都是安装在 /home/用户/.local/lib/python3.7/site-packages/下的，各用户的环境都是隔离的\n因为只允许非root用户登录\n无法通过conda install安装，因为安装目录是在 /opt/software/miniconda3/envs/jupyterhub1 ，用户无写权限\n同样的，插件在web界面也是无法进行安装的（conda install无权限）\n若是允许用户安装插件，可将插件安装所在文件夹共享出来，指定特定的组权限可写\n1 2 3 4 chgrp -R shared /opt/software/miniconda3/envs/jupyterhub chmod -R 775 /opt/software/miniconda3/envs/jupyterhub chmod -R +s /opt/software/miniconda3/envs/jupyterhub ==遇到的问题：==\n文件权限设置完成后，通过命令安装插件\n1 !conda install -c conda-forge jupyterlab-drawio -y ==输入上面这个命令之后jupyterhub就启动不起来了！！！****==\nnode:error while loading shared libraries: libnode.so.83\nerror while loading shared libraries的解決方法\n==解决思路：==\n输入node -v可以看到同样的错误，可能是安装的node有问题，把之前通过pip安装的node卸载掉==（pip和conda 安装的都要卸载掉）==，通过tar包重新安装\n重新安装建立软连接后是可以输入node -v，但是安装jupyterhub之后他会自带一个nodejs，还是会报错\n猜测的原因是conda 安装的jupyterhub自带的nodejs可能有问题\n通过pip的方式安装jupyterhub可以解决该问题\nLinux 上安装 Node.js 1 2 3 wget https://nodejs.org/dist/v14.8.0/node-v14.8.0-linux-x64.tar.gz // 下载 tar -xzvf node-v14.8.0-linux-x64.tar.gz // 解压 cd node-v14.8.0-linux-x64 // 进入解压目录 ==下面这个修改配置文件的方法不能生效==\n解压文件的 bin 目录底下包含了 node、npm 等命令，我们可以修改linux系统的环境变量（profile）来设置直接运行命令：\n老规矩先备份，养成修改重要文件之前先备份的好习惯。\n1 cp /etc/profile /etc/profile.bak 然后 vim /etc/profile，在最下面添加 export PATH=$PATH: 后面跟上 node 下 bin 目录的路径\n1 export PATH=$PATH:/opt/software/node-v14.8.0-linux-x64/bin 立即生效\n1 2 3 source /etc/profile [root@localhost ~]# node -v v14.8.0 OK！安装成功！\n==建立软连接才能生效==\n1 2 3 4 5 6 root@qingbin-virtual-machine:/opt/softeware# ln -s /opt/softeware/node-v14.8.0-linux-x64/bin/node /usr/local/bin/ root@qingbin-virtual-machine:/opt/softeware# node -v v14.8.0 root@qingbin-virtual-machine:/opt/softeware# ln -s /opt/softeware/node-v14.8.0-linux-x64/bin/npm /usr/local/bin/ root@qingbin-virtual-machine:/opt/softeware# npm -v 6.14.7 删除软连接：\n进入软连接目录\nrm ./node\n==遇到的问题：==\n直接通过web在插件模块install的话会出现如下错误，但是我启动jupyterhub的环境下已经安装了nodejs了，不知道为什么会出现该错误\n解决方法：\n在linux中自己安装node，不要用自带的node环境\n阿里天池的环境安装解决方案 阿里天池可以通过 pip install 安装环境/插件（python环境安装在/data/nas/workspace/envs/python3.6/site-packages/）\n阿里天池也没有办法通过插件模块install安装\n阿里天池也没有办法用命令!conda install -c conda-forge jieba -y安装环境\n阿里天池也没有办法用命令!conda install -c conda-forge jupyterlab-drawio -y安装插件\nColab的环境安装解决方案 可通过pip install安装环境（python环境安装在/usr/local/lib/python3.7/dist-packages/），但是无法通过conda install，没有安装插件的模块\n==Colab可以在输出端输入y执行之后的操作，但是阿里天池不可以==\nColab\n阿里天池\nThe Littlest JupyterHub The Littlest JupyterHub currently supports Ubuntu(18.04) Linux only\n每个 JupyterHub 用户都会在首次启动服务器时创建自己的 Unix 用户帐户。这可以保护用户彼此之间，在/home为他们提供一个主目录，并允许基于文件系统权限进行共享。\n安装TLJH The Littlest JupyterHub\n【TLJH】the-littlest-jupyterhub国内搭建和配置详细教程\nconda 阿里源_Littlest JupyterHub| 01 Littlest JupyterHub 阿里云搭建\n1.确保python3, python3-dev, curl 和 git 都已经安装\n1 sudo apt install python3 python3-dev git curl 2.安装\n下面这个安装不了，因为代码里面有GitHub的地址，下载很慢\n1 curl -L https://tljh.jupyter.org/bootstrap.py | sudo -E python3 - --admin ==遇到的问题：==\n启动报错\n安装程序都做了些什么 What does the installer do?\nTLJH创建的目录需要root权限/opt/tljh\nHub的环境安装在/opt/tljh/hub下，同时还包含了traefik（Træfik 是一个为了让部署微服务更加便捷而诞生的现代HTTP反向代理、负载均衡工具。 它支持多种后台 (Docker, Swarm, Kubernetes, Marathon, Mesos, Consul, Etcd, Zookeeper, BoltDB, Rest API, file…) 来自动化、动态的应用它的配置文件设置）\n用户环境安装在 /opt/tljh/user，这包含用于启动所有用户的notebook接口，以及所有用户可用的各种包。这个环境归root用户所有。\n不使用JupyterHub的原因 Jupytherhub的每个用户都是一个linux的用户，每个用户之间基于文件系统权限进行共享，用户的操作权限基本是遵循linux的规范，这不方便我们对用户的控制，开发环境、文件的管理与共享\nJupyter集成的应用 集成Jupyter notebook的工具或平台\n==集成的是Jupyter lab，通过Docker实现的，将一个外部目录挂载到容器中==\n阿里天池大数据 如何在天池学习、运行教程代码\nGoogle Colab https://colab.research.google.com/\nJupyter二次开发 重点:JupyterLab深度定制开发实践\n文件系统：glusterfs\n用户权限：目前我们的Jupyter没有使用jupyterHub来管理用户权限，主要是我们的模式是==每个用户启动一个docker容器的jupyterLab服务==，每个人使用自己的jupyterLab服务，互相不会有干扰，而且JupyterLab我们定义为用户的IDE和工作平台，所以独立容器保证了独立性，也方便后续用户资源计费。在此架构下，==jupyterlab token作为用户认证主要途径，在jupyterLab系统启动时，会将用户的token存储到user service的用户表字段中==，前端页面跳转jupyterlab web UI时，会去user service获取该用户的jupyterLab token，根据此token登录jupyterLab服务，完成认证。 而==目录权限的控制，主要是不同的用户和机构目录挂载到不同的目录==。对于hadoop的访问权限控制，我们会把kerberos/ranger相关配置集成到了app中，并且jupyterLab服务和livy服务都会使用对应的用户USER ID来启动。\nJuypter Notebook 前端二次开发\nJupyter Notebook二次开发的经验（一）——安装开发版本\nJupyter生态二次开发系列(一)\nJupyterHub+Lab：Ubuntu18.04搭建自己的多用户云notebook（安装篇）\nJupyter NoteBook / JupyterLab / JupyterHub 区别与关系简介\n搭建环境方案（根据需求调整）：\n线上环境：The Littlest JupyterHub + JupyterLab 开发环境：JupyterHub + JupyterLab 不管是Jupyter Notebook还是Jupyter Lab，都是只支持单用户的使用场景，作为一个可交互的web服务，所有用户都在同一个目录下操作（甚至同时在编辑同一个脚本），多数情况下很不方便。Jupyterhub可以解决这个问题。 但是当我们把Jupyterhub安装，启动服务后默认确实JupyterNoteBook，如何换成JupyterLab呢？👇\nJupyterLab on JupyterHub(JupyterLab+JupyterHub)（JupyterLab JupyterHub）\n思路 1.数据用Drive单独存储\n2.写函数库让用户调用\n例如：from google.colab import files\n1 2 3 4 5 6 from google.colab import files with open('example.txt', 'w') as f: f.write('some content') files.download('example.txt') 3.示例代码段\n4.ipynb工程分享\nhttps://colab.research.google.com/drive/131SUrBstRNKv6n4GtK582ULCEjVaV1V9?usp=sharing\n5.ipywidgets调参\n6.服务的发布与共享\n7.互操作引擎\n问题收集 1.运行代码的时候出现错误，弹框提示内核似乎挂掉了，它很快将自动重启。\n**解决：**出现这种情况的时候，需要将虚拟环境中的包全部用conda命令进行安装，用pip安装就会出现这个问题（把用pip安装的包删了重新用conda装：conda install -c conda-forge wordcloud）\n",
+  "wordCount" : "11970",
+  "inLanguage": "zh",
+  "datePublished": "2022-08-09T00:00:00Z",
+  "dateModified": "2022-08-09T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/note/jupyter/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/note/">👨🏻‍💻 我的笔记</a></div>
+    <h1 class="post-title">
+      Jupyter
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-08-09
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>11970字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>24分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/jupyter/" style="color: var(--secondary)!important;">jupyter</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#jupyter%e5%88%9d%e6%8e%a2" aria-label="Jupyter初探">Jupyter初探</a><ul>
+                            
+                    <li>
+                        <a href="#jupyter-notebook%e5%ae%89%e8%a3%85" aria-label="Jupyter notebook安装">Jupyter notebook安装</a></li>
+                    <li>
+                        <a href="#%e8%ae%be%e7%bd%aejupyter-notebook%e6%96%87%e4%bb%b6%e5%ad%98%e6%94%be%e4%bd%8d%e7%bd%ae" aria-label="设置Jupyter Notebook文件存放位置"><strong>设置Jupyter Notebook文件存放位置</strong></a></li>
+                    <li>
+                        <a href="#%e4%bf%9d%e5%ad%98%e5%92%8c%e6%a3%80%e6%9f%a5%e7%82%b9checkpoint" aria-label="保存和检查点(checkpoint)"><strong>保存和检查点(checkpoint)</strong></a></li>
+                    <li>
+                        <a href="#%e6%8b%93%e5%b1%95%e5%8a%9f%e8%83%bd" aria-label="拓展功能"><strong>拓展功能</strong></a><ul>
+                            
+                    <li>
+                        <a href="#%e5%85%b3%e8%81%94jupyter%e4%b8%8econda%e7%8e%af%e5%a2%83" aria-label="关联jupyter与conda环境">关联jupyter与conda环境</a><ul>
+                            
+                    <li>
+                        <a href="#nb_conda" aria-label="nb_conda">nb_conda</a></li>
+                    <li>
+                        <a href="#ipykernel" aria-label="ipykernel">ipykernel</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%ae%89%e8%a3%85%e6%8f%92%e4%bb%b6" aria-label="安装插件">安装插件</a></li></ul>
+                    </li></ul>
+                    </li>
+                    <li>
+                        <a href="#jupyter%e5%bf%ab%e6%8d%b7%e9%94%ae" aria-label="Jupyter快捷键">Jupyter快捷键</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%8a%a0%e8%bd%bd%e6%8c%87%e5%ae%9a%e7%bd%91%e9%a1%b5%e6%ba%90%e4%bb%a3%e7%a0%81" aria-label="加载指定网页源代码"><strong>加载指定网页源代码</strong></a></li>
+                    <li>
+                        <a href="#%e5%8a%a0%e8%bd%bd%e6%9c%ac%e5%9c%b0python%e6%96%87%e4%bb%b6" aria-label="加载本地Python文件"><strong>加载本地Python文件</strong></a></li>
+                    <li>
+                        <a href="#%e7%9b%b4%e6%8e%a5%e8%bf%90%e8%a1%8c%e6%9c%ac%e5%9c%b0python%e6%96%87%e4%bb%b6" aria-label="直接运行本地Python文件"><strong>直接运行本地Python文件</strong></a></li>
+                    <li>
+                        <a href="#%e5%9c%a8jupyter-notebook%e4%bd%bf%e7%94%a8shell%e5%91%bd%e4%bb%a4" aria-label="在Jupyter Notebook使用shell命令"><strong>在Jupyter Notebook使用shell命令</strong></a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#jupyterlab" aria-label="JupyterLab">JupyterLab</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%ae%89%e8%a3%85" aria-label="安装">安装</a></li>
+                    <li>
+                        <a href="#%e6%8e%a7%e5%88%b6%e5%8f%b0%e5%87%ba%e7%8e%b0%e7%9a%84%e5%90%84%e7%a7%8d%e8%ad%a6%e5%91%8a" aria-label="控制台出现的各种警告">控制台出现的各种警告</a></li>
+                    <li>
+                        <a href="#%e6%8f%92%e4%bb%b6" aria-label="插件">插件</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#jupyterhub" aria-label="JupyterHub">JupyterHub</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%ae%89%e8%a3%85-1" aria-label="安装">安装</a></li>
+                    <li>
+                        <a href="#%e5%a4%9a%e7%94%a8%e6%88%b7%e9%9c%80%e6%b1%82" aria-label="多用户需求">多用户需求</a><ul>
+                            
+                    <li>
+                        <a href="#%e6%96%b0%e5%a2%9e%e7%94%a8%e6%88%b7" aria-label="新增用户">新增用户</a></li>
+                    <li>
+                        <a href="#%e7%99%bb%e5%bd%95" aria-label="登录">登录</a></li>
+                    <li>
+                        <a href="#%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e8%ae%be%e7%bd%ae" aria-label="配置文件设置">配置文件设置</a></li>
+                    <li>
+                        <a href="#%e5%b7%a5%e4%bd%9c%e7%a9%ba%e9%97%b4%e9%85%8d%e7%bd%ae" aria-label="工作空间配置">工作空间配置</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%85%b1%e4%ba%ab%e5%b7%a5%e4%bd%9c%e7%a9%ba%e9%97%b4" aria-label="共享工作空间">共享工作空间</a></li>
+                    <li>
+                        <a href="#%e7%8b%ac%e4%ba%ab%e5%b7%a5%e4%bd%9c%e7%a9%ba%e9%97%b4" aria-label="独享工作空间">独享工作空间</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e7%94%a8%e6%88%b7%e5%ae%89%e8%a3%85%e6%8f%92%e4%bb%b6" aria-label="用户安装插件"><strong>用户安装插件</strong></a><ul>
+                            
+                    <li>
+                        <a href="#linux-%e4%b8%8a%e5%ae%89%e8%a3%85-nodejs" aria-label="Linux 上安装 Node.js">Linux 上安装 Node.js</a></li>
+                    <li>
+                        <a href="#%e9%98%bf%e9%87%8c%e5%a4%a9%e6%b1%a0%e7%9a%84%e7%8e%af%e5%a2%83%e5%ae%89%e8%a3%85%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88" aria-label="阿里天池的环境安装解决方案">阿里天池的环境安装解决方案</a></li>
+                    <li>
+                        <a href="#colab%e7%9a%84%e7%8e%af%e5%a2%83%e5%ae%89%e8%a3%85%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88" aria-label="Colab的环境安装解决方案">Colab的环境安装解决方案</a></li></ul>
+                    </li></ul>
+                    </li></ul>
+                    </li>
+                    <li>
+                        <a href="#the-littlest-jupyterhub" aria-label="The Littlest JupyterHub">The Littlest JupyterHub</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%ae%89%e8%a3%85tljh" aria-label="安装TLJH">安装TLJH</a></li>
+                    <li>
+                        <a href="#%e5%ae%89%e8%a3%85%e7%a8%8b%e5%ba%8f%e9%83%bd%e5%81%9a%e4%ba%86%e4%ba%9b%e4%bb%80%e4%b9%88" aria-label="安装程序都做了些什么">安装程序都做了些什么</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%b8%8d%e4%bd%bf%e7%94%a8jupyterhub%e7%9a%84%e5%8e%9f%e5%9b%a0" aria-label="不使用JupyterHub的原因">不使用JupyterHub的原因</a></li>
+                    <li>
+                        <a href="#jupyter%e9%9b%86%e6%88%90%e7%9a%84%e5%ba%94%e7%94%a8" aria-label="Jupyter集成的应用">Jupyter集成的应用</a><ul>
+                            
+                    <li>
+                        <a href="#%e9%98%bf%e9%87%8c%e5%a4%a9%e6%b1%a0%e5%a4%a7%e6%95%b0%e6%8d%aehttpstianchialiyuncom" aria-label="阿里天池大数据"><a href="https://tianchi.aliyun.com/">阿里天池大数据</a></a></li>
+                    <li>
+                        <a href="#google-colab" aria-label="Google Colab">Google Colab</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#jupyter%e4%ba%8c%e6%ac%a1%e5%bc%80%e5%8f%91" aria-label="Jupyter二次开发">Jupyter二次开发</a></li>
+                    <li>
+                        <a href="#%e6%80%9d%e8%b7%af" aria-label="思路">思路</a></li>
+                    <li>
+                        <a href="#%e9%97%ae%e9%a2%98%e6%94%b6%e9%9b%86" aria-label="问题收集">问题收集</a>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><h2 id="jupyter初探">Jupyter初探<a hidden class="anchor" aria-hidden="true" href="#jupyter初探">#</a></h2>
+<p><a href="https://zhuanlan.zhihu.com/p/33105153">Jupyter Notebook介绍、安装及使用教程</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/441668517">Jupyter使用详解</a></p>
+<h3 id="jupyter-notebook安装">Jupyter notebook安装<a hidden class="anchor" aria-hidden="true" href="#jupyter-notebook安装">#</a></h3>
+<p>安装了Anaconda发行版时已经自动安装了Jupyter Notebook</p>
+<p>直接打开命令窗口，输入<code>jupyter notebook</code>启动jupyter notebook</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338488.png" alt="image-20220530110743327"  />
+</p>
+<p>在浏览器输入url即可进入jupyter</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338485.png" alt="image-20220530110904277"  />
+</p>
+<p>这些所列的文件目录都存放在直接打开cmd时的初始目录下</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338496.png" alt="image-20220530110955610"  />
+</p>
+<h3 id="设置jupyter-notebook文件存放位置"><strong>设置Jupyter Notebook文件存放位置</strong><a hidden class="anchor" aria-hidden="true" href="#设置jupyter-notebook文件存放位置">#</a></h3>
+<p>创建配置文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">jupyter notebook --generate-config
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338494.png" alt="image-20220530111946181"  />
+</p>
+<p>修改配置文件</p>
+<p>搜索<code>c.NotebookApp.notebook_dir</code>，设置文件的默认存储位置</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338495.png" alt="image-20220530112649163"  />
+</p>
+<p>启动时出现的问题：</p>
+<blockquote>
+<p>[W 14:06:44.163 NotebookApp] 404 GET /api/kernels/39fc6aa7-5b95-4bc9-b561-b524370dbcd4/channels?session_id=0794ad0158734a7096f06b73e6d8cfd2 (127.0.0.1): Kernel does not exist: 39fc6aa7-5b95-4bc9-b561-b524370dbcd4</p>
+</blockquote>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338502.png" alt="image-20220530140706659"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338917.png" alt="image-20220531221216781"  />
+</p>
+<p>解决方案：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pip install --upgrade ipykernel
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="保存和检查点checkpoint"><strong>保存和检查点(checkpoint)</strong><a hidden class="anchor" aria-hidden="true" href="#保存和检查点checkpoint">#</a></h3>
+<p>在开始前，要记得定时保存文件，这可以直接采用快捷键 <code>Ctrl + S</code> 保存文件，它是通过一个命令&ndash;“保存和检查点”实现的，那么什么是检查点呢？</p>
+<p>每次创建一个新的 notebook，同时也创建了一个 <code>checkpoint</code> 文件，它保存在一个隐藏的子文件夹 <code>.ipynb_checkpoints</code> 中，并且也是一个 <code>.ipynb</code> 文件。默认 Jupyter 会每隔 120 秒自动保存 notebook 的内容到 <code>checkpoint</code> 文件中，而当你手动保存的时候，也会更新 notebook 和 checkpoint 文件。这个文件可以在因为意外原因关闭 notebook 后恢复你未保存的内容，可以在菜单中 <code>File-&gt;Revert to Checkpoint</code> 中恢复。</p>
+<h3 id="拓展功能"><strong>拓展功能</strong><a hidden class="anchor" aria-hidden="true" href="#拓展功能">#</a></h3>
+<h4 id="关联jupyter与conda环境">关联jupyter与conda环境<a hidden class="anchor" aria-hidden="true" href="#关联jupyter与conda环境">#</a></h4>
+<p><code>有两种方式关联</code></p>
+<h5 id="nb_conda">nb_conda<a hidden class="anchor" aria-hidden="true" href="#nb_conda">#</a></h5>
+<p><strong>关联Jupyter Notebook和conda的环境和包——“nb_conda”</strong></p>
+<p><a href="https://zhuanlan.zhihu.com/p/139776843">Jupyter Notebook中切换conda虚拟环境</a></p>
+<p><strong>① 安装</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">conda install nb_conda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>② 使用</strong></p>
+<p>可以在Conda类目下对conda环境和包进行一系列操作。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338931.jpg" alt="img"  />
+</p>
+<p>可以在笔记本内的“Kernel”类目里的“Change kernel”切换内核。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338947.jpg" alt="img"  />
+</p>
+<p><strong>③ 卸载</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">conda remove nb_conda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行上述命令即可卸载nb_conda包。</p>
+<p><strong>Jupyter notebook怎么使用自己新建的conda环境</strong></p>
+<p>以下操作都在命令行中操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">conda create -n tensorflow_study python=3.6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>tensorflow_study是我新建环境的名字，你的环境名字自己根据情况取；python版本也根据自己的需求来选择。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">conda activate tensorflow_study
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>进入新建的环境</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">conda install nb_conda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装nb_conda是为了实现不同环境的切换与选择。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Jupyter notebook
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==错误1：<strong>EnvironmentLocationNotFound: Not a conda environment</strong>==</p>
+<p>打开jupyter后点击Conda会弹出这样的错误：</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338963.jpg" alt="img"  />
+</p>
+<p>解决方法：</p>
+<p>找到Anaconda安装路径下nb_conda库的envmanager.py文件</p>
+<p>win系统在目录：Anaconda3\Lib\site-packages\nb_conda\envmanager.py</p>
+<p>linux系统在目录：Anaconda3/pkgs/nb_conda-2.2.1-py36_0/lib/python3.6/site-packages/nb_conda/envmanager.py</p>
+<p>找到该文件后在83~86行有这样一段代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">return {
+</span></span><span class="line"><span class="cl">            &#34;environments&#34;: [root_env] + [get_info(env)
+</span></span><span class="line"><span class="cl">                                          for env in info[&#39;envs&#39;]]
+</span></span><span class="line"><span class="cl">        }
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们将此段代码改成如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">return {
+</span></span><span class="line"><span class="cl">            &#34;environments&#34;: [root_env] + [get_info(env) for env in info[&#39;envs&#39;] if env != root_env[&#39;dir&#39;]]
+</span></span><span class="line"><span class="cl">        }
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后重启jupyter就可以了。</p>
+<p>==错误2：可使用的环境没有我新创建的jupyter环境==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338980.png" alt="image-20220530151944855"  />
+</p>
+<p>==<strong>nb_conda 要装到你的虚拟环境中才会在jupyter notebook中显示！！！！！！</strong>==</p>
+<p><a href="https://blog.csdn.net/u014264373/article/details/119390267">如何在 Jupyter Notebook 中切换/使用 conda 虚拟环境</a></p>
+<p><strong>使用 nb_conda_kernels 添加所有环境</strong></p>
+<p>这个方法就是一键添加所有 conda 环境</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">conda activate my-conda-env    <span class="c1"># this is the environment for your project and code</span>
+</span></span><span class="line"><span class="cl">conda install ipykernel
+</span></span><span class="line"><span class="cl">conda deactivate
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">conda activate base      <span class="c1"># could be also some other environment</span>
+</span></span><span class="line"><span class="cl">conda install nb_conda_kernels
+</span></span><span class="line"><span class="cl">jupyter notebook
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意：这里的 <code>conda install nb_conda_kernels</code> 是在 base 环境下操作的。</p>
+<p>安装好后，打开 jupyter notebook 就会显示所有的 conda 环境啦，点击随意切换。</p>
+<h5 id="ipykernel">ipykernel<a hidden class="anchor" aria-hidden="true" href="#ipykernel">#</a></h5>
+<p>1、直接在新建一个环境的同时，给该环境安装ipykernel</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda create -n 新环境名称 <span class="nv">python</span><span class="o">=</span>3.7 ipykernel
+</span></span><span class="line"><span class="cl"><span class="c1"># eg: conda create -n new python=3.7 ipykernel</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2、激活虚拟环境</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">source</span> activate 环境名称
+</span></span><span class="line"><span class="cl"><span class="c1"># eg: source activate new</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3、将该环境写入jupyter的kernel中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python -m ipykernel install --user --name 环境名称 --display-name <span class="s2">&#34;你想在jupyter中显示的该环境的名称&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># eg: python -m ipykernel install --user --name new --display-name &#34;jupyter环境&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>4、进入jupyter 服务器</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyter notebook
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="安装插件">安装插件<a hidden class="anchor" aria-hidden="true" href="#安装插件">#</a></h4>
+<p>首先安装扩展库</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda install -c conda-forge jupyter_contrib_nbextensions
+</span></span><span class="line"><span class="cl">jupyter contrib nbextensions install --user
+</span></span><span class="line"><span class="cl">conda install -c conda-forge jupyter_nbextensions_configurator
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>-c conda-forge</code>是指明在库<code>conda-forge</code>中下载<code>jupyter_contrib_nbextensions</code></p>
+<p><strong><code>1.Markdown生成目录</code></strong></p>
+<p>不同于有道云笔记的Markdown编译器，Jupyter Notebook无法为Markdown文档通过特定语法添加目录，因此需要通过安装扩展来实现目录的添加。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">conda install -c conda-forge jupyter_contrib_nbextensions
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>-c conda-forge</code>是指明在库<code>conda-forge</code>中下载<code>jupyter_contrib_nbextensions</code></p>
+<p>执行上述命令后，启动Jupyter Notebook，你会发现导航栏多了“Nbextensions”的类目，点击“Nbextensions”，勾选“Table of Contents ⑵”</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338995.jpg" alt="img"  />
+</p>
+<p>之后再在Jupyter Notebook中使用Markdown，点击下图的图标即可使用啦。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338231.jpg" alt="img"  />
+</p>
+<p>==遇到的问题：==</p>
+<p><strong>插件不显示</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338247.png" alt="image-20220530171551137"  />
+</p>
+<p>解决方法：</p>
+<p><a href="https://blog.csdn.net/mark__tuwen/article/details/106207530">jupyter nbextensions configurator不显示插件</a></p>
+<p>再执行如下命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">conda install -c conda-forge jupyter_nbextensions_configurator
+</span></span><span class="line"><span class="cl">jupyter contrib nbextensions install --user
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><code>2.代码自动补全扩展</code></strong></p>
+<p>勾选 <code>Hinterland</code></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338265.jpg" alt="img"  />
+</p>
+<p><strong>安装插件后出现警告“Config option template_path not recognized by LenvsLatexExporter”</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338280.png" alt="image-20220601192746090"  />
+</p>
+<p>原因是nbconvert6.0.0版本以上的某些参数的名称发生了更改，与原先版本不兼容，需要将版本降低到5.6.1</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install <span class="nv">nbconvert</span><span class="o">==</span>5.6.1 -i https://pypi.mirrors.ustc.edu.cn/simple
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><a href="https://blog.csdn.net/DTFT_/article/details/111242118">jupyter代码自动补全插件、安装后出现警告“Config option template_path not recognized by LenvsLatexExporter”的解决方案</a></p>
+<p><strong><code>3.主题</code></strong></p>
+<p><strong><code>4.Autopep8</code></strong></p>
+<p>这是一个将代码按照PEP8进行格式化的插件，前提是需要通过<code>pip install autopep8</code>安装autopep8，安装完之后需要重启jupyter notebook服务才能生效。同样在Nbextention选项卡中勾选Autopep8，在工具栏中会多一个“锤子”一样的按钮，可以帮助我们排版代码，使其符合pep8标准。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338296.png" alt="image-20220601112920483"  />
+</p>
+<p><strong><code>5.Variable inspector</code></strong></p>
+<p>该插件可以帮助我们查看当前notebook中所有的变量的名称，类型，大小和值。省去了df.shape，type()等语句的执行，也代替了前文提到的魔法函数“%whos”的执行，读者可以自行尝试一下。</p>
+<p><strong><code>6.Code folding</code></strong></p>
+<p>顾名思义，该插件可以对代码进行一定的折叠，例如遇到class，def等关键字，而且主体代码又很长时，折叠代码会方便阅读，这一点也让jupyter notebook更像一个IDE。</p>
+<p><strong><code>7.Execute time</code></strong></p>
+<p>该插件可以显示每一个cell中代码的执行时间。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338325.png" alt="image-20220601112935101"  />
+</p>
+<p>除此之外还有一些其他常见的插件扩展，例如Notify，Collapsible headings等，读者可以自行探索查看，并配置使用。</p>
+<h2 id="jupyter快捷键">Jupyter快捷键<a hidden class="anchor" aria-hidden="true" href="#jupyter快捷键">#</a></h2>
+<h3 id="加载指定网页源代码"><strong>加载指定网页源代码</strong><a hidden class="anchor" aria-hidden="true" href="#加载指定网页源代码">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">%load URL
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中，URL为指定网站的地址。</p>
+<h3 id="加载本地python文件"><strong>加载本地Python文件</strong><a hidden class="anchor" aria-hidden="true" href="#加载本地python文件">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">%load Python文件的绝对路径
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注意</strong></p>
+<ol>
+<li>Python文件的后缀为“.py”。</li>
+<li>“%load”后跟的是Python文件的<strong>绝对路径</strong>。</li>
+<li>输入命令后，可以按<code>CTRL 回车</code>来执行命令。第一次执行，是将本地的Python文件内容加载到单元格内。此时，Jupyter Notebook会自动将“%load”命令注释掉（即在前边加井号“#”），以便在执行已加载的文件代码时不重复执行该命令；第二次执行，则是执行已加载文件的代码。</li>
+</ol>
+<h3 id="直接运行本地python文件"><strong>直接运行本地Python文件</strong><a hidden class="anchor" aria-hidden="true" href="#直接运行本地python文件">#</a></h3>
+<p>执行命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">%run Python文件的绝对路径
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">!python3 Python文件的绝对路径
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">!python Python文件的绝对路径
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注意</strong></p>
+<ol>
+<li>Python文件的后缀为“.py”。</li>
+<li>“%run”后跟的是Python文件的<strong>绝对路径</strong>。</li>
+<li>“!python3”用于执行Python
+3.x版本的代码。</li>
+<li>“!python”用于执行Python
+2.x版本的代码。</li>
+<li>“!python3”和“!python”属于 <code>!shell命令</code> 语法的使用，即在Jupyter Notebook中执行shell命令的语法。</li>
+<li>输入命令后，可以按 <code>control return</code> 来执行命令，执行过程中将不显示本地Python文件的内容，直接显示运行结果。</li>
+</ol>
+<h3 id="在jupyter-notebook使用shell命令"><strong>在Jupyter Notebook使用shell命令</strong><a hidden class="anchor" aria-hidden="true" href="#在jupyter-notebook使用shell命令">#</a></h3>
+<p><strong>① 方法一——在笔记本的单元格中</strong></p>
+<p><strong>⑴ 语法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">!shell命令
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在Jupyter Notebook中的笔记本单元格中用英文感叹号“!”后接shell命令即可执行shell命令。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">!pip install jieba
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>② 方法二——在Jupyter Notebook中新建终端</strong></p>
+<p><strong>⑴ 启动方法</strong></p>
+<p>在Jupyter Notebook主界面，即“File”界面中点击“New”；在“New”下拉框中点击“Terminal”即新建了终端。此时终端位置是在你的home目录，可以通过<code>pwd</code>命令查询当前所在位置的绝对路径。</p>
+<p><strong>⑵ 关闭方法</strong></p>
+<p>在Jupyter Notebook的“Running”界面中的“Terminals”类目中可以看到正在运行的终端，点击后边的“Shutdown”即可关闭终端。</p>
+<h2 id="jupyterlab">JupyterLab<a hidden class="anchor" aria-hidden="true" href="#jupyterlab">#</a></h2>
+<p><a href="https://zhuanlan.zhihu.com/p/154515490">JupyterLab最全详解，如果你还在使用Notebook，那你就out了！</a></p>
+<p>Jupyter Notebook是一个交互式笔记本，支持运行 40 多种编程语言。Jupyter Notebook 的本质是一个 Web 应用程序，便于创建和共享文学化程序文档，支持实时代码、数学方程、可视化和 markdown，用途包括：数据清理和转换，数值模拟，统计建模，机器学习等等 。</p>
+<p>JupyterLab是Jupyter主打的最新数据科学生产工具，在一定程度上是为了取代Jupyter Notebook。它支持安装插件以及有着更好的界面。而 JupyterHub是为多个用户提供Jupyter Notebook的最佳方式。</p>
+<p><a href="https://www.imooc.com/article/300868">Jupyter NoteBook / JupyterLab / JupyterHub 区别与关系简介</a></p>
+<p>搭建环境方案（根据需求调整）：</p>
+<ul>
+<li>线上环境：The Littlest JupyterHub + JupyterLab</li>
+<li>开发环境：JupyterHub + JupyterLab</li>
+</ul>
+<p><code>Tips</code></p>
+<p>当前版本的 Jupyter Lab 网页版可视化界面虽然用起来很方便，但是也存在很多问题，==目前最好的解决方法是尽量将对 Jupyter Lab 有改动的操作自己在 Anaconda Prompt 下进行==，最主要的原因就是==即使发生了问题，也可以从Prompt中直观的看到错误原因甚至解释==。这对于解决问题其实是至关重要的一环。</p>
+<h3 id="安装">安装<a hidden class="anchor" aria-hidden="true" href="#安装">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">#创建环境</span>
+</span></span><span class="line"><span class="cl">conda create --name env_name <span class="nv">python</span><span class="o">=</span>x.x -y
+</span></span><span class="line"><span class="cl">conda activate env_name
+</span></span><span class="line"><span class="cl"><span class="c1">#安装jupyterlab</span>
+</span></span><span class="line"><span class="cl">conda install -c conda-forge jupyterlab
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在命令行使用<code>jupyter-lab</code>或<code>jupyter lab</code>命令运行Jupyter lab</p>
+<p>作为官方宣传的<code>jupyter lab</code>3.0版本后最大的改变，似乎我们可以不需要<code>nodejs</code>，不通过<code>jupyter labextension install</code>语句，仅仅依靠<code>pip/conda/mamba</code>就可以安装拓展</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install <span class="s2">&#34;jupyterlab-kite&gt;=2.0.2&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>Jupyter Lab配置</strong></p>
+<p>使用命令创建配置文件，其会生成<code>C:\Users\用户名\.jupyter\jupyter_notebook_config.py</code>或者<code>/home/用户名/.jupyter/jupyter_notebook_config.py</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyter lab --generate-config
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="控制台出现的各种警告">控制台出现的各种警告<a hidden class="anchor" aria-hidden="true" href="#控制台出现的各种警告">#</a></h3>
+<p><strong>安装插件后出现警告“Config option template_path not recognized by LenvsLatexExporter”</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338280.png" alt="image-20220601192746090"  />
+</p>
+<p>原因是nbconvert6.0.0版本以上的某些参数的名称发生了更改，与原先版本不兼容，需要将版本降低到5.6.1</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install <span class="nv">nbconvert</span><span class="o">==</span>5.6.1 -i https://pypi.mirrors.ustc.edu.cn/simple
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>ClobberError: This transaction has incompatible packages 或者The package ‘xxx‘ cannot be installed due</strong>==（未解决）==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338580.png" alt="image-20220602104154825"  />
+</p>
+<p>原因：conda和pip等相关包的版本太低，自动更新不能用。
+解决方案：在命令行中输入以下命令：==（没效果）==</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda clean --all
+</span></span><span class="line"><span class="cl">conda update --all
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>Failed validating &lsquo;additionalProperties&rsquo; in schema:</strong>==（未解决）==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338593.png" alt="image-20220602105909620"  />
+</p>
+<p><strong>WARNING | Config option kernel_spec_manager_class not recognized by LabBuildApp</strong>==（未解决）==</p>
+<p>如果出现</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338610.png" alt="image-20220602162645826"  />
+</p>
+<p>可以先更新pip</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python -m pip install --upgrade pip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="插件">插件<a hidden class="anchor" aria-hidden="true" href="#插件">#</a></h3>
+<p><a href="https://zhuanlan.zhihu.com/p/334958963">强烈推荐JupyterLab 6个&quot;精英&quot;插件</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/101070029">15个好用到爆炸的Jupyter Lab插件</a></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338628.png" alt="image-20220601151949729"  />
+</p>
+<p>==nodejs版本不能过低==</p>
+<p><strong><code>同时！！</code></strong></p>
+<p>==外部的node环境好像不生效，要在conda环境中装node==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338871.jpeg" alt="img"  />
+</p>
+<p>在anaconda prompt中运行下面的语句安装nodejs：</p>
+<p><code>conda install -c conda-forge nodejs&lt;15</code></p>
+<p>其次需要注意的一点是：<strong>nodejs最好选择14.x.x版本，如果选择了16.x.x可能会遇到各种奇葩问题 。（这是个大坑）</strong></p>
+<p>还有，建议用官方默认源来下载npm资源，yarn同理。别用taobao的源。</p>
+<p>taobao的源有些不对，也会导致资源下载不成功。而且taobao在2022年5月要改域名了。</p>
+<p><strong><code>1.jupyterlab-code-snippets（没安装成功）</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyter labextension install jupyterlab-code-snippets
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>报错：</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338795.png" alt="image-20220601152906883"  />
+</p>
+<p>==外部的node环境好像不生效，要在conda环境中装node==</p>
+<p>==遇到的问题：==</p>
+<p>安装之后无法使用</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338815.png" alt="image-20220601191124601"  />
+</p>
+<p>解决方法：</p>
+<p><strong><code>elyra-code-snippet-extension（安装成功）</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install elyra-code-snippet-extension
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果出现</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338610.png" alt="image-20220602162645826"  />
+</p>
+<p>可以先更新pip</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python -m pip install --upgrade pip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda install -c conda-forge elyra-code-snippet-extension <span class="o">&amp;&amp;</span> jupyter lab build
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>👆命令装不了</p>
+<p>==控制台安装出错==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338580.png" alt="image-20220602104154825"  />
+</p>
+<p>==页面安装出错==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338831.png" alt="image-20220602110450011"  />
+</p>
+<p><strong>code snippets存储路径：<code>$JUPYTER_DATA_DIR/metadata/code-snippets</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ jupyter --data-dir
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338868.png" alt="image-20220601153535277"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338053.png" alt="image-20220602142350786"  />
+</p>
+<p><strong><code>2.jupyter lsp（安装成功）</code></strong></p>
+<p><a href="https://blog.csdn.net/aboshu/article/details/121864655">jupyter lab 代码提示 代码补全插件 jupyter lsp 配置教程 ：Hinterland mode</a></p>
+<p>1.安装JupyterLab-lsp</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install jupyter-lsp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.安装python-lsp-server</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install python-lsp-server<span class="o">[</span>all<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3.安装frontend extension</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyter labextension install @krassowski/jupyterlab-lsp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3.或者启动 jupyter lab，在插件中搜索lsp，点击@krassowski/jupyterlab-lsp下的install安装</p>
+<p>4.点击OK</p>
+<p>5.重新进入jupyter lab，输入代码时按tab键，就可以使用代码提示啦 。</p>
+<p>若想实现jupyter notebook中类似Hinterland mode的自动提示，还需进行下面的设置</p>
+<p>6.依次点击Settings&ndash;&gt;Advanced Settings Editor</p>
+<p>7.选择Code Completion，在右侧输入如下代码，并保存，即可开启Hinterland mode</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&#34;continuousHinting&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==可能会出现如下问题：==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338073.png" alt="image-20220602151604581"  />
+</p>
+<p><strong><code>3.ipywidgets（安装成功）</code></strong></p>
+<p>生成控件(下拉菜单, 滑条等等), 非常方便手动调参, 因为会即使反馈, 根据反馈不断调整参数</p>
+<p>先用pip安装ipywidgets: <code>pip install ipywidgets</code></p>
+<p><strong>用这个命令（指定为版本7）：</strong><code>pip install ipywidgets==7</code></p>
+<p>这样安装会出现如下问题：</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338093.png" alt="image-20220601224900732"  />
+</p>
+<p>**解决方法（这个方法没解决）：**<a href="https://www.coder.work/article/3135992">https://www.coder.work/article/3135992</a></p>
+<p>ipywidget 7.5 破坏了 jupyter lab，它也影响了其他库。</p>
+<p><a href="https://github.com/plotly/plotly.py/issues/1659">https://github.com/plotly/plotly.py/issues/1659</a></p>
+<p>降级到 7 解决</p>
+<p>安装完成后在Jupyter Notebook中激活：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyter nbextension <span class="nb">enable</span> --py widgetsnbextension
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果使用Jupyterlab，运行以下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyter labextension install @jupyter-widgets/jupyterlab-manager
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在Notebook中导入并使用ipywidgets：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">interact</span><span class="p">,</span> <span class="n">interact_manual</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>交互式控件入门</strong></p>
+<p>假设我们有一个数据框(dataframe)，包含Medium文章的统计信息：</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338492.png" alt="img"  />
+</p>
+<p>如何查看总阅读次数超过1000的文章？</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;reads&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果要显示点赞超过500的文章，必须编写一行新的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;claps&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果不用编写更多代码就可以快速更改这些参数，那不是很好吗？尝试ipywidgets：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nd">@interact</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">show_articles_more_than</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;claps&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><code>4.jupyterlab_variableinspector（安装成功）</code></strong></p>
+<p>jupyterlab-variableInspector帮助我们在jupyter lab中查看当前环境中存在的变量相关信息，以美观的界面形式对多种类型的对象予以呈现</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda config --add channels conda-forge
+</span></span><span class="line"><span class="cl">conda config --set channel_priority strict
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">conda install jupyterlab-variableinspector
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果遇到<code>Solving environment: failed with initial frozen solve. Retrying with flexible solve.</code>参考下面这个博客</p>
+<p><a href="https://blog.csdn.net/Sakura_Logic/article/details/108312146">https://blog.csdn.net/Sakura_Logic/article/details/108312146</a></p>
+<p>👇方式安装失败</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyter labextension install @lckr/jupyterlab_variableinspector
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==这个插件build会失败==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338134.png" alt="image-20220603144018843"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338231.png" alt="image-20220601223103081"  />
+</p>
+<p><strong><code>5.代码折叠</code></strong></p>
+<p>设置如下：<code>codeFolding：true</code>，即可见代码折叠</p>
+<p><img loading="lazy" src="../../../../../BIN/binbin%e7%9a%84%e7%ac%94%e8%ae%b0/myNotes/Jupyter.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0ppYWppa2FuZ19qams=,size_16,color_FFFFFF,t_70%23pic_center.png" alt="在这里插入图片描述"  />
+</p>
+<p><strong><code>6.kite（没安装成功）</code></strong></p>
+<p>kite插件是能够对代码块进行自动补充和对函数参数进行解释的插件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install <span class="s2">&#34;jupyterlab-kite&gt;=2.0.2&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装出错：缺少对应的wheel</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338391.png" alt="image-20220602145204187"  />
+</p>
+<p>启动时出错</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338405.png" alt="image-20220602143227143"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338419.png" alt="image-20220602145835025"  />
+</p>
+<p><strong><code>7.elyra（未安装）</code></strong></p>
+<p><strong>搭建工作流</strong></p>
+<p><a href="https://www.cnblogs.com/feffery/p/13692800.html">elyra——jupyter lab平台最强插件集</a></p>
+<p><strong><code>8.jupyterlab_code_formatter（安装成功）</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda install -c conda-forge jupyterlab_code_formatter
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或使用jupyter页面安装</p>
+<p>如果python版本过高会无法使用</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338435.png" alt="image-20220602160209602"  />
+</p>
+<p>**解决方法：**运行<code>jupyter server extension enable --py jupyterlab_code_formatter</code>并重启jupyter lab</p>
+<h2 id="jupyterhub">JupyterHub<a hidden class="anchor" aria-hidden="true" href="#jupyterhub">#</a></h2>
+<p>JupyterHub有两种部署方式：</p>
+<ul>
+<li><a href="https://tljh.jupyter.org/en/latest/">The Littlest JupyterHub</a></li>
+<li><a href="https://zero-to-jupyterhub.readthedocs.io/en/latest/">Zero to JupyterHub with Kubernetes</a></li>
+</ul>
+<p><a href="https://tljh.jupyter.org/en/latest/topic/whentouse.html#topic-whentouse">When to use The Littlest JupyterHub</a></p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338449.png" alt="image-20220603153446278" style="zoom:80%;" /> 
+<h3 id="安装-1">安装<a hidden class="anchor" aria-hidden="true" href="#安装-1">#</a></h3>
+<p>安装教程：</p>
+<p><a href="https://jupyterhub.readthedocs.io/en/latest/quickstart.html#prerequisites">Quickstart</a></p>
+<p><a href="https://blog.csdn.net/luoluonuoyasuolong/article/details/88526526">jupyterhub 安装教程</a></p>
+<p><code>1.安装miniconda</code></p>
+<p><a href="https://www.jianshu.com/p/47ed480daccc">https://www.jianshu.com/p/47ed480daccc</a></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338636.png" alt="image-20220603162231450"  />
+</p>
+<p><strong>解决方案：</strong></p>
+<p>打开一个终端，然后输入命令行打开bashrc文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo gedit ~/.bashrc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意这里要有sudo，不然无法编辑里面的内容。</p>
+<p>打开自己的安装目录<code>/opt/software/miniconda3/bin</code>，输入指令<code>pwd</code>查看路径。</p>
+<p>在bashrc文件中输入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;/opt/software/miniconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>保存关闭bashrc文件，在命令行输入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">source</span> ~/.bashrc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>随后检测一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda --version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338650.png" alt="image-20220603163426669"  />
+</p>
+<p>如上图所示，成功。</p>
+<p><code>2.安装JupyterHub</code></p>
+<p><strong>pip, npm:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python3 -m pip install jupyterhub
+</span></span><span class="line"><span class="cl">npm install -g configurable-http-proxy
+</span></span><span class="line"><span class="cl">python3 -m pip install jupyterlab notebook  <span class="c1"># needed if running the notebook servers in the same environment</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>建立软连接</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ln -s /opt/software/node-v14.8.0-linux-x64/bin/configurable-http-proxy /usr/bin/configurable-http-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>conda</strong> (one command installs jupyterhub and proxy):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda install -c conda-forge jupyterhub  <span class="c1"># installs jupyterhub and proxy</span>
+</span></span><span class="line"><span class="cl">conda install jupyterlab notebook  <span class="c1"># needed if running the notebook servers in the same environment</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>测试是否安装成功</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyterhub -h
+</span></span><span class="line"><span class="cl">configurable-http-proxy -h
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>3.启动jupyterhub</code></p>
+<p>命令行输入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyterhub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>浏览器输入<code>http://localhost:8000</code>(localhost可换成服务器ip)，通过服务器的用户登录（非root，root默认是无法登录的）</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338669.png" alt="image-20220603164548865"  />
+</p>
+<p>==遇到的问题：==</p>
+<p>使用pip安装启动jupyterhub时，找不到 &lsquo;configurable-http-proxy&rsquo;</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338683.png" alt="image-20220605200332347"  />
+</p>
+<p>建立软连接</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ln -s /opt/software/node-v14.8.0-linux-x64/bin/configurable-http-proxy /usr/bin/configurable-http-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="多用户需求">多用户需求<a hidden class="anchor" aria-hidden="true" href="#多用户需求">#</a></h3>
+<p><a href="https://jupyterhub.readthedocs.io/en/latest/getting-started/index.html">Get Started</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/66169551">多用户多环境Jupyter notebook解决方案</a></p>
+<p><a href="https://blog.csdn.net/weixin_42902669/article/details/108896133">[Centos/Jupyterhub] 多用户远程登录 Jupyter 详细配置</a></p>
+<p><a href="https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#create-a-set-of-allowed-users">Authentication and User Basics</a></p>
+<p><a href="https://blog.csdn.net/qq_19381989/article/details/107183075">安装 JupyterHub 踩坑指南 —— 如何通过 JupyterHub 实现多用户管理</a></p>
+<p><strong>默认情况下，要真正的实现分配用户账号，需要满足以下两点要求：</strong></p>
+<ol>
+<li>c.Authenticator.whitelist 指定了用户名</li>
+<li>在系统中创建了该用户（adduser / useradd）</li>
+</ol>
+<p>tips: 默认情况下，密码为系统中该用户对应的密码</p>
+<p>JupyterHub支持多种Spawner，可以启动LocalProcess（默认）的JupyterLab，docker容器版的JupyterLab，也可以启动Kubernetes(k8s)集群Pod版的JupyterLab、Hadoop Yarn上的JupyterLab等等。</p>
+<p>针对测试或者自己单用户使用，默认的LocalProcess就可以；若多用户不是很多，隔离性也没那么高要求的，LocalProcess也能满足；如果有意向大量不确定用户提供，还是使用docker容器或者k8s版本的比较好，隔离性好，也能限制资源用量。</p>
+<h4 id="新增用户">新增用户<a hidden class="anchor" aria-hidden="true" href="#新增用户">#</a></h4>
+<p>每个用户的环境都是独立的</p>
+<p><code>pip install</code>都是安装在  <code>/home/用户/.local/lib/python3.7/site-packages/</code>下</p>
+<h4 id="登录">登录<a hidden class="anchor" aria-hidden="true" href="#登录">#</a></h4>
+<p>==登录时遇到的问题：==</p>
+<p>登录普通用户的时候日志报错</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338699.png" alt="image-20220605165732557"  />
+</p>
+<p>在输入<code>node -v</code> 时显示未找到命令，而且 <code>configurable-http-proxy</code> 也没了</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338921.png" alt="image-20220605185955477"  />
+</p>
+<p>软连接失效</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338936.png" alt="image-20220605190811414"  />
+</p>
+<p>删除软连接，新建软连接，==手动输入==</p>
+<p>==解决方法：新建一个环境！！！重复上述操作==</p>
+<h4 id="配置文件设置">配置文件设置<a hidden class="anchor" aria-hidden="true" href="#配置文件设置">#</a></h4>
+<p>生成配置文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyterhub --generate-config
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个命令会在你的当前目录下生成一个<code>jupyterhub_config.py</code>文件，接下来我们需要在这个文件中配置我们的网络和用户管理。（建议放在编撰的UNIX文件系统位置：<code>/etc/jupyterhub</code>）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述命令可以根据你的配置文件启动jupyterhub。</p>
+<p>在存放<strong>jupyterhub_config.py</strong>的文件夹下执行<code>jupyterhub</code>启动服务</p>
+<p><strong>配置 jupyterhub_config.py</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">c</span><span class="o">.</span><span class="n">Spawner</span><span class="o">.</span><span class="n">notebook_dir</span> <span class="o">=</span> <span class="s1">&#39;/home/cqb/jupyter_workspace&#39;</span> <span class="c1">#jupyterhub自定义目录</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>c.Spawner.notebook_dir设置之后新建工程出现<code>Permission denied: 未命名.ipynb</code></p>
+<p>==解决方法：==</p>
+<p>修改该文件夹的权限：<code>chmod 777 jupyter_workspace/</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">chmod <span class="m">770</span> jupyter_workspace/
+</span></span><span class="line"><span class="cl">chmod +s jupyter_workspace/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338951.png" alt="image-20220603183117082"  />
+</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># c.Spawner.default_url = &#39;/lab&#39; # /lab对应jupyterlab 默认为notebook</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># c.JupyterHub.port = 80 # 指定暴露端口</span>
+</span></span><span class="line"><span class="cl"><span class="n">c</span><span class="o">.</span><span class="n">Authenticator</span><span class="o">.</span><span class="n">allowed_users</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;user1&#39;</span><span class="p">,</span> <span class="s1">&#39;user002&#39;</span><span class="p">,</span> <span class="s1">&#39;user003&#39;</span><span class="p">}</span> <span class="c1"># 指定可使用用户</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># PAMAuthenticator.whitelist is deprecated in JupyterHub 1.2, use PAMAuthenticator.allowed_users instead</span>
+</span></span><span class="line"><span class="cl"><span class="n">c</span><span class="o">.</span><span class="n">LocalAuthenticator</span><span class="o">.</span><span class="n">create_system_users</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl"><span class="n">c</span><span class="o">.</span><span class="n">Authenticator</span><span class="o">.</span><span class="n">admin_users</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;cqb&#39;</span><span class="p">}</span> <span class="c1"># 指定admin用户</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># c.JupyterHub.statsd_prefix = &#39;jupyterhub&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># c.Spawner.cmd=[&#39;jupyterhub-singleuser&#39;]</span>
+</span></span><span class="line"><span class="cl"><span class="n">c</span><span class="o">.</span><span class="n">Spawner</span><span class="o">.</span><span class="n">notebook_dir</span> <span class="o">=</span> <span class="s1">&#39;~/jupyter_workspace&#39;</span> <span class="c1"># 每个用户有单独的工作空间(但是前提是需提前创建好文件夹)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># c.LocalAuthenticator.group_whitelist = {&#39;group1&#39;}</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># c.JupyterHub.statsd_prefix = &#39;jupyterhub&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 为jupyterhub 添加额外服务，用于处理闲置用户进程。安装jupyterhub-ilde-culler：pip install jupyterhub-ilde-culler（jupyterhub-ilde-culler安装不了）</span>
+</span></span><span class="line"><span class="cl"><span class="n">c</span><span class="o">.</span><span class="n">JupyterHub</span><span class="o">.</span><span class="n">services</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;idle-culler&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;command&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;python3&#39;</span><span class="p">,</span> <span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="s1">&#39;jupyterhub_idle_culler&#39;</span><span class="p">,</span> <span class="s1">&#39;--timeout=3600&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;admin&#39;</span><span class="p">:</span><span class="kc">True</span> <span class="c1"># 1.5.0 需要服务管理员权限，去kill 部分闲置的进程notebook, 2.0版本已经改了，可以只赋给 idel-culler 部分特定权限，roles</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置管理员，管理员能够查看和启停所有用户的servers</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">c.Authenticator.admin_users = set([&#39;admin&#39;])
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置普通用户，管理员用户不需要加入白名单</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">c.Authenticator.whitelist = set([&#39;user1&#39;, &#39;user2&#39;, &#39;user3&#39;])
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><code>注意事项</code></strong></p>
+<p>==须在root管理员下启动jupyterhub，才可以实现多用户（否则会出现权限不足和有些用户无法登录的情况）==；</p>
+<p>==user1登录失败==</p>
+<p>没有权限访问jupyter_workspace文件夹 <code>No such notebook dir: '/home/cqb/jupyter_workspace'</code></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338970.png" alt="image-20220604161052962"  />
+</p>
+<h4 id="工作空间配置">工作空间配置<a hidden class="anchor" aria-hidden="true" href="#工作空间配置">#</a></h4>
+<p>工作空间分为<strong>共享工作空间（多用户共用一个文件夹）<strong>或者是</strong>用户独享工作空间</strong></p>
+<h5 id="共享工作空间">共享工作空间<a hidden class="anchor" aria-hidden="true" href="#共享工作空间">#</a></h5>
+<p>共享的话要配置  <code>Linux多用户共同使用同一目录</code></p>
+<p><a href="https://blog.csdn.net/catscanner/article/details/105129846">https://blog.csdn.net/catscanner/article/details/105129846</a></p>
+<p><strong>例如有alex，bob两个用户，互相无法访问对方的home~文件夹，为了共享文件，可以让root用户在/home中创建一个shared文件夹，然后创建一个用户组dev01</strong></p>
+<p><strong>在root或者sudo下：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">groupadd dev01
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>创建用户组之后添加文件夹并为文件夹更改组</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir /home/dev_shared
+</span></span><span class="line"><span class="cl">chgrp dev01 /home/dev_shared
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>接下来更改文件夹权限，使得owner以及用户组可以访问,+s是为了确保之后添加进去的文件夹也继承同样的权限</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">chmod <span class="m">770</span> /home/dev_shared
+</span></span><span class="line"><span class="cl">chmod +s /home/dev_shared
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>然后将需要共享文件的用户添加到dev01这个用户组</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">usermod -a -G dev01 alex
+</span></span><span class="line"><span class="cl">usermod -a -G dev01 bob
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意，使用root环境运行su - ， 而不是root权限su</p>
+<p><strong>至此，两人都可以访问/home/dev_shared文件夹了</strong></p>
+<p><strong>另外，用户可以自行检查自己所在的用户组</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">groups
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>如果是全新的账户，root用户可以先建立新用户：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">useradd alex
+</span></span><span class="line"><span class="cl">passwd alex
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用root权限查看所有的group情况</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/group
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="独享工作空间">独享工作空间<a hidden class="anchor" aria-hidden="true" href="#独享工作空间">#</a></h5>
+<p>独享的话配置文件设置 <code>c.Spawner.notebook_dir = '~/jupyter_workspace'</code> 每个用户的文件会放在<code>/home/user/jupyter_workspace</code>下</p>
+<p>==遇到的问题：==</p>
+<p>创建文件的时候报错<code>Permission denied: '/home/shared/jupyter_workspace/.ipynb_checkpoints/untitled-checkpoint.dio'</code></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338989.png" alt="image-20220605162113559"  />
+</p>
+<p><code>.ipynb_checkpoint</code>文件夹没有写权限，注意这个文件夹是 <code>user1</code> 创建的，其他用户没有写权限，所以==用户共享一个工作空间的方案不可行==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338177.png" alt="image-20220605163104769"  />
+</p>
+<p><strong>解决方法：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">chmod <span class="m">770</span> .ipynb_checkpoints
+</span></span><span class="line"><span class="cl">chmod +s .ipynb_checkpoints
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><code>注意：</code></strong></p>
+<p>其他用户创建的文件是无法保存的（既然这样子，那其实就没有必要让用户共享工作空间，因为文件并不能被修改，可以用户拥有自己的工作空间，同时创建一个共享文件夹，用户将需要共享的文件放到该共享文件夹让对方调用）</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338196.png" alt="image-20220605163550002"  />
+</p>
+<h4 id="用户安装插件"><strong>用户安装插件</strong><a hidden class="anchor" aria-hidden="true" href="#用户安装插件">#</a></h4>
+<p>只能使用 <code>pip install</code> 安装</p>
+<p>用户登录的时候通过<code>pip install</code>都是安装在  <code>/home/用户/.local/lib/python3.7/site-packages/</code>下的，各用户的环境都是隔离的</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338212.png" alt="image-20220605154924797"  />
+</p>
+<p><strong><code>因为只允许非root用户登录</code></strong></p>
+<p>无法通过<code>conda install</code>安装，因为安装目录是在 <code>/opt/software/miniconda3/envs/jupyterhub1</code> ，用户无写权限</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338229.png" alt="image-20220605160627200"  />
+</p>
+<p>同样的，插件在web界面也是无法进行安装的（<code>conda install</code>无权限）</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338240.png" alt="image-20220603185223055"  />
+</p>
+<p>若是允许用户安装插件，可将插件安装所在文件夹共享出来，指定特定的组权限可写</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">chgrp -R shared /opt/software/miniconda3/envs/jupyterhub
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">chmod -R <span class="m">775</span> /opt/software/miniconda3/envs/jupyterhub
+</span></span><span class="line"><span class="cl">chmod -R +s /opt/software/miniconda3/envs/jupyterhub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==遇到的问题：==</p>
+<p>文件权限设置完成后，通过命令安装插件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">!conda install -c conda-forge jupyterlab-drawio -y
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==输入上面这个命令之后jupyterhub就启动不起来了！！！****==</p>
+<p><code>node:error while loading shared libraries: libnode.so.83</code></p>
+<p><a href="https://blog.csdn.net/dumeifang/article/details/2963223">error while loading shared libraries的解決方法</a></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338366.png" alt="image-20220605134026388"  />
+</p>
+<p>==解决思路：==</p>
+<p>输入<code>node -v</code>可以看到同样的错误，可能是安装的node有问题，把之前通过pip安装的node卸载掉==（pip和conda 安装的都要卸载掉）==，通过tar包重新安装</p>
+<p>重新安装建立软连接后是可以输入<code>node -v</code>，但是安装jupyterhub之后他会自带一个nodejs，还是会报错</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338385.png" alt="image-20220605140942699"  />
+</p>
+<p>猜测的原因是conda 安装的jupyterhub自带的nodejs可能有问题</p>
+<p><code>通过pip的方式安装jupyterhub可以解决该问题</code></p>
+<h5 id="linux-上安装-nodejs">Linux 上安装 Node.js<a hidden class="anchor" aria-hidden="true" href="#linux-上安装-nodejs">#</a></h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wget https://nodejs.org/dist/v14.8.0/node-v14.8.0-linux-x64.tar.gz     // 下载
+</span></span><span class="line"><span class="cl">tar -xzvf node-v14.8.0-linux-x64.tar.gz                                // 解压
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> node-v14.8.0-linux-x64                                              // 进入解压目录
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==下面这个修改配置文件的方法不能生效==</p>
+<p>解压文件的 bin 目录底下包含了 node、npm 等命令，我们可以修改linux系统的环境变量（profile）来设置直接运行命令：</p>
+<p><strong>老规矩先备份，养成修改重要文件之前先备份的好习惯。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cp /etc/profile /etc/profile.bak
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后 <code>vim /etc/profile</code>，在最下面添加 export PATH=$PATH: 后面跟上 node 下 bin 目录的路径</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">export PATH=$PATH:/opt/software/node-v14.8.0-linux-x64/bin
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>立即生效</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">source</span> /etc/profile
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@localhost ~<span class="o">]</span><span class="c1"># node -v</span>
+</span></span><span class="line"><span class="cl">v14.8.0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>OK！安装成功！</p>
+<p>==建立软连接才能生效==</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">root@qingbin-virtual-machine:/opt/softeware# ln -s /opt/softeware/node-v14.8.0-linux-x64/bin/node /usr/local/bin/
+</span></span><span class="line"><span class="cl">root@qingbin-virtual-machine:/opt/softeware# node -v
+</span></span><span class="line"><span class="cl">v14.8.0
+</span></span><span class="line"><span class="cl">root@qingbin-virtual-machine:/opt/softeware# ln -s /opt/softeware/node-v14.8.0-linux-x64/bin/npm /usr/local/bin/
+</span></span><span class="line"><span class="cl">root@qingbin-virtual-machine:/opt/softeware# npm -v
+</span></span><span class="line"><span class="cl">6.14.7
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>删除软连接</strong>：</p>
+<p>进入软连接目录</p>
+<p><code>rm ./node</code></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338400.png" alt="image-20220605192408699"  />
+</p>
+<p>==遇到的问题：==</p>
+<p>直接通过web在插件模块install的话会出现如下错误，但是我启动jupyterhub的环境下已经安装了nodejs了，不知道为什么会出现该错误</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338417.png" alt="image-20220604170734530"  />
+</p>
+<p><strong>解决方法：</strong></p>
+<p>在linux中自己安装node，不要用自带的node环境</p>
+<h5 id="阿里天池的环境安装解决方案">阿里天池的环境安装解决方案<a hidden class="anchor" aria-hidden="true" href="#阿里天池的环境安装解决方案">#</a></h5>
+<p><strong>阿里天池可以通过 <code>pip install</code> 安装环境/插件（python环境安装在<code>/data/nas/workspace/envs/python3.6/site-packages/</code>）</strong></p>
+<p>阿里天池也没有办法通过插件模块install安装</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338432.png" alt="image-20220604173257132"  />
+</p>
+<p>阿里天池也没有办法用命令<code>!conda install -c conda-forge jieba -y</code>安装环境</p>
+<p>阿里天池也没有办法用命令<code>!conda install -c conda-forge jupyterlab-drawio -y</code>安装插件</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338575.png" alt=""  />
+</p>
+<h5 id="colab的环境安装解决方案">Colab的环境安装解决方案<a hidden class="anchor" aria-hidden="true" href="#colab的环境安装解决方案">#</a></h5>
+<p>可通过<code>pip install</code>安装环境（python环境安装在<code>/usr/local/lib/python3.7/dist-packages/</code>），但是无法通过<code>conda install</code>，没有安装插件的模块</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338589.png" alt="image-20220607160923426"  />
+</p>
+<p>==Colab可以在输出端输入y执行之后的操作，但是阿里天池不可以==</p>
+<p><strong>Colab</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338606.png" alt="image-20220607163558190"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338623.png" alt="image-20220607160328328"  />
+</p>
+<p><strong>阿里天池</strong></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338639.png" alt="image-20220607163244817"  />
+</p>
+<h2 id="the-littlest-jupyterhub">The Littlest JupyterHub<a hidden class="anchor" aria-hidden="true" href="#the-littlest-jupyterhub">#</a></h2>
+<p><code>The Littlest JupyterHub currently supports Ubuntu(18.04) Linux only</code></p>
+<p>每个 JupyterHub 用户都会在首次启动服务器时创建自己的 Unix 用户帐户。这可以保护用户彼此之间，在<code>/home</code>为他们提供一个主目录，并允许基于文件系统权限进行共享。</p>
+<h3 id="安装tljh">安装TLJH<a hidden class="anchor" aria-hidden="true" href="#安装tljh">#</a></h3>
+<p><a href="https://tljh.jupyter.org/en/latest/">The Littlest JupyterHub</a></p>
+<p><a href="https://blog.csdn.net/qq_24046745/article/details/123683199">【TLJH】the-littlest-jupyterhub国内搭建和配置详细教程</a></p>
+<p><a href="https://blog.csdn.net/weixin_28910411/article/details/113052430">conda 阿里源_Littlest JupyterHub| 01 Littlest JupyterHub 阿里云搭建</a></p>
+<p>1.确保<code>python3</code>, <code>python3-dev</code>, <code>curl</code> 和 <code>git</code> 都已经安装</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install python3 python3-dev git curl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338752.png" alt="image-20220606155143129"  />
+</p>
+<p>2.安装</p>
+<p>下面这个安装不了，因为代码里面有GitHub的地址，下载很慢</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -L https://tljh.jupyter.org/bootstrap.py <span class="p">|</span> sudo -E python3 - --admin &lt;admin-user-name&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==遇到的问题：==</p>
+<p>启动报错</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338786.png" alt="image-20220606163948341"  />
+</p>
+<h3 id="安装程序都做了些什么">安装程序都做了些什么<a hidden class="anchor" aria-hidden="true" href="#安装程序都做了些什么">#</a></h3>
+<p><a href="https://tljh.jupyter.org/en/latest/topic/installer-actions.html#topic-installer-actions">What does the installer do?</a></p>
+<p>TLJH创建的目录需要root权限<code>/opt/tljh</code></p>
+<p>Hub的环境安装在<code>/opt/tljh/hub</code>下，同时还包含了<a href="http://traefik.io/">traefik</a>（Træfik 是一个为了让部署微服务更加便捷而诞生的现代HTTP反向代理、负载均衡工具。 它支持多种后台 (<a href="https://www.docker.com/">Docker</a>, <a href="https://docs.docker.com/swarm">Swarm</a>, <a href="https://kubernetes.io/">Kubernetes</a>, <a href="https://mesosphere.github.io/marathon/">Marathon</a>, <a href="https://github.com/apache/mesos">Mesos</a>, <a href="https://www.consul.io/">Consul</a>, <a href="https://coreos.com/etcd/">Etcd</a>, <a href="https://zookeeper.apache.org/">Zookeeper</a>, <a href="https://github.com/boltdb/bolt">BoltDB</a>, Rest API, file…) 来自动化、动态的应用它的配置文件设置）</p>
+<p>用户环境安装在 <code>/opt/tljh/user</code>，这包含用于启动所有用户的notebook接口，以及所有用户可用的各种包。这个环境归root用户所有。</p>
+<h2 id="不使用jupyterhub的原因">不使用JupyterHub的原因<a hidden class="anchor" aria-hidden="true" href="#不使用jupyterhub的原因">#</a></h2>
+<p>Jupytherhub的每个用户都是一个linux的用户，每个用户之间基于文件系统权限进行共享，用户的操作权限基本是遵循linux的规范，这不方便我们对用户的控制，开发环境、文件的管理与共享</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338804.png" alt="image-20220606163338804"  />
+</p>
+<h2 id="jupyter集成的应用">Jupyter集成的应用<a hidden class="anchor" aria-hidden="true" href="#jupyter集成的应用">#</a></h2>
+<p><a href="https://blog.csdn.net/wiborgite/article/details/87730368">集成Jupyter notebook的工具或平台</a></p>
+<p>==集成的是Jupyter lab，通过Docker实现的，将一个外部目录挂载到容器中==</p>
+<h3 id="阿里天池大数据httpstianchialiyuncom"><a href="https://tianchi.aliyun.com/">阿里天池大数据</a><a hidden class="anchor" aria-hidden="true" href="#阿里天池大数据httpstianchialiyuncom">#</a></h3>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338847.png" alt="image-20220530155319167"  />
+</p>
+<p><a href="https://tianchi.aliyun.com/notebook-ai/detail?&amp;postId=198826">如何在天池学习、运行教程代码</a></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338886.png" alt="image-20220807153714668"  />
+</p>
+<h3 id="google-colab">Google Colab<a hidden class="anchor" aria-hidden="true" href="#google-colab">#</a></h3>
+<p><a href="https://colab.research.google.com/">https://colab.research.google.com/</a></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338943.png" alt="image-20220530161239495"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338967.png" alt="image-20220530161439061"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338386.png" alt="image-20220807153137649"  />
+</p>
+<h2 id="jupyter二次开发">Jupyter二次开发<a hidden class="anchor" aria-hidden="true" href="#jupyter二次开发">#</a></h2>
+<p><strong><code>重点:</code></strong><a href="https://zhuanlan.zhihu.com/p/383848307">JupyterLab深度定制开发实践</a></p>
+<p>文件系统：glusterfs</p>
+<p>用户权限：目前我们的Jupyter没有使用jupyterHub来管理用户权限，主要是我们的模式是==每个用户启动一个docker容器的jupyterLab服务==，每个人使用自己的jupyterLab服务，互相不会有干扰，而且JupyterLab我们定义为用户的IDE和工作平台，所以独立容器保证了独立性，也方便后续用户资源计费。在此架构下，==jupyterlab token作为用户认证主要途径，在jupyterLab系统启动时，会将用户的token存储到user service的用户表字段中==，前端页面跳转jupyterlab web UI时，会去user service获取该用户的jupyterLab token，根据此token登录jupyterLab服务，完成认证。 而==目录权限的控制，主要是不同的用户和机构目录挂载到不同的目录==。对于hadoop的访问权限控制，我们会把kerberos/ranger相关配置集成到了app中，并且jupyterLab服务和livy服务都会使用对应的用户USER ID来启动。</p>
+<p><a href="https://forrany.github.io/2019/12/09/Jupyter-Notebook-%E5%89%8D%E7%AB%AF%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E5%88%9D%E6%8E%A2/">Juypter Notebook 前端二次开发</a></p>
+<p><a href="https://blog.csdn.net/weixin_39198406/article/details/90812334">Jupyter Notebook二次开发的经验（一）——安装开发版本</a></p>
+<p><a href="https://blog.51cto.com/slaytanic/2523291">Jupyter生态二次开发系列(一)</a></p>
+<p><a href="https://fishercat.top/20200322130/">JupyterHub+Lab：Ubuntu18.04搭建自己的多用户云notebook（安装篇）</a></p>
+<p><a href="https://www.imooc.com/article/300868">Jupyter NoteBook / JupyterLab / JupyterHub 区别与关系简介</a></p>
+<p>搭建环境方案（根据需求调整）：</p>
+<ul>
+<li>线上环境：The Littlest JupyterHub + JupyterLab</li>
+<li>开发环境：JupyterHub + JupyterLab</li>
+</ul>
+<p>不管是Jupyter Notebook还是Jupyter Lab，都是只支持单用户的使用场景，作为一个可交互的web服务，所有用户都在同一个目录下操作（甚至同时在编辑同一个脚本），多数情况下很不方便。Jupyterhub可以解决这个问题。
+但是当我们把Jupyterhub安装，启动服务后默认确实JupyterNoteBook，如何换成JupyterLab呢？👇</p>
+<p><a href="https://blog.csdn.net/sunmingyang1987/article/details/107067305">JupyterLab on JupyterHub(JupyterLab+JupyterHub)（JupyterLab JupyterHub）</a></p>
+<h2 id="思路">思路<a hidden class="anchor" aria-hidden="true" href="#思路">#</a></h2>
+<p>1.数据用Drive单独存储</p>
+<p>2.写函数库让用户调用</p>
+<p>例如：<code>from google.colab import files</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">files</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;example.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;some content&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">files</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;example.txt&#39;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3.示例代码段</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338402.png" alt="image-20220531230140442"  />
+</p>
+<p>4.ipynb工程分享</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338415.png" alt="image-20220531230427623"  />
+</p>
+<p><a href="https://colab.research.google.com/drive/131SUrBstRNKv6n4GtK582ULCEjVaV1V9?usp=sharing">https://colab.research.google.com/drive/131SUrBstRNKv6n4GtK582ULCEjVaV1V9?usp=sharing</a></p>
+<p>5.ipywidgets调参</p>
+<p>6.服务的发布与共享</p>
+<p>7.互操作引擎</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338435.png" alt="image-20220809160900313"  />
+</p>
+<h2 id="问题收集">问题收集<a hidden class="anchor" aria-hidden="true" href="#问题收集">#</a></h2>
+<p>1.运行代码的时候出现错误，弹框提示<code>内核似乎挂掉了，它很快将自动重启。</code></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307252338451.png" alt="image-20220531213736457"  />
+</p>
+<p>**解决：**出现这种情况的时候，需要将虚拟环境中的包全部用conda命令进行安装，用pip安装就会出现这个问题（把用pip安装的包删了重新用conda装：<code>conda install -c conda-forge wordcloud</code>）</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/note/vue%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Vue项目搭建</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/design/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>工作流设计与实现</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

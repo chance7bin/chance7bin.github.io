@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>nodejs on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/nodejs/</link>
+    <description>Recent content in nodejs on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 16 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ubuntu部署node项目</title>
+      <link>https://chance7bin.github.io/posts/note/ubuntu%E9%83%A8%E7%BD%B2node%E9%A1%B9%E7%9B%AE/</link>
+      <pubDate>Sun, 16 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/ubuntu%E9%83%A8%E7%BD%B2node%E9%A1%B9%E7%9B%AE/</guid>
+      <description>linux 解压 tar 文件 要在Linux上解压缩.tar文件，可以使用以下命令： tar -xvf file.tar 这将解压缩.tar文件并将其提取到当前目录中。您可以将“file.t</description>
+    </item>
+    
+  </channel>
+</rss>
