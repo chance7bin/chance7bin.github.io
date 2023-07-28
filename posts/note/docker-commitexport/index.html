@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>docker commit&amp;export | Binb&#39;s Blog</title>
+<meta name="keywords" content="docker">
+<meta name="description" content="1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的 1 2 file1:367fc7b1e2ca4d416290c6b5b68e5283 file2:437eb32a507c44e781e36e18c3100f23 2.docker save/load 与 docker export/import https://www.cnblogs.com/Cherry-Linux/p/8025777.html https://cloud.tencent.com/developer/article/2027894 export export与imp">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/note/docker-commitexport/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="docker commit&amp;export" />
+<meta property="og:description" content="1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的 1 2 file1:367fc7b1e2ca4d416290c6b5b68e5283 file2:437eb32a507c44e781e36e18c3100f23 2.docker save/load 与 docker export/import https://www.cnblogs.com/Cherry-Linux/p/8025777.html https://cloud.tencent.com/developer/article/2027894 export export与imp" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/note/docker-commitexport/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-12-09T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-12-09T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="docker commit&amp;export"/>
+<meta name="twitter:description" content="1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的 1 2 file1:367fc7b1e2ca4d416290c6b5b68e5283 file2:437eb32a507c44e781e36e18c3100f23 2.docker save/load 与 docker export/import https://www.cnblogs.com/Cherry-Linux/p/8025777.html https://cloud.tencent.com/developer/article/2027894 export export与imp"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻 我的笔记",
+      "item": "https://chance7bin.github.io/posts/note/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "docker commit\u0026export",
+      "item": "https://chance7bin.github.io/posts/note/docker-commitexport/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "docker commit\u0026export",
+  "name": "docker commit\u0026export",
+  "description": "1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的 1 2 file1:367fc7b1e2ca4d416290c6b5b68e5283 file2:437eb32a507c44e781e36e18c3100f23 2.docker save/load 与 docker export/import https://www.cnblogs.com/Cherry-Linux/p/8025777.html https://cloud.tencent.com/developer/article/2027894 export export与imp",
+  "keywords": [
+    "docker"
+  ],
+  "articleBody": "1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的 1 2 file1:367fc7b1e2ca4d416290c6b5b68e5283 file2:437eb32a507c44e781e36e18c3100f23 2.docker save/load 与 docker export/import https://www.cnblogs.com/Cherry-Linux/p/8025777.html\nhttps://cloud.tencent.com/developer/article/2027894\nexport export与import命令：\n注意：\n1.会丢弃历史记录和元数据。 2.启动export与import命令导出导入的镜像必须加/bin/bash或者其他/bin/sh，否则会报错。\ndocker: Error response from daemon: No command specified.\nexport： 导出容器会丢失历史记录和元数据，类似与快照。\ncommit 如果有docker镜像仓库的权限，也可以直接将生成的镜像push到docker仓库，然后在另一台主机上pull镜像并运行为容器即可。\n3.docker commit 原理 基于layer的概念，每次commit都是基于前面的镜像进行构建， 因此会越来越大（就算删除容器内的环境也不会变小）\nhttps://blog.csdn.net/weixin_41790086/article/details/102932185\nUnion FS\nhttps://www.jianshu.com/p/3ba255463047\nhttps://coolshell.cn/articles/17061.html\n示例 test6:1.0 是基于基础镜像commit生成的镜像\ntest7:1.0 是基于test6:1.0镜像commit生成的镜像，可以发现查看image history的时候 包含了基础镜像（59149c73a68c）以及test6:1.0镜像（d189c372fc80）\n我在test6:1.0镜像中，先pip install Pillow，生成test7:1.0 镜像大小增加2mb，接着我在test6:1.0中删除Pillow， commit生成test7:1.0，镜像大小还是比原来多出2mb，所以在容器中进行的任何操作，只会增加镜像大小，而不会使镜像减小\n4.docker export/import 启动export与import命令导出导入的镜像必须加/bin/bash或者其他/bin/sh，否则会报错。\ndocker: Error response from daemon: No command specified.\n解决方法：\n使用 docker ps -a –no-trunc 查看启动容器需要的命令\n在run的时候加上上述红框内的命令，注意不要带上双引号，不然会报错：no such file or directory: unknown\n报错：\n5.docker commit 和 export 到底export可以缩小多少 基于多个镜像 迭代的\ncommit 方式是基于前面的镜像继续往上加 ，删除前面镜像安装的包的话再commit不能缩小镜像大小\nexport 是基于当前镜像的，删除前面镜像安装的包再export 生成的tar会缩小\n参考链接\nhttps://blog.csdn.net/weixin_43220532/article/details/123848167\nhttps://zhuanlan.zhihu.com/p/457356842\nhttps://blog.csdn.net/u011195077/article/details/108148824\nhttps://github.com/goldmann/docker-squash\n",
+  "wordCount" : "816",
+  "inLanguage": "zh",
+  "datePublished": "2022-12-09T00:00:00Z",
+  "dateModified": "2022-12-09T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/note/docker-commitexport/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/note/">👨🏻‍💻 我的笔记</a></div>
+    <h1 class="post-title">
+      docker commit&amp;export
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-12-09
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>816字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>2分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/docker/" style="color: var(--secondary)!important;">docker</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#1%e4%bd%bf%e7%94%a8docker-commit-%e5%b0%b1%e7%ae%97%e4%b8%8d%e8%bf%9b%e8%a1%8c%e4%bb%bb%e4%bd%95%e6%93%8d%e4%bd%9c%e5%8f%aa%e8%a6%81%e6%98%afcommit%e4%b8%a4%e6%ac%a1%e7%94%9f%e6%88%90%e7%9a%84tar%e7%9a%84md5%e9%83%bd%e6%98%af%e4%b8%8d%e7%9b%b8%e7%ad%89%e7%9a%84" aria-label="1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的">1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的</a></li>
+                    <li>
+                        <a href="#2docker-saveload-%e4%b8%8e-docker-exportimport" aria-label="2.docker save/load 与 docker export/import">2.docker save/load 与 docker export/import</a><ul>
+                            
+                    <li>
+                        <a href="#export" aria-label="export">export</a></li>
+                    <li>
+                        <a href="#commit" aria-label="commit">commit</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#3docker-commit-%e5%8e%9f%e7%90%86" aria-label="3.docker commit 原理">3.docker commit 原理</a><ul>
+                            
+                    <li>
+                        <a href="#%e7%a4%ba%e4%be%8b" aria-label="示例">示例</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#4docker-exportimport" aria-label="4.docker export/import">4.docker export/import</a></li>
+                    <li>
+                        <a href="#5docker-commit-%e5%92%8c-export-%e5%88%b0%e5%ba%95export%e5%8f%af%e4%bb%a5%e7%bc%a9%e5%b0%8f%e5%a4%9a%e5%b0%91" aria-label="5.docker commit 和 export 到底export可以缩小多少">5.docker commit 和 export 到底export可以缩小多少</a>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><h2 id="1使用docker-commit-就算不进行任何操作只要是commit两次生成的tar的md5都是不相等的">1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的<a hidden class="anchor" aria-hidden="true" href="#1使用docker-commit-就算不进行任何操作只要是commit两次生成的tar的md5都是不相等的">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">file1:367fc7b1e2ca4d416290c6b5b68e5283
+</span></span><span class="line"><span class="cl">file2:437eb32a507c44e781e36e18c3100f23
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="2docker-saveload-与-docker-exportimport">2.docker save/load 与 docker export/import<a hidden class="anchor" aria-hidden="true" href="#2docker-saveload-与-docker-exportimport">#</a></h2>
+<blockquote>
+<p><a href="https://www.cnblogs.com/Cherry-Linux/p/8025777.html">https://www.cnblogs.com/Cherry-Linux/p/8025777.html</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/2027894">https://cloud.tencent.com/developer/article/2027894</a></p>
+</blockquote>
+<h3 id="export">export<a hidden class="anchor" aria-hidden="true" href="#export">#</a></h3>
+<p><strong>export与import命令：</strong></p>
+<p><strong>注意：</strong></p>
+<p><strong>1.会丢弃历史记录和元数据。   2.启动export与import命令导出导入的镜像必须加/bin/bash或者其他/bin/sh，否则会报错。</strong></p>
+<p><code>docker: Error response from daemon: No command specified.</code></p>
+<p><strong><code>export</code>：</strong> <strong>导出容器会丢失历史记录和元数据，类似与快照。</strong></p>
+<h3 id="commit">commit<a hidden class="anchor" aria-hidden="true" href="#commit">#</a></h3>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272345393.png" alt="image-20230727234542361"  />
+</p>
+<p><strong>如果有docker</strong><a href="https://cloud.tencent.com/product/tcr?from=10680"><strong>镜像仓库</strong></a><strong>的权限，也可以直接将生成的镜像push到docker仓库，然后在另一台主机上pull镜像并运行为容器即可。</strong></p>
+<h2 id="3docker-commit-原理">3.docker commit 原理<a hidden class="anchor" aria-hidden="true" href="#3docker-commit-原理">#</a></h2>
+<p>基于layer的概念，每次commit都是基于前面的镜像进行构建， 因此会越来越大（就算删除容器内的环境也不会变小）</p>
+<p><a href="https://blog.csdn.net/weixin_41790086/article/details/102932185">https://blog.csdn.net/weixin_41790086/article/details/102932185</a></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272346570.png" alt="image-20230727234607530"  />
+</p>
+<blockquote>
+<p><strong>Union FS</strong></p>
+<p><a href="https://www.jianshu.com/p/3ba255463047">https://www.jianshu.com/p/3ba255463047</a></p>
+<p><a href="https://coolshell.cn/articles/17061.html">https://coolshell.cn/articles/17061.html</a></p>
+</blockquote>
+<h3 id="示例">示例<a hidden class="anchor" aria-hidden="true" href="#示例">#</a></h3>
+<p>test6:1.0 是基于基础镜像commit生成的镜像</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272346854.png" alt="image-20230727234628806"  />
+</p>
+<p>test7:1.0 是基于test6:1.0镜像commit生成的镜像，可以发现查看image history的时候 包含了基础镜像（59149c73a68c）以及test6:1.0镜像（d189c372fc80）</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272346936.png" alt="image-20230727234637891"  />
+</p>
+<p>我在test6:1.0镜像中，先pip install Pillow，生成test7:1.0 镜像大小增加2mb，接着我在test6:1.0中删除Pillow， commit生成test7:1.0，镜像大小还是比原来多出2mb，所以在容器中进行的任何操作，只会增加镜像大小，而不会使镜像减小</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272346540.png" alt="image-20230727234646506"  />
+</p>
+<h2 id="4docker-exportimport">4.docker export/import<a hidden class="anchor" aria-hidden="true" href="#4docker-exportimport">#</a></h2>
+<p><strong>启动export与import命令导出导入的镜像必须加/bin/bash或者其他/bin/sh，否则会报错。</strong></p>
+<p><code>docker: Error response from daemon: No command specified.</code></p>
+<p><strong>解决方法：</strong></p>
+<p>使用 docker ps -a &ndash;no-trunc 查看启动容器需要的命令</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272347627.png" alt="image-20230727234704587"  />
+</p>
+<p>在run的时候加上上述红框内的命令，注意不要带上双引号，不然会报错：<code>no such file or directory: unknown</code></p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272347604.png" alt="image-20230727234720580"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272347768.png" alt="image-20230727234724745"  />
+</p>
+<p>报错：</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272347950.png" alt="image-20230727234733925"  />
+</p>
+<h2 id="5docker-commit-和-export-到底export可以缩小多少">5.docker commit 和 export 到底export可以缩小多少<a hidden class="anchor" aria-hidden="true" href="#5docker-commit-和-export-到底export可以缩小多少">#</a></h2>
+<p>基于多个镜像 迭代的</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272347363.png" alt="image-20230727234749335"  />
+</p>
+<p>commit 方式是基于前面的镜像继续往上加 ，删除前面镜像安装的包的话再commit不能缩小镜像大小</p>
+<p><strong>export 是基于当前镜像的，删除前面镜像安装的包再export 生成的tar会缩小</strong></p>
+<p><strong>参考链接</strong></p>
+<blockquote>
+<p><a href="https://blog.csdn.net/weixin_43220532/article/details/123848167">https://blog.csdn.net/weixin_43220532/article/details/123848167</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/457356842">https://zhuanlan.zhihu.com/p/457356842</a></p>
+<p><a href="https://blog.csdn.net/u011195077/article/details/108148824">https://blog.csdn.net/u011195077/article/details/108148824</a></p>
+<p><a href="https://github.com/goldmann/docker-squash">https://github.com/goldmann/docker-squash</a></p>
+</blockquote>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/note/linux%E6%89%8B%E5%86%8C/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Linux手册</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/note/springboot-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>Springboot 项目搭建</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>开篇 | Binb&#39;s Blog</title>
+<meta name="keywords" content="设计模式">
+<meta name="description" content="写在前面 这个专栏记录学习设计模式的一些笔记，相关代码在GitHub上 面向对象基础 字段和属性 变量私有的叫字段，公有的是属性，那么对于方法而言，">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/basic/pattern/%E5%BC%80%E7%AF%87/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="开篇" />
+<meta property="og:description" content="写在前面 这个专栏记录学习设计模式的一些笔记，相关代码在GitHub上 面向对象基础 字段和属性 变量私有的叫字段，公有的是属性，那么对于方法而言，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/basic/pattern/%E5%BC%80%E7%AF%87/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-09-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-09-14T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="开篇"/>
+<meta name="twitter:description" content="写在前面 这个专栏记录学习设计模式的一些笔记，相关代码在GitHub上 面向对象基础 字段和属性 变量私有的叫字段，公有的是属性，那么对于方法而言，"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📕 计算机基础",
+      "item": "https://chance7bin.github.io/posts/basic/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "设计模式",
+      "item": "https://chance7bin.github.io/posts/basic/pattern/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "开篇",
+      "item": "https://chance7bin.github.io/posts/basic/pattern/%E5%BC%80%E7%AF%87/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "开篇",
+  "name": "开篇",
+  "description": "写在前面 这个专栏记录学习设计模式的一些笔记，相关代码在GitHub上 面向对象基础 字段和属性 变量私有的叫字段，公有的是属性，那么对于方法而言，",
+  "keywords": [
+    "设计模式"
+  ],
+  "articleBody": "写在前面 这个专栏记录学习设计模式的一些笔记，相关代码在GitHub上\n面向对象基础 字段和属性 变量私有的叫字段，公有的是属性，那么对于方法而言，同样也就有私有方法和公有方法了，一般无需要对外界公开的方法都应该设置其修饰符为 private（私有）。这才有利于”封装“\n继承的使用场景 对象的继承代表了一种”is-a“的关系，如果两个对象A和B，可以描述为”B是A“，则表明B可以继承A。”猫是哺乳动物“，就说明了猫与哺乳动物之间继承与被继承的关系。\n抽象类和接口的区别 从表象上来说，抽象类可以给出一些成员的实现，接口却不包含成员的实现，抽象类的抽象成员可被子类部分实现，接口的成员需要实现类完全实现，一个类只能继承一个抽象类，但可实现多个接口等等。但这些都是从两者的形态上去区分的。还有三点是能帮助我们去区分抽象类和接口的。\n**第一，类是对对象的抽象；抽象类是对类的抽象；接口是对行为的抽象。**接口是对类的局部（行为）进行的抽象，而抽象类是对类整体（字段、属性、方法〉的抽象。如果只关注行为抽象，那么也可以认为接口就是抽象类。总之，不论是接口、抽象类、类甚至对象，都是在不同层次、不同角度进行抽象的结果，它们的共性就是抽象。\n第二，如果行为跨越不同类的对象，可使用接口；对于一些相似的类对象，用继承抽象类。\n**第三，从设计角度讲，抽象类是从子类中发现了公共的东西，泛化出父类，然后子类继承父类，而接口是根本不知子类的存在，方法如何实现还不确认，预先定义。**这里说明的是抽象类和接口设计的思维过程。先是有一个Cat类，然后再有一个 Dog类，观察后发现它们有类似之处，于是泛化出 Animal类，通过重构改善既有代码的设计。\nArrayList 可以根据使用大小按需动态增加，不用受事先设置其大小的控制。可以随意地添加、插入或移除某一范围元素，比数组方便。但是，ArrayList不是类型安全的。\nArrayList对于存放值类型的数据，比如 int、string型或者结构struct 的数据，用ArrayList就意味着都需要将值类型装箱为Object对象，使用集合元素时，还需要执行拆箱操作，这就带来了很大的性能损耗。\n装箱是把值类型打包到Objeet 引用类型的一个实例中，比如整型变量i被“装箱”并赋值给对象o。\n1 2 int i = 123; object o = (object) i; //boxing 拆箱是指从对象中提取值类型。此例中对象o拆箱并将其赋值给整型变量i\n1 2 o = 123; i = (int) o; //unboxing 相对于简单的赋值而言，装箱和拆箱过程需要进行大量的计算。对值类型进行装箱时，必须分配并构造一个全新的对象。其次，拆箱所需的强制转换也需要进行大量的计算。而 ArrayList集合在使用值类型数据时，其实就是在不断地做装箱和拆箱的工作。\n泛型 泛型是具有占位符（类型参数〉的类、结构、接口和方法，这些占位符是类、结构、接口和方法所存储或使用的一个或多个类型的占位符。泛型集合类可以将类型参数用作它所存储的对象的类型的占位符；类型参数作为其字段的类型和其方法的参数类型出现。\n通常情况下，都建议使用泛型集合，因为这样可以获得类型安全的直接优点而不需要从基集合类型派生并实现类型特定的成员。此外，如果集合元素为值类型，泛型集合类型的性能通常优于对应的非泛型集合类型(并优于从非泛型基集合类型派生的类型)，因为使用泛型时不必对元素进行装箱。\n委托与事件 委托是对函数的封装，可以当作给方法的特征指定一个名称。而事件则是委托的一种特殊形式，当发生有意义的事情时，事件对象处理通知过程。\n委托是一种引用方法的类型。一旦为委托分配了方法，委托将与该方法具有完全相同的行为。\nJava实现：\nUML类图 类 ”动物“矩形框，它就代表一个类（Class）。类图分三层，第一层显示类的名称，如果是抽象类，则就用斜体显示。第二层是类的特性，通常就是字段和属性。第三层是类的操作，通常是方法或行为。‘+’表示public，‘-’表示private，‘#’表示protected。\n接口 继承 继承关系用空心三角形+实线来表示\n实现接口 实现接口用空心三角形+虚线来表示\n关联 当一个类”知道“另一个类时，可以用关联(association)。关联关系用实线箭头来表示。\n聚合 聚合（Aggregation）表示一种弱的”拥有\"关系，体现的是A对象可以包含B对象，但B对象不是A对象的一部分。聚合关系用空心的菱形+实线箭头来表示。\n合成 合成（Composition，也有翻译成“组合”的）是一种强的“拥有”关系，体现了严格的部分和整体的关系，部分和整体的生命周期一样。在这里鸟和其翅膀就是合成（组合）关系，因为它们是部分和整体的关系，并且翅膀和鸟的生命周期是相同的。合成关系用实心的菱形+实线箭头来表示。另外，合成关系的连线两端还有一个数字”1“和数字”2“，这被称为基数。表明这一端的类可以有几个实例，很显然，一个鸟应该有两只翅膀。如果一个类可能有无数个实例，则就用”n“来表示。关联关系、聚合关系也可以有基数的。\n依赖关系 动物几大特征，比如有新陈代谢，能繁殖。而动物要有生命力，需要氧气、水以及食物等。也就是说，动物依赖于氧气和水。他们之间是依赖关系（Dependency），用虚线箭头来表示。\n设计模式分类 创建型模式 工厂方法\n抽象工厂\n生成器（亦称建造者模式）\n原型\n单例\n结构型模式 适配器\n桥接\n组合\n装饰\n外观\n享元\n代理\n行为模式 责任链\n命令\n迭代器\n中介者\n备忘录\n观察者\n状态\n策略\n模板方法\n访问者\n",
+  "wordCount" : "2199",
+  "inLanguage": "zh",
+  "datePublished": "2021-09-14T00:00:00Z",
+  "dateModified": "2021-09-14T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/basic/pattern/%E5%BC%80%E7%AF%87/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/">📕 计算机基础</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/pattern/">设计模式</a></div>
+    <h1 class="post-title">
+      开篇
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2021-09-14
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>2199字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>5分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="color: var(--secondary)!important;">设计模式</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e5%86%99%e5%9c%a8%e5%89%8d%e9%9d%a2" aria-label="写在前面">写在前面</a><ul>
+                            
+                    <li>
+                        <a href="#%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e5%9f%ba%e7%a1%80" aria-label="面向对象基础">面向对象基础</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%ad%97%e6%ae%b5%e5%92%8c%e5%b1%9e%e6%80%a7" aria-label="字段和属性">字段和属性</a></li>
+                    <li>
+                        <a href="#%e7%bb%a7%e6%89%bf%e7%9a%84%e4%bd%bf%e7%94%a8%e5%9c%ba%e6%99%af" aria-label="继承的使用场景">继承的使用场景</a></li>
+                    <li>
+                        <a href="#%e6%8a%bd%e8%b1%a1%e7%b1%bb%e5%92%8c%e6%8e%a5%e5%8f%a3%e7%9a%84%e5%8c%ba%e5%88%ab" aria-label="抽象类和接口的区别">抽象类和接口的区别</a></li>
+                    <li>
+                        <a href="#arraylist" aria-label="ArrayList">ArrayList</a></li>
+                    <li>
+                        <a href="#%e6%b3%9b%e5%9e%8b" aria-label="泛型">泛型</a></li>
+                    <li>
+                        <a href="#%e5%a7%94%e6%89%98%e4%b8%8e%e4%ba%8b%e4%bb%b6" aria-label="委托与事件">委托与事件</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#uml%e7%b1%bb%e5%9b%be" aria-label="UML类图">UML类图</a><ul>
+                            
+                    <li>
+                        <a href="#%e7%b1%bb" aria-label="类">类</a></li>
+                    <li>
+                        <a href="#%e6%8e%a5%e5%8f%a3" aria-label="接口">接口</a></li>
+                    <li>
+                        <a href="#%e7%bb%a7%e6%89%bf" aria-label="继承">继承</a></li>
+                    <li>
+                        <a href="#%e5%ae%9e%e7%8e%b0%e6%8e%a5%e5%8f%a3" aria-label="实现接口">实现接口</a></li>
+                    <li>
+                        <a href="#%e5%85%b3%e8%81%94" aria-label="关联">关联</a></li>
+                    <li>
+                        <a href="#%e8%81%9a%e5%90%88" aria-label="聚合">聚合</a></li>
+                    <li>
+                        <a href="#%e5%90%88%e6%88%90" aria-label="合成">合成</a></li>
+                    <li>
+                        <a href="#%e4%be%9d%e8%b5%96%e5%85%b3%e7%b3%bb" aria-label="依赖关系">依赖关系</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f%e5%88%86%e7%b1%bb" aria-label="设计模式分类">设计模式分类</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%88%9b%e5%bb%ba%e5%9e%8b%e6%a8%a1%e5%bc%8f" aria-label="创建型模式">创建型模式</a></li>
+                    <li>
+                        <a href="#%e7%bb%93%e6%9e%84%e5%9e%8b%e6%a8%a1%e5%bc%8f" aria-label="结构型模式">结构型模式</a></li>
+                    <li>
+                        <a href="#%e8%a1%8c%e4%b8%ba%e6%a8%a1%e5%bc%8f" aria-label="行为模式">行为模式</a>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><h2 id="写在前面">写在前面<a hidden class="anchor" aria-hidden="true" href="#写在前面">#</a></h2>
+<blockquote>
+<p>这个专栏记录学习设计模式的一些笔记，相关代码在<a href="https://github.com/chance7bin/DesignPatterns">GitHub</a>上</p>
+</blockquote>
+<h3 id="面向对象基础">面向对象基础<a hidden class="anchor" aria-hidden="true" href="#面向对象基础">#</a></h3>
+<h4 id="字段和属性">字段和属性<a hidden class="anchor" aria-hidden="true" href="#字段和属性">#</a></h4>
+<p>变量私有的叫字段，公有的是属性，那么对于方法而言，同样也就有私有方法和公有方法了，一般无需要对外界公开的方法都应该设置其修饰符为 private（私有）。这才有利于”封装“</p>
+<h4 id="继承的使用场景">继承的使用场景<a hidden class="anchor" aria-hidden="true" href="#继承的使用场景">#</a></h4>
+<p>对象的继承代表了一种”is-a“的关系，如果两个对象A和B，可以描述为”B是A“，则表明B可以继承A。”猫是哺乳动物“，就说明了猫与哺乳动物之间继承与被继承的关系。</p>
+<h4 id="抽象类和接口的区别">抽象类和接口的区别<a hidden class="anchor" aria-hidden="true" href="#抽象类和接口的区别">#</a></h4>
+<p>从表象上来说，抽象类可以给出一些成员的实现，接口却不包含成员的实现，<strong>抽象类的抽象成员可被子类部分实现，接口的成员需要实现类完全实现，一个类只能继承一个抽象类，但可实现多个接口等等</strong>。但这些都是从两者的形态上去区分的。还有三点是能帮助我们去区分抽象类和接口的。</p>
+<p>**第一，类是对对象的抽象；抽象类是对类的抽象；接口是对行为的抽象。**接口是对类的局部（行为）进行的抽象，而抽象类是对类整体（字段、属性、方法〉的抽象。如果只关注行为抽象，那么也可以认为接口就是抽象类。总之，不论是接口、抽象类、类甚至对象，都是在不同层次、不同角度进行抽象的结果，它们的共性就是抽象。</p>
+<p><strong>第二，如果行为跨越不同类的对象，可使用接口；对于一些相似的类对象，用继承抽象类。</strong></p>
+<p>**第三，从设计角度讲，抽象类是从子类中发现了公共的东西，泛化出父类，然后子类继承父类，而接口是根本不知子类的存在，方法如何实现还不确认，预先定义。**这里说明的是抽象类和接口设计的思维过程。先是有一个Cat类，然后再有一个 Dog类，观察后发现它们有类似之处，于是泛化出 Animal类，<strong>通过重构改善既有代码的设计</strong>。</p>
+<h4 id="arraylist">ArrayList<a hidden class="anchor" aria-hidden="true" href="#arraylist">#</a></h4>
+<p>可以根据使用大小按需动态增加，不用受事先设置其大小的控制。可以随意地添加、插入或移除某一范围元素，比数组方便。但是，ArrayList不是类型安全的。</p>
+<p>ArrayList对于存放值类型的数据，比如 int、string型或者结构struct 的数据，用ArrayList就意味着都需要将值类型装箱为Object对象，使用集合元素时，还需要执行拆箱操作，这就带来了很大的性能损耗。</p>
+<p><strong>装箱</strong>是把值类型打包到Objeet 引用类型的一个实例中，比如整型变量i被“装箱”并赋值给对象o。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">123</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">object</span> <span class="n">o</span> <span class="o">=</span> <span class="o">(</span><span class="n">object</span><span class="o">)</span> <span class="n">i</span><span class="o">;</span> <span class="c1">//boxing
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>拆箱</strong>是指从对象中提取值类型。此例中对象o拆箱并将其赋值给整型变量i</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">o</span> <span class="o">=</span> <span class="mi">123</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">i</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">o</span><span class="o">;</span> <span class="c1">//unboxing
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>相对于简单的赋值而言，装箱和拆箱过程需要进行大量的计算。对值类型进行装箱时，必须分配并构造一个全新的对象。其次，拆箱所需的强制转换也需要进行大量的计算。而 ArrayList集合在使用值类型数据时，其实就是在不断地做装箱和拆箱的工作。</p>
+<h4 id="泛型">泛型<a hidden class="anchor" aria-hidden="true" href="#泛型">#</a></h4>
+<p>泛型是具有占位符（类型参数〉的类、结构、接口和方法，这些占位符是类、结构、接口和方法所存储或使用的一个或多个类型的占位符。泛型集合类可以将类型参数用作它所存储的对象的类型的占位符；类型参数作为其字段的类型和其方法的参数类型出现。</p>
+<p>通常情况下，都建议使用泛型集合，因为这样可以获得类型安全的直接优点而不需要从基集合类型派生并实现类型特定的成员。此外，如果集合元素为值类型，泛型集合类型的性能通常优于对应的非泛型集合类型(并优于从非泛型基集合类型派生的类型)，因为使用泛型时不必对元素进行装箱。</p>
+<h4 id="委托与事件">委托与事件<a hidden class="anchor" aria-hidden="true" href="#委托与事件">#</a></h4>
+<p>委托是对函数的封装，可以当作给方法的特征指定一个名称。而事件则是委托的一种特殊形式，当发生有意义的事情时，事件对象处理通知过程。</p>
+<p>委托是一种引用方法的类型。一旦为委托分配了方法，委托将与该方法具有完全相同的行为。</p>
+<p>Java实现：</p>
+<h3 id="uml类图">UML类图<a hidden class="anchor" aria-hidden="true" href="#uml类图">#</a></h3>
+<h4 id="类">类<a hidden class="anchor" aria-hidden="true" href="#类">#</a></h4>
+<p>”动物“矩形框，它就代表一个类（Class）。类图分三层，第一层显示类的名称，如果是抽象类，则就用斜体显示。第二层是类的特性，通常就是字段和属性。第三层是类的操作，通常是方法或行为。‘+’表示public，‘-’表示private，‘#’表示protected。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330447.png" alt="image-20210818143456545"  />
+</p>
+<h4 id="接口">接口<a hidden class="anchor" aria-hidden="true" href="#接口">#</a></h4>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330493.png" alt="image-20210818143711601"  />
+</p>
+<h4 id="继承">继承<a hidden class="anchor" aria-hidden="true" href="#继承">#</a></h4>
+<p>继承关系用空心三角形+实线来表示</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330492.png" alt="image-20210818143819609"  />
+</p>
+<h4 id="实现接口">实现接口<a hidden class="anchor" aria-hidden="true" href="#实现接口">#</a></h4>
+<p>实现接口用空心三角形+虚线来表示</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330475.png" alt="image-20210818143927965"  />
+</p>
+<h4 id="关联">关联<a hidden class="anchor" aria-hidden="true" href="#关联">#</a></h4>
+<p>当一个类”知道“另一个类时，可以用关联(association)。关联关系用实线箭头来表示。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330508.png" alt="image-20210818144208128"  />
+</p>
+<h4 id="聚合">聚合<a hidden class="anchor" aria-hidden="true" href="#聚合">#</a></h4>
+<p>聚合（Aggregation）表示一种弱的”拥有&quot;关系，体现的是A对象可以包含B对象，但B对象不是A对象的一部分。聚合关系用空心的菱形+实线箭头来表示。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330507.png" alt="image-20210818144339999"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330144.png" alt="image-20210818144348634"  />
+</p>
+<h4 id="合成">合成<a hidden class="anchor" aria-hidden="true" href="#合成">#</a></h4>
+<p>合成（Composition，也有翻译成“组合”的）是一种强的“拥有”关系，体现了严格的部分和整体的关系，部分和整体的生命周期一样。在这里鸟和其翅膀就是合成（组合）关系，因为它们是部分和整体的关系，并且翅膀和鸟的生命周期是相同的。合成关系用实心的菱形+实线箭头来表示。另外，合成关系的连线两端还有一个数字”1“和数字”2“，这被称为基数。表明这一端的类可以有几个实例，很显然，一个鸟应该有两只翅膀。如果一个类可能有无数个实例，则就用”n“来表示。关联关系、聚合关系也可以有基数的。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330182.png" alt="image-20210818144744450"  />
+</p>
+<h4 id="依赖关系">依赖关系<a hidden class="anchor" aria-hidden="true" href="#依赖关系">#</a></h4>
+<p>动物几大特征，比如有新陈代谢，能繁殖。而动物要有生命力，需要氧气、水以及食物等。也就是说，动物依赖于氧气和水。他们之间是依赖关系（Dependency），用虚线箭头来表示。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330220.png" alt="image-20210818144819859"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307282330323.png" alt="image-20210818144827964"  />
+</p>
+<h3 id="设计模式分类">设计模式分类<a hidden class="anchor" aria-hidden="true" href="#设计模式分类">#</a></h3>
+<h4 id="创建型模式">创建型模式<a hidden class="anchor" aria-hidden="true" href="#创建型模式">#</a></h4>
+<p><a href="#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E5%99%A8"><strong>工厂方法</strong></a></p>
+<p><a href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93"><strong>抽象工厂</strong></a></p>
+<p><a href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%88%9B%E5%BB%BA%E5%B0%8F%E4%BA%BA"><strong>生成器（亦称建造者模式）</strong></a></p>
+<p><a href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%AE%80%E5%8E%86%E5%A4%8D%E5%8D%B0"><strong>原型</strong></a></p>
+<p><a href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%94%9F%E5%A8%83"><strong>单例</strong></a></p>
+<h4 id="结构型模式">结构型模式<a hidden class="anchor" aria-hidden="true" href="#结构型模式">#</a></h4>
+<p><a href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%BF%BB%E8%AF%91%E3%80%81DataAdapter"><strong>适配器</strong></a></p>
+<p><a href="#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%89%8B%E6%9C%BA%E8%BD%AF%E4%BB%B6%E7%BB%9F%E4%B8%80"><strong>桥接</strong></a></p>
+<p><a href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%80%BB%E5%85%AC%E5%8F%B8-%E5%88%86%E5%85%AC%E5%8F%B8-%E9%83%A8%E9%97%A8"><strong>组合</strong></a></p>
+<p><a href="#%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%A9%BF%E6%90%AD"><strong>装饰</strong></a></p>
+<p><a href="#%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E4%B9%B0%E8%82%A1%E7%A5%A8%E5%88%B0%E4%B9%B0%E5%9F%BA%E9%87%91"><strong>外观</strong></a></p>
+<p><a href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%A4%96%E5%8C%85"><strong>享元</strong></a></p>
+<p><a href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E9%80%81%E8%8A%B1"><strong>代理</strong></a></p>
+<h4 id="行为模式">行为模式<a hidden class="anchor" aria-hidden="true" href="#行为模式">#</a></h4>
+<p><a href="#%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%8A%A0%E8%96%AA"><strong>责任链</strong></a></p>
+<p><a href="#%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%82%B9%E8%8F%9C"><strong>命令</strong></a></p>
+<p><a href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%A3%80%E7%A5%A8"><strong>迭代器</strong></a></p>
+<p><a href="#%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E8%81%94%E5%90%88%E5%9B%BD"><strong>中介者</strong></a></p>
+<p><a href="#%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%AD%98%E8%BF%9B%E5%BA%A6"><strong>备忘录</strong></a></p>
+<p><a href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94BOSS%E6%9D%A5%E4%BA%86"><strong>观察者</strong></a></p>
+<p><a href="#%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%A4%9A%E5%88%86%E6%94%AF%E5%88%A4%E6%96%AD"><strong>状态</strong></a></p>
+<p><a href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%95%86%E5%9C%BA%E4%BF%83%E9%94%80"><strong>策略</strong></a></p>
+<p><a href="#%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%AD%94%E9%A2%98%E6%A8%A1%E6%9D%BF"><strong>模板方法</strong></a></p>
+<p><a href="#%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%94%B7%E5%A5%B3%E5%AF%B9%E6%AF%94"><strong>访问者</strong></a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>docker 安装nominatim</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/basic/pattern/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>创建型模式</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

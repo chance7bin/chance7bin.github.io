@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>osm on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/osm/</link>
+    <description>Recent content in osm on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 10 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/osm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>docker 安装nominatim</title>
+      <link>https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/</link>
+      <pubDate>Thu, 10 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/</guid>
+      <description>引言 Nominatim是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。 写</description>
+    </item>
+    
+  </channel>
+</rss>

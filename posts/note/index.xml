@@ -8,6 +8,15 @@
     <language>zh-cn</language>
     <lastBuildDate>Mon, 17 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/posts/note/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>docker 安装nominatim</title>
+      <link>https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/</link>
+      <pubDate>Thu, 10 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/</guid>
+      <description>引言 Nominatim是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。 写</description>
+    </item>
+    
+    <item>
       <title>虚拟机网络——vmware&amp;docker</title>
       <link>https://chance7bin.github.io/posts/note/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9Cvmwaredocker/</link>
       <pubDate>Mon, 17 Jul 2023 00:00:00 +0000</pubDate>
@@ -59,6 +68,15 @@
       
       <guid>https://chance7bin.github.io/posts/note/linux%E6%89%8B%E5%86%8C/</guid>
       <description>Ubuntu apt换国内源 https://blog.csdn.net/RadiantJeral/article/details/104184351 https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/ 打开终端输入命令下载vim工具 1 sudo apt-get install vim 1.备份 /etc/apt/sources.list 1 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak 2.编辑 /etc/apt/sources.list 打开 /etc/apt/sources.list： 1</description>
+    </item>
+    
+    <item>
+      <title>docker commit&amp;export</title>
+      <link>https://chance7bin.github.io/posts/note/docker-commitexport/</link>
+      <pubDate>Fri, 09 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/note/docker-commitexport/</guid>
+      <description>1.使用docker commit 就算不进行任何操作，只要是commit两次生成的tar的md5都是不相等的 1 2 file1:367fc7b1e2ca4d416290c6b5b68e5283 file2:437eb32a507c44e781e36e18c3100f23 2.docker save/load 与 docker export/import https://www.cnblogs.com/Cherry-Linux/p/8025777.html https://cloud.tencent.com/developer/article/2027894 export export与imp</description>
     </item>
     
     <item>

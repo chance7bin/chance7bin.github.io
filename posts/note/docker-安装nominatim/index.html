@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>docker 安装nominatim | Binb&#39;s Blog</title>
+<meta name="keywords" content="docker, osm">
+<meta name="description" content="引言 Nominatim是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。 写">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="docker 安装nominatim" />
+<meta property="og:description" content="引言 Nominatim是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。 写" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-11-10T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="docker 安装nominatim"/>
+<meta name="twitter:description" content="引言 Nominatim是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。 写"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻 我的笔记",
+      "item": "https://chance7bin.github.io/posts/note/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "docker 安装nominatim",
+      "item": "https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "docker 安装nominatim",
+  "name": "docker 安装nominatim",
+  "description": "引言 Nominatim是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。 写",
+  "keywords": [
+    "docker", "osm"
+  ],
+  "articleBody": "引言 Nominatim是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。\n写本篇文章的原因是在通过Docker配置Nominatim时，遇到了一些困难，无法使用，所以就只好自己配置一遍/(ㄒoㄒ)/~~\n写在前面：是由于官方提供的docker镜像启动时连接外网下载数据，下载的数据是外网的，所以下载不下来，导致容器无法使用，如何修改直接往后看=》\n参考链接\nhttps://blog.csdn.net/xff1994/article/details/79707720\nhttps://blog.csdn.net/vatrenoludilo/article/details/125003804\nhttps://nominatim.org/release-docs/latest/appendix/Install-on-Ubuntu-20/\npbf数据下载地址：http://download.openstreetmap.fr/extracts/asia\n基于Ubuntu 1.ubuntu换源 https://zhuanlan.zhihu.com/p/142014944\nUbuntu系统中，软件源文件地址为：/etc/apt/sources.list\n1.备份原来的源，将以前的源备份一下，以防以后可以用的。\nsudo cp /etc/apt/sources.list /etc/apt/sources.list.bak\n2.打开/etc/apt/sources.list文件，删除所有 ggdG ，并保存。\nsudo vim /etc/apt/sources.list（可将vim更换为自己熟悉的编辑器）\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 #添加阿里源 deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse #添加清华源 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse multiverse 3.更新\n更新源\n1 sudo apt-get update 如出现依赖问题，解决方式如下：\n1 sudo apt-get -f install 更新软件：\n1 sudo apt-get upgrade 2.解决中文乱码 https://www.jianshu.com/p/5fc84838f816\n查看当前系统语言\n1 $ echo $LANG 查看系统安装的语言包\n1 2 3 4 5 6 $ locale -a C C.UTF-8 POSIX $ sudo dpkg -l | grep language-pack-zh-hans 如果没有中文语言包，需要安装\n1 $ sudo apt-get install language-pack-zh-hans 安装成功后，确认是否安装成功\n1 2 3 4 5 6 7 8 9 10 $ locale -a C C.UTF-8 POSIX zh_CN.utf8 zh_SG.utf8 $ sudo dpkg -l | grep language-pack-zh-hans ii language-pack-zh-hans 1:20.04+20210802 all translation updates for language Simplified Chinese ii language-pack-zh-hans-base 1:20.04+20210802 all translations for language Simplified Chinese 设置系统语言环境\n1 2 3 4 5 6 7 // export 的方式只对当前终端生效 $ export LANG=\"zh_CN.UTF-8\" // /etc/profile 文件中添加export LANG=\"zh_CN.UTF-8\" 对所有用户生效 $ vim /etc/profile // 使配置生效 $ source /etc/profile 3.docker中无法输入中文\ndocker exec -it nominatim_docker env LANG=C.UTF-8 /bin/bash\n永久在docker中输入中文\n在Dockerfile中添加一行，如下所示：\nENV LANG C.UTF-8\n4.安装必要软件 1 2 3 4 5 6 7 8 9 sudo apt install -y php-cgi sudo apt install -y build-essential cmake g++ libboost-dev libboost-system-dev \\ libboost-filesystem-dev libexpat1-dev zlib1g-dev \\ libbz2-dev libpq-dev \\ postgresql-12-postgis-3 \\ postgresql-contrib-12 postgresql-12-postgis-3-scripts \\ php-cli php-pgsql php-intl libicu-dev python3-dotenv \\ python3-psycopg2 python3-psutil python3-jinja2 \\ python3-icu python3-datrie python3-yaml 安装systemctl\napt-get install systemctl\n5.创建Nominatim专用用户 1 2 3 4 5 6 7 8 9 // To create the user and directory run sudo useradd -d /srv/nominatim -s /bin/bash -m nominatim // To be able to copy and paste instructions from this manual, export user name and home directory now like this: export USERNAME=nominatim export USERHOME=/srv/nominatim // Make sure that system servers can read from the home directory: chmod a+x $USERHOME 6.设置PostgreSQL 修改配置文件的地方在 /etc/postgresql/12/main/postgresql.conf\n对于初次导入，需要设置\n1 2 fsync = off full_page_writes = off 开启postgresql\n1 2 3 4 5 6 7 8 9 10 11 12 root@d505aab0a27b:/var/run/postgresql# service postgresql status 12/main (port 5432): down root@d505aab0a27b:/var/run/postgresql# systemctl postgresql status ERROR:systemctl:Unknown operation postgresql. root@d505aab0a27b:/var/run/postgresql# service postgresql start * Starting PostgreSQL 12 database server [ OK ] root@d505aab0a27b:/var/run/postgresql# service postgresql status 12/main (port 5432): online root@d505aab0a27b:/var/run/postgresql# systemctl status postgresql postgresql.service - PostgreSQL RDBMS Loaded: loaded (/usr/lib/systemd/system/postgresql.service, enabled) Active: active (running) 初次导入后记得重新打开。设置完成后重启postgresql：\n1 sudo systemctl restart postgresql 创建两个postgresql用户(一个导入数据，一个用于webserver的只读用户):\n1 2 3 4 5 6 root@d505aab0a27b:/var/run/postgresql# su postgres postgres@d505aab0a27b:/var/run/postgresql$ createuser -s $USERNAME postgres@d505aab0a27b:/var/run/postgresql$ createuser www-data postgres@d505aab0a27b:/var/run/postgresql$ exit exit root@d505aab0a27b:/var/run/postgresql# 7.安装Nominatim 1 2 3 4 5 6 7 8 9 10 apt-get install -y wget cd $USERHOME wget https://nominatim.org/release/Nominatim-4.1.0.tar.bz2 tar xf Nominatim-4.1.0.tar.bz2 wget -O data/country_osm_grid.sql.gz https://www.nominatim.org/data/country_grid.sql.gz mkdir $USERHOME/build cd $USERHOME/build cmake $USERHOME/Nominatim-4.1.0 make sudo make install 8.导入数据 创建文件夹作为工作目录\n1 2 3 mkdir $USERHOME/nominatim-project mkdir $USERHOME/nominatim-project/website export PROJECT_DIR=$USERHOME/nominatim-project 导入过程会使用该文件夹\n在 PROJECT_DIR 导入数据\n导入数据库前要给文件夹赋予权限\n1 chmod -R a+x nominatim-project/ 1 su $USERNAME -c \"nominatim import --osm-file beijing.osm.pbf --offline 2\u003e\u00261 | tee setup.log\" 注意：需加 offline 参数，不加的话在导入的时候会请求外网链接导致数据导入失败\n在将pbf数据导入到数据库时出现如下错误\n2022-11-10 21:07:22: Post-process tables 2022-11-10 21:07:28: Create search index for default country names. 2022-11-10 21:07:29: Recompute word counts 2022-11-10 21:07:31: Setup website at /srv/nominatim/nominatim-project/data/website 2022-11-10 21:07:32: Failed to load URL: https://www.openstreetmap.org/api/0.6/node/10169283021/1 2022-11-10 21:07:32: Cannot determine date of database: 如果操作错误，一次没有导入成功，再次导入时记得先删除数据库再导入：\n1 su $USERNAME -c \"dropdb nominatim \" 9.测试是否安装成功 1 2 nominatim admin --check-database nominatim serve 测试\n1 2 3 4 5 root@d505aab0a27b:/# curl http://localhost:8088/status.php OK root@d505aab0a27b:/# curl http://localhost:8088/search.php?q=tiananmen [{\"place_id\":281751,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"relation\",\"osm_id\":941596,\"boundingbox\":[\"39.8988884\",\"39.9058312\",\"116.3896532\",\"116.3932766\"],\"lat\":\"39.90272175\",\"lon\":\"116.39144087676334\",\"display_name\":\"天安门广场, 东城区, 北京市, 100010, 中国\",\"place_rank\":25,\"category\":\"place\",\"type\":\"square\",\"importance\":0.125},{\"place_id\":114335,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"node\",\"osm_id\":5211002739,\"boundingbox\":[\"39.9055272\",\"39.9056272\",\"116.3912549\",\"116.3913549\"],\"lat\":\"39.9055772\",\"lon\":\"116.3913049\",\"display_name\":\"天安门广场旗杆, 西长安街, 西长安街街道, 东城区, 北京市, 100010, 中国\",\"place_rank\":30,\"category\":\"man_made\",\"type\":\"flagpole\",\"importance\":0.0001}] 10.设置web服务器 1 sudo apt install -y apache2 libapache2-mod-php 1 2 3 4 5 6 7 8 9 10 sudo tee /etc/apache2/conf-available/nominatim.conf \u003c\u003c EOFAPACHECONF ",
+  "wordCount" : "2921",
+  "inLanguage": "zh",
+  "datePublished": "2022-11-10T00:00:00Z",
+  "dateModified": "2022-11-10T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/note/">👨🏻‍💻 我的笔记</a></div>
+    <h1 class="post-title">
+      docker 安装nominatim
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-11-10
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>2921字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>6分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/docker/" style="color: var(--secondary)!important;">docker</a>
+                &nbsp;<a href="https://chance7bin.github.io/tags/osm/" style="color: var(--secondary)!important;">osm</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e5%bc%95%e8%a8%80" aria-label="引言">引言</a></li>
+                    <li>
+                        <a href="#%e5%9f%ba%e4%ba%8eubuntu" aria-label="基于Ubuntu">基于Ubuntu</a><ul>
+                            
+                    <li>
+                        <a href="#1ubuntu%e6%8d%a2%e6%ba%90" aria-label="1.ubuntu换源">1.ubuntu换源</a></li>
+                    <li>
+                        <a href="#2%e8%a7%a3%e5%86%b3%e4%b8%ad%e6%96%87%e4%b9%b1%e7%a0%81" aria-label="2.解决中文乱码">2.解决中文乱码</a></li>
+                    <li>
+                        <a href="#4%e5%ae%89%e8%a3%85%e5%bf%85%e8%a6%81%e8%bd%af%e4%bb%b6" aria-label="4.安装必要软件">4.安装必要软件</a></li>
+                    <li>
+                        <a href="#5%e5%88%9b%e5%bb%banominatim%e4%b8%93%e7%94%a8%e7%94%a8%e6%88%b7" aria-label="5.创建Nominatim专用用户">5.创建Nominatim专用用户</a></li>
+                    <li>
+                        <a href="#6%e8%ae%be%e7%bd%aepostgresql" aria-label="6.设置PostgreSQL">6.设置PostgreSQL</a></li>
+                    <li>
+                        <a href="#7%e5%ae%89%e8%a3%85nominatim" aria-label="7.安装Nominatim">7.安装Nominatim</a></li>
+                    <li>
+                        <a href="#8%e5%af%bc%e5%85%a5%e6%95%b0%e6%8d%ae" aria-label="8.导入数据">8.导入数据</a></li>
+                    <li>
+                        <a href="#9%e6%b5%8b%e8%af%95%e6%98%af%e5%90%a6%e5%ae%89%e8%a3%85%e6%88%90%e5%8a%9f" aria-label="9.测试是否安装成功">9.测试是否安装成功</a></li>
+                    <li>
+                        <a href="#10%e8%ae%be%e7%bd%aeweb%e6%9c%8d%e5%8a%a1%e5%99%a8" aria-label="10.设置web服务器">10.设置web服务器</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%9f%ba%e4%ba%8edocker" aria-label="基于Docker">基于Docker</a><ul>
+                            
+                    <li>
+                        <a href="#1nominatim-docker%e4%bf%ae%e6%94%b9" aria-label="1.nominatim-docker修改">1.nominatim-docker修改</a></li>
+                    <li>
+                        <a href="#2%e5%ae%b9%e5%99%a8%e4%b9%8b%e9%97%b4%e7%9a%84%e9%80%9a%e4%bf%a1" aria-label="2.容器之间的通信">2.容器之间的通信</a></li>
+                    <li>
+                        <a href="#3nominatim%e6%9f%a5%e8%af%a2api" aria-label="3.nominatim查询api">3.nominatim查询api</a>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><h1 id="引言">引言<a hidden class="anchor" aria-hidden="true" href="#引言">#</a></h1>
+<p><a href="https://github.com/osm-search/Nominatim">Nominatim</a>是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。</p>
+<p>写本篇文章的原因是在通过<a href="https://github.com/mediagis/nominatim-docker">Docker配置Nominatim</a>时，遇到了一些困难，无法使用，所以就只好自己配置一遍/(ㄒoㄒ)/~~</p>
+<p><font color='red'>写在前面：是由于官方提供的docker镜像启动时连接外网下载数据，下载的数据是外网的，所以下载不下来，导致容器无法使用，如何修改直接往后看<a href="#%C2%A0%E5%9F%BA%E4%BA%8EDocker">=》</a></font></p>
+<blockquote>
+<p><strong>参考链接</strong></p>
+<p><a href="https://blog.csdn.net/xff1994/article/details/79707720">https://blog.csdn.net/xff1994/article/details/79707720</a></p>
+<p><a href="https://blog.csdn.net/vatrenoludilo/article/details/125003804">https://blog.csdn.net/vatrenoludilo/article/details/125003804</a></p>
+<p><a href="https://nominatim.org/release-docs/latest/appendix/Install-on-Ubuntu-20/">https://nominatim.org/release-docs/latest/appendix/Install-on-Ubuntu-20/</a></p>
+<p><strong>pbf数据下载地址：</strong><a href="http://download.openstreetmap.fr/extracts/asia"><strong>http://download.openstreetmap.fr/extracts/asia</strong></a></p>
+</blockquote>
+<h1 id="基于ubuntu">基于Ubuntu<a hidden class="anchor" aria-hidden="true" href="#基于ubuntu">#</a></h1>
+<h2 id="1ubuntu换源">1.ubuntu换源<a hidden class="anchor" aria-hidden="true" href="#1ubuntu换源">#</a></h2>
+<p><a href="https://zhuanlan.zhihu.com/p/142014944">https://zhuanlan.zhihu.com/p/142014944</a></p>
+<p>Ubuntu系统中，软件源文件地址为：/etc/apt/sources.list</p>
+<p>1.备份原来的源，将以前的源备份一下，以防以后可以用的。</p>
+<p>sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak</p>
+<p>2.打开/etc/apt/sources.list文件，删除所有 ggdG ，并保存。</p>
+<p>sudo vim /etc/apt/sources.list（可将vim更换为自己熟悉的编辑器）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#添加阿里源
+</span></span><span class="line"><span class="cl">deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+</span></span><span class="line"><span class="cl">#添加清华源
+</span></span><span class="line"><span class="cl">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+</span></span><span class="line"><span class="cl"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+</span></span><span class="line"><span class="cl"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+</span></span><span class="line"><span class="cl"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+</span></span><span class="line"><span class="cl">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+</span></span><span class="line"><span class="cl"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse multiverse
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3.更新</p>
+<p>更新源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt-get update
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如出现依赖问题，解决方式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt-get -f install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>更新软件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt-get upgrade
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="2解决中文乱码">2.解决中文乱码<a hidden class="anchor" aria-hidden="true" href="#2解决中文乱码">#</a></h2>
+<p><a href="https://www.jianshu.com/p/5fc84838f816">https://www.jianshu.com/p/5fc84838f816</a></p>
+<p>查看当前系统语言</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="nv">$LANG</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看系统安装的语言包</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ locale -a 
+</span></span><span class="line"><span class="cl">C
+</span></span><span class="line"><span class="cl">C.UTF-8
+</span></span><span class="line"><span class="cl">POSIX
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sudo dpkg -l <span class="p">|</span> grep language-pack-zh-hans
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果没有中文语言包，需要安装</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ sudo apt-get install language-pack-zh-hans
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装成功后，确认是否安装成功</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ locale -a 
+</span></span><span class="line"><span class="cl">C
+</span></span><span class="line"><span class="cl">C.UTF-8
+</span></span><span class="line"><span class="cl">POSIX
+</span></span><span class="line"><span class="cl">zh_CN.utf8
+</span></span><span class="line"><span class="cl">zh_SG.utf8
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sudo dpkg -l <span class="p">|</span> grep language-pack-zh-hans
+</span></span><span class="line"><span class="cl">ii  language-pack-zh-hans           1:20.04+20210802                    all          translation updates <span class="k">for</span> language Simplified Chinese
+</span></span><span class="line"><span class="cl">ii  language-pack-zh-hans-base      1:20.04+20210802                    all          translations <span class="k">for</span> language Simplified Chinese
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置系统语言环境</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">// <span class="nb">export</span> 的方式只对当前终端生效
+</span></span><span class="line"><span class="cl">$ <span class="nb">export</span> <span class="nv">LANG</span><span class="o">=</span><span class="s2">&#34;zh_CN.UTF-8&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">//  /etc/profile 文件中添加export <span class="nv">LANG</span><span class="o">=</span><span class="s2">&#34;zh_CN.UTF-8&#34;</span> 对所有用户生效
+</span></span><span class="line"><span class="cl">$ vim /etc/profile
+</span></span><span class="line"><span class="cl">// 使配置生效
+</span></span><span class="line"><span class="cl">$ <span class="nb">source</span> /etc/profile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3.docker中无法输入中文</strong></p>
+<p><code>docker exec -it nominatim_docker env LANG=C.UTF-8 /bin/bash</code></p>
+<p><strong>永久在docker中输入中文</strong></p>
+<p>在Dockerfile中添加一行，如下所示：</p>
+<p><code>ENV LANG C.UTF-8</code></p>
+<h2 id="4安装必要软件">4.安装必要软件<a hidden class="anchor" aria-hidden="true" href="#4安装必要软件">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install -y php-cgi
+</span></span><span class="line"><span class="cl">sudo apt install -y build-essential cmake g++ libboost-dev libboost-system-dev <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>                    libboost-filesystem-dev libexpat1-dev zlib1g-dev <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>                    libbz2-dev libpq-dev <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>                    postgresql-12-postgis-3 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>                    postgresql-contrib-12 postgresql-12-postgis-3-scripts <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>                    php-cli php-pgsql php-intl libicu-dev python3-dotenv <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>                    python3-psycopg2 python3-psutil python3-jinja2 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>                    python3-icu python3-datrie python3-yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>安装systemctl</strong></p>
+<p><code>apt-get install systemctl</code></p>
+<h2 id="5创建nominatim专用用户">5.创建Nominatim专用用户<a hidden class="anchor" aria-hidden="true" href="#5创建nominatim专用用户">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">// To create the user and directory run
+</span></span><span class="line"><span class="cl">sudo useradd -d /srv/nominatim -s /bin/bash -m nominatim
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// To be able to copy and paste instructions from this manual, <span class="nb">export</span> user name and home directory now like this:
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">USERNAME</span><span class="o">=</span>nominatim
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">USERHOME</span><span class="o">=</span>/srv/nominatim
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// Make sure that system servers can <span class="nb">read</span> from the home directory:
+</span></span><span class="line"><span class="cl">chmod a+x <span class="nv">$USERHOME</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="6设置postgresql">6.设置PostgreSQL<a hidden class="anchor" aria-hidden="true" href="#6设置postgresql">#</a></h2>
+<p>修改配置文件的地方在 <code>/etc/postgresql/12/main/postgresql.conf</code></p>
+<p>对于初次导入，需要设置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">fsync</span> <span class="o">=</span> off
+</span></span><span class="line"><span class="cl"><span class="nv">full_page_writes</span> <span class="o">=</span> off
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>开启postgresql</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">root@d505aab0a27b:/var/run/postgresql# service postgresql status
+</span></span><span class="line"><span class="cl">12/main <span class="o">(</span>port 5432<span class="o">)</span>: down
+</span></span><span class="line"><span class="cl">root@d505aab0a27b:/var/run/postgresql# systemctl postgresql status
+</span></span><span class="line"><span class="cl">ERROR:systemctl:Unknown operation postgresql.
+</span></span><span class="line"><span class="cl">root@d505aab0a27b:/var/run/postgresql# service postgresql start
+</span></span><span class="line"><span class="cl"> * Starting PostgreSQL <span class="m">12</span> database server                                                                        <span class="o">[</span> OK <span class="o">]</span>
+</span></span><span class="line"><span class="cl">root@d505aab0a27b:/var/run/postgresql# service postgresql status
+</span></span><span class="line"><span class="cl">12/main <span class="o">(</span>port 5432<span class="o">)</span>: online
+</span></span><span class="line"><span class="cl">root@d505aab0a27b:/var/run/postgresql# systemctl status postgresql
+</span></span><span class="line"><span class="cl">postgresql.service - PostgreSQL RDBMS
+</span></span><span class="line"><span class="cl">    Loaded: loaded <span class="o">(</span>/usr/lib/systemd/system/postgresql.service, enabled<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    Active: active <span class="o">(</span>running<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>初次导入后记得重新打开。设置完成后重启postgresql：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl restart postgresql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>创建两个postgresql用户(一个导入数据，一个用于webserver的只读用户):</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">root@d505aab0a27b:/var/run/postgresql# su postgres
+</span></span><span class="line"><span class="cl">postgres@d505aab0a27b:/var/run/postgresql$ createuser -s <span class="nv">$USERNAME</span>
+</span></span><span class="line"><span class="cl">postgres@d505aab0a27b:/var/run/postgresql$ createuser www-data
+</span></span><span class="line"><span class="cl">postgres@d505aab0a27b:/var/run/postgresql$ <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span>
+</span></span><span class="line"><span class="cl">root@d505aab0a27b:/var/run/postgresql#
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="7安装nominatim">7.安装Nominatim<a hidden class="anchor" aria-hidden="true" href="#7安装nominatim">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">apt-get install -y wget
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="nv">$USERHOME</span>
+</span></span><span class="line"><span class="cl">wget https://nominatim.org/release/Nominatim-4.1.0.tar.bz2
+</span></span><span class="line"><span class="cl">tar xf Nominatim-4.1.0.tar.bz2
+</span></span><span class="line"><span class="cl">wget -O data/country_osm_grid.sql.gz https://www.nominatim.org/data/country_grid.sql.gz
+</span></span><span class="line"><span class="cl">mkdir <span class="nv">$USERHOME</span>/build
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="nv">$USERHOME</span>/build
+</span></span><span class="line"><span class="cl">cmake <span class="nv">$USERHOME</span>/Nominatim-4.1.0
+</span></span><span class="line"><span class="cl">make
+</span></span><span class="line"><span class="cl">sudo make install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="8导入数据">8.导入数据<a hidden class="anchor" aria-hidden="true" href="#8导入数据">#</a></h2>
+<p>创建文件夹作为工作目录</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir <span class="nv">$USERHOME</span>/nominatim-project
+</span></span><span class="line"><span class="cl">mkdir <span class="nv">$USERHOME</span>/nominatim-project/website
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PROJECT_DIR</span><span class="o">=</span><span class="nv">$USERHOME</span>/nominatim-project
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>导入过程会使用该文件夹</p>
+<p>在 <code>PROJECT_DIR</code> 导入数据</p>
+<p>导入数据库前要给文件夹赋予权限</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-SH" data-lang="SH"><span class="line"><span class="cl">chmod -R a+x nominatim-project/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-SH" data-lang="SH"><span class="line"><span class="cl">su <span class="nv">$USERNAME</span> -c <span class="s2">&#34;nominatim import --osm-file beijing.osm.pbf --offline 2&gt;&amp;1 | tee setup.log&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><font color='red'>注意：需加 <code>offline</code> 参数，不加的话在导入的时候会请求外网链接导致数据导入失败</font></strong></p>
+<p><strong>在将pbf数据导入到数据库时出现如下错误</strong></p>
+<blockquote>
+<p>2022-11-10 21:07:22: Post-process tables
+2022-11-10 21:07:28: Create search index for default country names.
+2022-11-10 21:07:29: Recompute word counts
+2022-11-10 21:07:31: Setup website at /srv/nominatim/nominatim-project/data/website
+2022-11-10 21:07:32: Failed to load URL: <a href="https://www.openstreetmap.org/api/0.6/node/10169283021/1">https://www.openstreetmap.org/api/0.6/node/10169283021/1</a>
+2022-11-10 21:07:32: Cannot determine date of database: &lt;urlopen error EOF occurred in violation of protocol (_ssl.c:1131)&gt;</p>
+</blockquote>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272326369.png" alt="image-20230727232637005"  />
+</p>
+<p>如果操作错误，一次没有导入成功，再次导入时记得先删除数据库再导入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">su <span class="nv">$USERNAME</span> -c <span class="s2">&#34;dropdb nominatim &#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="9测试是否安装成功">9.测试是否安装成功<a hidden class="anchor" aria-hidden="true" href="#9测试是否安装成功">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nominatim admin --check-database
+</span></span><span class="line"><span class="cl">nominatim serve
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">root@d505aab0a27b:/# curl http://localhost:8088/status.php
+</span></span><span class="line"><span class="cl">OK
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@d505aab0a27b:/# curl http://localhost:8088/search.php?q<span class="o">=</span>tiananmen
+</span></span><span class="line"><span class="cl"><span class="o">[{</span><span class="s2">&#34;place_id&#34;</span>:281751,<span class="s2">&#34;licence&#34;</span>:<span class="s2">&#34;Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright&#34;</span>,<span class="s2">&#34;osm_type&#34;</span>:<span class="s2">&#34;relation&#34;</span>,<span class="s2">&#34;osm_id&#34;</span>:941596,<span class="s2">&#34;boundingbox&#34;</span>:<span class="o">[</span><span class="s2">&#34;39.8988884&#34;</span>,<span class="s2">&#34;39.9058312&#34;</span>,<span class="s2">&#34;116.3896532&#34;</span>,<span class="s2">&#34;116.3932766&#34;</span><span class="o">]</span>,<span class="s2">&#34;lat&#34;</span>:<span class="s2">&#34;39.90272175&#34;</span>,<span class="s2">&#34;lon&#34;</span>:<span class="s2">&#34;116.39144087676334&#34;</span>,<span class="s2">&#34;display_name&#34;</span>:<span class="s2">&#34;天安门广场, 东城区, 北京市, 100010, 中国&#34;</span>,<span class="s2">&#34;place_rank&#34;</span>:25,<span class="s2">&#34;category&#34;</span>:<span class="s2">&#34;place&#34;</span>,<span class="s2">&#34;type&#34;</span>:<span class="s2">&#34;square&#34;</span>,<span class="s2">&#34;importance&#34;</span>:0.125<span class="o">}</span>,<span class="o">{</span><span class="s2">&#34;place_id&#34;</span>:114335,<span class="s2">&#34;licence&#34;</span>:<span class="s2">&#34;Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright&#34;</span>,<span class="s2">&#34;osm_type&#34;</span>:<span class="s2">&#34;node&#34;</span>,<span class="s2">&#34;osm_id&#34;</span>:5211002739,<span class="s2">&#34;boundingbox&#34;</span>:<span class="o">[</span><span class="s2">&#34;39.9055272&#34;</span>,<span class="s2">&#34;39.9056272&#34;</span>,<span class="s2">&#34;116.3912549&#34;</span>,<span class="s2">&#34;116.3913549&#34;</span><span class="o">]</span>,<span class="s2">&#34;lat&#34;</span>:<span class="s2">&#34;39.9055772&#34;</span>,<span class="s2">&#34;lon&#34;</span>:<span class="s2">&#34;116.3913049&#34;</span>,<span class="s2">&#34;display_name&#34;</span>:<span class="s2">&#34;天安门广场旗杆, 西长安街, 西长安街街道, 东城区, 北京市, 100010, 中国&#34;</span>,<span class="s2">&#34;place_rank&#34;</span>:30,<span class="s2">&#34;category&#34;</span>:<span class="s2">&#34;man_made&#34;</span>,<span class="s2">&#34;type&#34;</span>:<span class="s2">&#34;flagpole&#34;</span>,<span class="s2">&#34;importance&#34;</span>:0.0001<span class="o">}]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="10设置web服务器">10.设置web服务器<a hidden class="anchor" aria-hidden="true" href="#10设置web服务器">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install -y apache2 libapache2-mod-php
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo tee /etc/apache2/conf-available/nominatim.conf <span class="s">&lt;&lt; EOFAPACHECONF
+</span></span></span><span class="line"><span class="cl"><span class="s">&lt;Directory &#34;$USERHOME/nominatim-project/website&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">  Options FollowSymLinks MultiViews
+</span></span></span><span class="line"><span class="cl"><span class="s">  AddType text/html   .php
+</span></span></span><span class="line"><span class="cl"><span class="s">  DirectoryIndex search.php
+</span></span></span><span class="line"><span class="cl"><span class="s">  Require all granted
+</span></span></span><span class="line"><span class="cl"><span class="s">&lt;/Directory&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">Alias /nominatim $USERHOME/nominatim-project/website
+</span></span></span><span class="line"><span class="cl"><span class="s">EOFAPACHECONF</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo a2enconf nominatim
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo systemctl restart apache2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置完成之后便可请求 nominatim 的api <code>http://localhost/nominatim/</code></p>
+<h1 id="基于docker">基于Docker<a hidden class="anchor" aria-hidden="true" href="#基于docker">#</a></h1>
+<h2 id="1nominatim-docker修改">1.nominatim-docker修改<a hidden class="anchor" aria-hidden="true" href="#1nominatim-docker修改">#</a></h2>
+<p>默认的nominatim-docker在导入数据的时候需要请求外网，会导致导入数据失败</p>
+<p><strong>在将pbf数据导入到数据库时出现如下错误</strong></p>
+<blockquote>
+<p>2022-11-10 21:07:22: Post-process tables
+2022-11-10 21:07:28: Create search index for default country names.
+2022-11-10 21:07:29: Recompute word counts
+2022-11-10 21:07:31: Setup website at /srv/nominatim/nominatim-project/data/website
+2022-11-10 21:07:32: Failed to load URL: <a href="https://www.openstreetmap.org/api/0.6/node/10169283021/1">https://www.openstreetmap.org/api/0.6/node/10169283021/1</a>
+2022-11-10 21:07:32: Cannot determine date of database: &lt;urlopen error EOF occurred in violation of protocol (_ssl.c:1131)&gt;</p>
+</blockquote>
+<p>因此需将docker构建文件中的<code>init.sh</code>在下述位置加上 <code>--offline</code> 重新 build 生成新的 nominatim 镜像即可</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202307272328749.png" alt="image-20230727232839715"  />
+</p>
+<h2 id="2容器之间的通信">2.容器之间的通信<a hidden class="anchor" aria-hidden="true" href="#2容器之间的通信">#</a></h2>
+<p>启用默认的bridge模式</p>
+<p>使用nominatim-docker启动项目</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-SH" data-lang="SH"><span class="line"><span class="cl">docker run -itd -e <span class="nv">PBF_PATH</span><span class="o">=</span>/nominatim/data/beijing-latest.osm.pbf  -p 8080:8080 -p 5432:5432 -v /e/Projects/DockerWorkspace/nominatim/data:/nominatim/data --name nominatim_docker2 nominatim:1.0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>请求的地址为  <code>http://localhost:8080/search.php?q=beijing</code></p>
+<p>其他容器访问该容器的方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl 172.17.0.4:8080/search.php?q<span class="o">=</span>beijing
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>172.17.0.4 为nominatim-docker分配的ip</p>
+<h2 id="3nominatim查询api">3.nominatim查询api<a hidden class="anchor" aria-hidden="true" href="#3nominatim查询api">#</a></h2>
+<p><a href="https://nominatim.org/release-docs/latest/api/Search/">https://nominatim.org/release-docs/latest/api/Search/</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="next" href="https://chance7bin.github.io/posts/basic/pattern/%E5%BC%80%E7%AF%87/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>开篇</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
