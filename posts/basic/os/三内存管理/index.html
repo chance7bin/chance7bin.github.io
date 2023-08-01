@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>三、内存管理 | Binb&#39;s Blog</title>
+<meta name="keywords" content="操作系统">
+<meta name="description" content="内存使用与分段 一、内存使用 1.逻辑地址 内存作为计算机的基本组成部分，用来存储程序（指令和数据），内存单元按字节编址、寻址，程序装入到内存后，">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/basic/os/%E4%B8%89%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="三、内存管理" />
+<meta property="og:description" content="内存使用与分段 一、内存使用 1.逻辑地址 内存作为计算机的基本组成部分，用来存储程序（指令和数据），内存单元按字节编址、寻址，程序装入到内存后，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/basic/os/%E4%B8%89%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-16T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-05-16T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="三、内存管理"/>
+<meta name="twitter:description" content="内存使用与分段 一、内存使用 1.逻辑地址 内存作为计算机的基本组成部分，用来存储程序（指令和数据），内存单元按字节编址、寻址，程序装入到内存后，"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📕 计算机基础",
+      "item": "https://chance7bin.github.io/posts/basic/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "操作系统",
+      "item": "https://chance7bin.github.io/posts/basic/os/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "三、内存管理",
+      "item": "https://chance7bin.github.io/posts/basic/os/%E4%B8%89%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "三、内存管理",
+  "name": "三、内存管理",
+  "description": "内存使用与分段 一、内存使用 1.逻辑地址 内存作为计算机的基本组成部分，用来存储程序（指令和数据），内存单元按字节编址、寻址，程序装入到内存后，",
+  "keywords": [
+    "操作系统"
+  ],
+  "articleBody": "内存使用与分段 一、内存使用 1.逻辑地址 内存作为计算机的基本组成部分，用来存储程序（指令和数据），内存单元按字节编址、寻址，程序装入到内存后，PC 指向程序开始地址，依次取指执行\n==即内存使用：将程序放到内存中，PC指向开始地址==\n这是main()编译后，entry是入口地址，如果_main相对于_entry的偏移地址是40\n现在如果这段程序要运行，那么只要将PC指向 call 40 这条指令所在的地址就好了，执行完call 40之后，会自动跳到地址为40处执行。\n但是现在有个问题，_main所在的位置一定是物理地址为40的位置吗？换言之，40表示的是物理地址吗？\n学过前面的知识，我们知道肯定不是的，前面放的system模块\ncall 40这个40指的是相对于_entry的偏移量，程序里面的地址是==相对地址（逻辑地址）==，而==程序真正运行时的地址是绝对地址（物理地址）==，即程序运行时，==根据逻辑地址得到物理地址就是地址的重定位==。\n比如_entry这条指令的地址如果存放在物理地址为1000处，那么_main的 地址就应该是1040，所以call 40就要变成call 1040.\n2.重定位 ==重定位:== ==重定位是指将指令中的逻辑地址转换为内存中实际的物理地址的过程==\n重定位方式:\n1.编译时重定位 编译时重定位的程序只能放在内存中的固定位置，而编译结束后的内存使用情况不一定,与编译时的相同，因此这种重定位方式有很大的局限性。必须保证装入该程序时，这段程序要使用的地址是可用的。\n编译时进行重定位后，装入过程不需要有额外开销，因此效率较高\n编译时重定位一般用在可以保证一段程序固定地装入某段内存中的嵌入式系统中\n2.载入时重定位（静态重定位） 程序在装入内存时，将指令中的相对地址加上装入的内存段的基址作为绝对地址，载入时重定位的程序一旦载入内存后就不可以再移动位置。不利于程序在内存中的移动（交换，swap）。\n3.运行时重定位（动态重定位）(最佳时机） 运行时重定位的程序，装入内存的仍是逻辑地址，在实际访问时进行重定位，即在进程 PCB 中保存程序段的基址，实际访问时进行地址翻译（由基地址与逻辑偏移计算出物理地址），无妨交换\n3.交换 为了更好地支持多进程，当内存空闲空间不足时，有选择地将某些进程保存到硬盘上（换出），将腾出的空间交给当前需要运行的进程使用，即将要运行的进程换入到内存\n进程1睡眠将进程1换出放入磁盘中，并将要运行的程序换入，当程序1要再次运行的时候，就再次换入，但是每次的基地址可能不一样。所以，一般在运行时重定位。\n二、内存分段 在内存的使用方式，以及每个进程中的指令的地址如何对应到实际的内存 实际上，更多时候进程不是作为一个连续的整体装入内存的\n而按照程序本身特点，将进程分段管理，满足每个段的需要，建立段表，描述段的信息，包括段号、段基址、段限长，段类别等等 可以单独移动、扩大某个段，只需要维护好段表\n进程由多个部分(段)组成，每个段有各自的特点和用途，因为各个段性质的不同，当所有段作为一个整体看待时就会有所不便，比如，代码段是只读的，代码段、数据段不会动态增长，而堆栈段可能要动态增长 假如不分段，在一个程序中执行指令和数据会杂糅在一起并保存在内存中，由于执行指令写到内存后不能被用户修改的，属于只读属性的。而程序中的数据是可读可写的，所以当计算机取址执行时还要判断该对应内存地址下的是指令还是数据，这样就不好判断了。所以我们将指令与数据用地址区间来分开，这样计算机在取址时通过判断地址就可以知道取的是指令还是数据，便于执行程序。所以人们为了计算机方便，就将程序中的具有相同属性的内容放到同一块内存片段。\n定位指令(数据):\u003c段号，段内偏移\u003e\n重定位的段号有特定的表来记录(LDT，和GDT表一样) CPU每执行一条牵涉到地址的指令都会查一下PCB里面这个进程段表，从而确定物理地址，有一个专门存放该表地址的寄存器LDTR寄存器。\n每个进程可以维护一个LDT表作为进程段表 操作系统维护 GDT，每个 LDT 的入口可以作为GDT的一个表项，LDTR寄存器保存当前LDT的地址 进程切换时，切换PCB，包括切换指令序列(CS:IP)与映射表(LDT)\n当内存在分段管理时，建立一个进程需要按程序所分的段(编译时确定)建立其段表，即初始化LDT，并将LDT与PCB关联起来，然后在内存中找到一块合适空闲区域装入程序\n1.linux0.11下TCB/PCB的实现都是靠一个task_struct结构体\n2.这个结构体里面还有一个结构体tss\n3.tss里面放的内容可以理解为是当前进程的CPU快照\n4.由于进程切换，段寄存器的内容就放在task_struct里的tss了\n内存的管理 前面讲了内存的分段，这才是内存管理的起点。接下来，分段和分页结合使用才能真正的管理和使用内存\n一、内存分区 分区式存储管理是把内存分为一些大小相等或不等的分区，操作系统占用其中一个分区，其余的分区由应用程序使用，每个应用程序占用一个或几个分区。分区式存储管理虽然可以支持并发，但难以进行内存分区的共享。\n专业术语介绍\n(1)内碎片与外碎片：\n内碎片是占用分区内未被利用的空间，外碎片是占用分区之间难以利用的空闲分区(通常是小空闲分区)。\n(2)内存紧缩：将空间分区合并需要移动一个段（复制内容），消耗大量时间，影响操作系统性能\n1.固定分区 固定分区：把内存划分为若干个固定大小的连续分区，这种作法只适合于多个相同程序的并发执行(处理多个类型相同的对象)。分区大小也可以不等：有多个小分区、适量的中等分区以及少量的大分区。根据程序的大小，分配当前空闲的、适当大小的分区。 优点：易于实现，开销小 缺点：内碎片造成浪费；分区总数固定，限制了并发执行的程序数目\n2.动态分区 ==动态分区就是动态创建分区，在装入程序时按其初始要求分配，或在其执行过程中通过系统调用进行分配或改变分区大小。==\n动态分区的分区分配就是寻找某个空闲分区，其大小需大于或等于程序的要求。若是大于需求，则将该分区分割成两个分区，其中一个分区为要求的大小并标记为“占用”，而另一个分区为余下部分并标记为“空闲”。\n分区分配的先后次序通常是从内存低端到高端。动态分区的分区释放过程中有一个要注意的问题是，将相邻的空闲分区合并成一个大的空闲分区。 与固定分区相比较：没有内碎片，但它却引入了另一种碎片——外碎片。\n==(1)可变分区的管理过程——核心数据结构==\n通过已分配分区表和空闲分区表两张表来记录分区使用情况。当有段请求时，空闲分区表将改变 ==(2)可变分区的管理—请求分配== 在上图中，原本内存中已分配了seg1和seg2，空闲分区从地址250k开始，大小为250K，现有一个100k大小的段请求，于是250k-350k被分配给了新请求段seg3，空闲分区还剩下150k\n==(3)可变分区的管理—释放内存== 同时由于进程可能被换入换出，所以内存中已分配的空间有可能被释放，因此空闲分区可能存在多段\n==(4)可变分区的管理—再次申请==\n当存在多个空间分区时，再来一个段提出内存请求，该选谁？所以引入了三个分区分配算法\n3.分区分配算法 ==(1)最先适配法(nrst-fit)==\n按分区在内存的先后次序从头查找，找到符合要求的第一个分区进行分配。该算法的分配和释放的时间性能较好，较大的空闲分区可以被保留在内存高端。但随着低端分区不断划分会产生较多小分区，每次分配时查找时间开销便会增大。\n==(2)最佳适配法(best-fit)==\n按分区在内存的先后次序从头查找，**找到其大小与要求相差最小的空闲分区进行分配。**从个别来看，外碎片较小；但从整体来看，会形成较多外碎片优点是较大的空闲分区可以被保留。\n==(3)最坏适配法(worst- fit)==\n按分区在内存的先后次序从头查找，找到最大的空闲分区进行分配。基本不留下小空闲分区，不易形成外碎片。但由于较大的空闲分区不被保留，当对内存需求较大的进程需要运行时，其要求不易被满足。\n首先适配快，但其他分区就浪费时间，最佳分配需要遍历内存 因此需要引入分页：解决内存分区导致的内存效率问题\n二、内存分页 1.引入分页 引入分页: 解决内存分区导致的内存效率问题\n可变分区多次分配以后就会形成内存碎片，当再来一个段请求大于每个单个空间空间时，就需要将内存合并：内存紧缩，内存紧缩需要花费大量时间 解决方法：将每个段分成多页，内存也分成很多页，页是最小分配单位，这样每次分配段空间，最多浪费不超过一页，没有内存碎片\n其实也有会部分内存没有使用到，但是注意这种思想，页是一个单位，每次分配的内存都是整数个页，也就是将这些分配出去的页都看成是已经使用的了，所以就没有内存碎片。==所以从内存角度来说这种方式是比较好的，也就是物理内存想要分页，但是用户程序希望是分段。==后面会说到的\n每个段在计算物理地址时需要查找段的基址，那么将段分成页后，计算物理地址需要查找页的基址，物理地址=页基址+逻辑地址。\nPCB中存在页表保存每个段的页分配信息，为了取分段的页，将内存的页叫作页框 内存分段的有一个段表，分页自然也要有一个页表。有一个专门的寄存器存储页表的地址。\n注意页在内存的排布顺序并不是按照地址的顺序递增的，也就是说页0不一定是放在地址零处，这里引入页框，页框是按照内存顺序排列的，并且页框的大小和页是相同的\n分析mov [0x2240],%eax\n1 2 3 4 5 图片中： mov [0x2240],%eax 2240地址表示的实际内存地址是多少？首先看它是那一页的，每一页的大小为 4k，0x2240除以4K得到页号，除以4K也就是右移12位,得到2,即第二页，根据页 号找到具体的页框号，在上图中为3，具体的地址就是3*4K+240=3240，即物理地 址为3240. 2.多级页表 为了提高内存的利用率，内存是分页管理的，并且有一个页表用来存储页号与页框的对应关系。 但是，为了更好的提高内存的利用率，每一页就应该做得足够小，但是每一页都要在页表里面有一项与页框对应，也就是说页数越多页表也就会越大，页表如果很大的话就会对内存造成浪费，因为存放页表的这部分你内存是不能给程序使用的，并且一直存放在该进程的PCB里面\n(1)只存放用到的页\n只用到0，1，3就存放这三页，如图 若这存放用到的页，但这样的话页表的项就不连续了，找某一页对应的页框就不能直接使用偏移量的形式，较高查找效率是折半查找（因为页号是有顺序的），即便使用折半查找耗费的时间也会比使用偏移量大很多倍。\n所以页表的页号必须是连续的。\n==(2)多级页表(页目录表+页表)==\n==页目录表的每一项对应一个页表，然后再根据页表找到对应的页。== 一个逻辑地址用10bits的页目录号+10bits的页号+12bits的偏移组成 这种思想就类似于书本的目录，目录的地方有一个章目录（页目录表）和节目录（页表)，如果要查找某一节的内容首先找到这一章的地方，然后再查具体的某一节\n不仅能节省大量内存，并且保证了章目录和节目录都是连续的，所以可以使用偏移量的形式查找对应的章节\n3.快表TLB 多级页表提高了空间效率，但是在时间的效率上非常低。因为每一次访问的时候都要根据章目录找到页目录再找到具体的页。也就是需要访问三次内存，cpu每一条指令执行的时间其实大部分都是浪费在访问内存上 解决方法：在CPU与内存访问之间加一组TLB，==TLB是一组寄存器，用来存放最近使用过的页对应的页框号==\n这样如果CPU需要访问某一页首先在TLB里面找，如果TLB里面有就不用访问内存了，因为TLB是寄存器，cpu访问寄存器的速度远大于对内存的访问速度，大大地提升时间性能了。\n提升时间性能最主要的因素就是==可以在TLB里面直接找到该页对应的页框号==。\n要提升命中率，TLB肯定是越大越好，但是TLB材料很贵，不会做得很大。TLB的大小大概是[64,1024]。\n为什么TLB里面存放这么少的项就能实现“近似访存1次”？\n因为程序的局部性原理，==程序的局部性原理在用户程序里面多对应的是循环，顺序结构==\n总结 为了提高内存的空间性能，提出了多级页表；但是提到空间性能是以浪费时间性能为基础的，因此为了补充损失的时间性能，提出了快表(即TLB)，快表利用的是程序的局部性原理。\nLinux虚拟内存 一、虚拟内存的引入 1.基本概念 虚拟内存：\n用辅助存储器（一般指磁盘）作为内存的补充。虚拟内存允许进程执行时只将部分程序放入内存，因此程序可以比物理内存大。虚拟内存的大小受计算机寻址机制和可用辅助存储器容量大限制，而不受内存容量的限制。\n特征：\n①运行进程时只把现在要执行的页/段装入内存，其余页/段放在外存，需要时再利用请求调入页/段功能和置换功能将其调入内存。 ②在逻辑上扩充内存容量 ③访问速度接近于内存，没位(bit)成本接近于外存。\n虚拟地址：即逻辑地址，虚拟内存中某个字节的地址，假设该字节在内存中（其实可能位于磁盘，但这对用户是透明的）\n虚拟地址空间：分配给某个进程（程序）的虚拟地址范围\n实地址：即物理地址, 物理内存中某个字节的地址\n驻留集：进程运行时装入内存的部分\n工作集：在 t 时刻，进程在过去的N个时间单位内访问的页面集合(活跃页面)\n内存管理单元MMU：集成在CPU中，或作为一个协处理器\n==功能：分解逻辑地址；逻辑地址到物理地址的转换；查找更新快表TLB；进程切换时清空TLB；发出缺页中断或越界中断；设置和检查页表中各个特征位。==\n2.局部性原理 上一篇笔记中提了一点关于局部性原理的特点，这里更详细的介绍。\n局部性原理表现在以下两个方面：\n==(1)时间局部性==\n如果程序中的某条指令一旦执行，不久以后该指令可能再次执行；如果某数据被访问过，不久以后该数据可能再次被访问。\n原因:==是由于在程序中存在着大量的循环操作==\n==(2)空间局部性==\n一旦程序访问了某个存储单元，在不久之后，其附近的存储单元也将被访问，即程序在一段时间内所访问的地址，可能集中在一定的范围之内\n原因：==指令通常是顺序存放、顺序执行的，数据也一般是以向量、数组、表等形式簇聚存储的==。\n快表、 页高速缓存以及虚拟内存技术从广义上讲，都是属于高速缓存技术。这个技术所依赖的原理就是局部性原理。局部性原理既适用于程序结构，也适用于数据结构\n3.引入 从前面我们了解到：物理内存必须得是分页管理的；对用户来说是分段的。\n但是用户程序最终能在内存上面跑，肯定需要某种机制或者转化使得以用户程序的视角看起来内存是分段的，以物理内存的视角看起来又是分页的，这种机制就是虚拟内存\n时间局部性是通过将近来使用的指令和数据保存到高速缓存存储器中，并使用高速缓存的层次结构实现。\n空间局部性通常是使用较大的高速缓存，并将预取机制集成到高速缓存控制逻辑中实现。虚拟内存技术实际上就是建立了 “内存一外存”的两级存储器的结构，利用局部性原理实现髙速缓存。\n虚拟内存是一种和物理内存一样的东西，每一个字节都有对应的地址。但是有一点与物理内存不同，从它的名字就能看出来，“虚拟”：即实际上并不存在，它只是一种机制，是用程序表示的。它的作用就是让上层程序看起来是内存是分段的，而实际上是分页的，如图\n用户程序使用了一段内存，首先会在虚拟内存上面找到一段空的内存，然后将用户程序使用的内存映射到这段内存上，然后虚拟内存再将这段内存映射到物理内存上\n用户程序使用的逻辑内存经过了两次映射才达到物理内存，第一次映射是段的映射，需要段表；第二次是页的映射，需要页表。\n逻辑地址究竟是如何变成物理地址的呢？\n==逻辑地址是段号+偏移（CS：IP）组成的，首先根据段号在段表中找到虚拟内存的段基址，然后加上偏移得到虚拟地址（即在虚拟内存上面的地址），格式是：页号+偏移。然后根据页号在页表中找到对应的页框号，再加上偏移得到最后的物理地址。实现了逻辑地址与物理地址的对应。也就是重定位操作。==\n二、实现虚拟内存 1.载入内存 内存管理的核心就是内存分配，所以从程序放入内存、使用内存开始 首先为程序分配虚拟内存，将程序中的各段分配到虚拟内存的闲置空间中，然后再将虚拟内存中的各段再分成若干页，映射到物理内存的页框中\n2. 分配虚存、 建段表 创建进程使用的是fork()系统调用，从前面可以知道fork()-\u003esys_fork-\u003ecopy_process\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 在Linux/kernel/fork.c int copy_process(int nr, long ebp...) { ……………… copy_mem(nr,p); //分配虚拟内存 ……………… } int copy_mem(int nr, task_struct *p) { unsigned long new_data_base; new_data_base = nr*0x4000000;\t// nr * 64M set_base(p_\u003eldt[1], new_data_base);\t// 代码段 ldt(段表) set_base(p-\u003eldt[2], new_data_base);\t// 数据段 ……………… } 调用fork()，然后调用sys_fork，进入copy_process后，在copy_process中调用copy_men();\ncopy_men()函数就是给该进程在虚拟内存上分配内存空间的， 形参 nr：第nr个进程 p：该进程的pcb\n1 new_data_base = nr*0x4000000;\t// nr * 64M 给该进程在虚拟内存上分配一块64M的内存块。可以看到第0个进程内存区域就是0 ~ 64M，第一个进程64~128M，依次类推，互不重叠。然后将p的ldt[1]和ldt[2]都指向这块内存\nldt[1]和ldt[2]指的是数据段和代码段，数据段和代码段现在在虚拟内存上分配内存、建立段表完成\n3.分配内存、建页表 分配内存、建立页表，还是copy_mem()函数完成的\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 int copy_mem(int nr, task_struct *p) { unsigned long old_data_base; old_data_base = get_base(currnet-\u003eldt[2]); copy_page_tables(old_data_base, new_data_base, data_limit); ……………… } int copy_page_tables(unsigned long from, unsigned long to , long size) { from_dir = (unsigned long *) ((from\u003e\u003e20) \u0026 0xffc); to_dir = (unsigned long * )((to\u003e\u003e20) \u0026 0xffc); size = (unsigned long)(size + 0x3fffff) \u003e\u003e 22; for (; size--\u003e0; from_dir++, to_dir++) { from_page_table=(0xfffff000 \u0026 *from_dir); to_page_table = get_free_page(); *to_dir = ((unsigned long) to_page_table) | 7; } } 简单分析：\n1 old_data_base = get_base(currnet-\u003eldt[2]); 得到当前进程的虚拟内存地址赋给old_data_base，再调用copy_page_tables()函数，\n参数from和to：都是32为虚拟内存地址 from_dir指向一个父进程的页目录项（章） to_dir指向一个子进程的页目录项（章） 32位虚拟地址格式： 1 2 3 from_dir = (unsigned long *) ((from\u003e\u003e20) \u0026 0xffc); //from右移22位得到的是页目录号 ffc00000 -\u003e1111 1111 1100 0000 //这里右移20 并与上0xffc 就是去前10位， size是页目录项数\n1 2 3 4 5 6 7 for (; size--\u003e0; from_dir++, to_dir++) { from_page_table=(0xfffff000 \u0026 *from_dir); to_page_table = get_free_page(); //分配一个物理内存页来保存页表,就是在mem_map中找一段没有被用过的内存 *to_dir = ((unsigned long) to_page_table) | 7; } from_dir就是一个指向页目录号的指针，根据这个指针找到每一个页号和对应的页框号,get_free_page()新建一个子进程的页目录表，然后将这个页目录表赋给to_dir,但是to_dir指向的表的内容是空的\nget_free_page()函数：得到一段空闲的空间\n1 2 3 4 5 6 7 8 9 unsigned long get_free_page(void) { register unsigned long _res asm(“ax”); _asm_(“std; repne; scasbnt” “movl %%edx,%%eaxn” “D”(mem_map+PAGIG_PA GES-1)); return _res; } 接下来就是填表,将父进程的页表拷贝到子进程中\n1 2 3 4 5 6 7 8 9 10 for (; nr--\u003e0; from_page_table++, to_page_table++) { this_page = *from_page_table; this_page \u0026= ~2;\t// 设置为只读,父进程子进程共享一个页 *to_page_table = this_page; *from_page_table = this_page; this_page -= LOW_MEN; this-\u003epage \u003e\u003e= 12; mem_map[this_page]++; 这一页被共享了，当其中一个释放，还有其他的在使用，因此要+1 } 做完上面三步，内存情况： 4.重定位 通过逻辑地址找到虚拟地址，通过虚拟地址找到物理地址(MMU自动完成)\n如： 对父进程指向p=0x300， *p=7，父进程就会在通过重定位找到物理地址，然后将7写入\n然后父进程fork()一个子进程，因为公用的是一套页表，并且将页表置位只读，因此子进程指向p=0x300， *p=8时，就会重新申请一段内存，修改页表，然后MMU重新计算，然后执行*p = 8，这样就实现了进程之间的分离。\n总结 虚拟内存的实现\n1.分配段 2.建段表 3.分配页 4.建页表 5.重定位 内存换入与换出 为了保证内存在用户程序看起来是分段，而实际是分页的效果，引入了虚拟内存。对于用户来说，虚拟内存是一个完整的内存，用户可以随意使用该内存，假设为4G，对于用户来说就有4G的空间可以使用，但是真正的物理内存远小于4G。为了实现这一差别，引出了内存换入和换出\n一、内存换入 1.引出换入 从前面我们知道，在内存中段页同时存在 但是实际情况是虚拟内存的大小一般大于物理内存，我们又不得不实现虚拟内存，所以，用换入换出实现这一差别(建立虚拟内存与物理内存的映射)。\n==分段分页的核心是虚拟内存，而要实现虚拟内存，就需要进行内存的换入和换出==\n当要访问某一个段的时候，将该段映射到物理内存中，不向相关的数据可以覆盖。 2.请求调页 先用逻辑地址通过查段表计算出虚拟地址时，再由虚拟地址查页表计算物理地址，当用虚拟地址查页表发现该虚拟地址没有映射，即该页没有载入内存时，需要从磁盘中将该页载入物理内存（请求调页） 逻辑地址CS:IP，首先根据CS在段表中找到对应的基址，加上偏移得到虚拟地址：页号+偏移。然后根据页号在页表中找到对应的页框号，加上偏移得到物理地址。\n但是如果在页表中找不到对应的页号对应的页框地址，就要从磁盘上将这一页换入了。\n换入是利用中断来处理(页错误处理程序)，如果load[addr]的时候，发现addr在页表里面没有对应映射，那么就将中断向量寄存器的某一位置为1，说明有中断产生。然后在中断服务函数里面将addr导入到物理内存中。然后再次执行load[addr]这条语句。\n通过虚拟地址查页表找不到映射的情况称作缺页，发现缺页后就要从磁盘中请求调页，这个过程一般比较长，同时需要进入内核，所以在中断中进行。一旦发生缺页，就进入缺页中断，在中断中请求调页。同时建立虚拟内存的该页与物理内存的映射，当请求调页完成时，映射也建立好了 将某页从磁盘换入到内存的，从中断服务函数开始。cpu有专门的中断会就去查找中断号，然后转去执行该中断服务程序。这些东西是在系统初始化的时候就做好了\n(1)设置中断号\n1 2 3 4 5 6 7 void trap_init(void) { set_trap_gate(14, \u0026page_fault); //设置中断号 } # define set_trap_gate(n, addr) _set_gate(\u0026idt[n], 15, 0, addr); (2)中断处理page fault (3)进入中断要push保留现场，然后调用do_no_page(); 当页不存在时，执行该函数\n1 2 3 page=get_free_page(); bread_page(page, current-\u003eexecutable-\u003ei_dev, nr); put_page(page, address); 先分配一个空闲页给page，然后将磁盘里面的页读到内存中，调用put_page建立映射，最后再次执行load[addr]\n(4)建立映射put_page 二、内存换出 1.引入换出 由于物理内存大小是有限的，在内存换入多次后，物理内存就会满，因此必须换页，才能腾出空间给新换入的页。\n换页的核心问题是需要选择一页淘汰，换出到磁盘，选择哪一页？类似于进程调度\n2.FIFO算法 即每次缺页的时候就替换掉最开始的那一页（先进先出） 在第一次换D的时候将A换入，但是后面紧跟着又要换入A… 这种算法在这个方面肯定不是最好的算法，因为它没有任何机制保证替换次数尽可能少\n3.MIN算法 选最远（不常用的）将使用的页淘汰， 是最优方案 但是，MIN需要知道将来发生的事，在实际中不可行\n4.LRU算法 选最近最长一段时间没有使用的页淘汰(最近最少使用)\n用过去的历史预测将来，可以通过前面调用的页的顺序来推测未来哪些页是常用的，理论基础就是程序的空间局部性。 实现一：时间戳\n用时间戳来记录每页的访问时间 第一次将A放入页框中，并记录当前时间为1；第二次将B放入页框中，并记录当前时间为2；第三次将C放入页框中，并记录当前时间为3；第四次又是访问A页，更新A页访问时间，第五次访问B页，更新B页访问时间；第六次访问D页，不存在，那么就在A、B、C页中选择一个最早使用的也就是数字最小的替换，即C页。\n理论上算法可行，但是，每次地址访问都需要修改时间戳， 需维护一个全局时钟， 需找到最小值 … 实现代价较大\n这里的关键是维护时机的问题。\n如果不缺页，程序应该是直接通过MMU访问物理地址，内核没有机会进行时间戳或者栈的维护。\n只有在缺页中断的时候内核才有机会接触处理页换出。\n任何在不缺页的时候的数据结构维护都会带来巨大开销\n实现二：页码栈\n每次选择栈底换出 每次地址访问都需要修改栈(修改10次左右栈指针) … 实现代价仍然较大\n5.Clock算法 LRU的近似实现 – 将时间计数变为是和否\n实现这一算法：Second Chance Replacement（再给一次机会）\n具体思想：每页增加一个引用位( R )，每一次访问该页时，就将该位置为1。当发生缺页时用一个指针查看每一页的引用位，如果是1则将其置为0，如果是0就直接淘汰。\n每次访问一页时， 硬件自动设置该位\n选择淘汰页： 扫描该位， 是1时清0， 并继续扫描； 是0时淘汰该页\n这种方法提高了内存的效率，只要维护R位（在PCB中）\n但是，如果缺页很少，可能会出现所以的R为1（在实际中，缺页的情况不会很多；如果缺页很多了，说明内存太小了或者算法不行）\n当发生缺页时，指针转一圈之后将所有的页的引用位都置为0，没找到能替换的，继续转，这时候发现最开始的页引用位为0，将其换出，指针后移\n然后又一段时间没有发生缺页，所有页的引用位都为1，当发生缺页之后，又会将这一轮最开始的页换出，然后指针后移，一段时间之后发生缺页，又会将这一轮最开始的页换出，这不就直接退化为FIFO了吗？\n原因：记录了太长的历史信息\n解决：==定时清除R位==\n再加一个指针用来清除每一页的引用位（这个指针的移动速度要快），可以放在时钟中断里面，定时清除 三、帧frame 现在置换策略有了，但是还有一个问题：给进程分配多少个页框(帧frame)?\n如果分配多，请求调页导致的内存高效利用就没有用。而且内存就那么大，如果每一个进程分配很多的话，跑的进程数量就少了。\n如果分配的少，系统内进程增多，每个进程的缺页率增大，当缺页率大到一定程度，进程就会总等待调页完成，导致cpu利用率降低，这一现象为颠簸(thrashing) 所以，先给进程分配一定数量的页框，如果增加页框能增加cpu利用率，就缓慢增加，如果导致cpu利用率减少，就降低页框分配。当然实际情况下每个进程对应的页框数量肯定是得动态调整的。\n总结 内存的换入与换出大致过程： ",
+  "wordCount" : "10429",
+  "inLanguage": "zh",
+  "datePublished": "2022-05-16T00:00:00Z",
+  "dateModified": "2022-05-16T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/basic/os/%E4%B8%89%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/">📕 计算机基础</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/os/">操作系统</a></div>
+    <h1 class="post-title">
+      三、内存管理
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-05-16
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>10429字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>21分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="color: var(--secondary)!important;">操作系统</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e5%86%85%e5%ad%98%e4%bd%bf%e7%94%a8%e4%b8%8e%e5%88%86%e6%ae%b5" aria-label="内存使用与分段">内存使用与分段</a><ul>
+                            
+                    <li>
+                        <a href="#%e4%b8%80%e5%86%85%e5%ad%98%e4%bd%bf%e7%94%a8" aria-label="一、内存使用">一、内存使用</a><ul>
+                            
+                    <li>
+                        <a href="#1%e9%80%bb%e8%be%91%e5%9c%b0%e5%9d%80" aria-label="1.逻辑地址">1.逻辑地址</a></li>
+                    <li>
+                        <a href="#2%e9%87%8d%e5%ae%9a%e4%bd%8d" aria-label="2.重定位">2.重定位</a></li>
+                    <li>
+                        <a href="#3%e4%ba%a4%e6%8d%a2" aria-label="3.交换">3.交换</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%ba%8c%e5%86%85%e5%ad%98%e5%88%86%e6%ae%b5" aria-label="二、内存分段">二、内存分段</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%86%85%e5%ad%98%e7%9a%84%e7%ae%a1%e7%90%86" aria-label="内存的管理">内存的管理</a><ul>
+                            
+                    <li>
+                        <a href="#%e4%b8%80%e5%86%85%e5%ad%98%e5%88%86%e5%8c%ba" aria-label="一、内存分区">一、内存分区</a><ul>
+                            
+                    <li>
+                        <a href="#1%e5%9b%ba%e5%ae%9a%e5%88%86%e5%8c%ba" aria-label="1.固定分区">1.固定分区</a></li>
+                    <li>
+                        <a href="#2%e5%8a%a8%e6%80%81%e5%88%86%e5%8c%ba" aria-label="2.动态分区">2.动态分区</a></li>
+                    <li>
+                        <a href="#3%e5%88%86%e5%8c%ba%e5%88%86%e9%85%8d%e7%ae%97%e6%b3%95" aria-label="3.分区分配算法">3.分区分配算法</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%ba%8c%e5%86%85%e5%ad%98%e5%88%86%e9%a1%b5" aria-label="二、内存分页">二、内存分页</a><ul>
+                            
+                    <li>
+                        <a href="#1%e5%bc%95%e5%85%a5%e5%88%86%e9%a1%b5" aria-label="1.引入分页">1.引入分页</a></li>
+                    <li>
+                        <a href="#2%e5%a4%9a%e7%ba%a7%e9%a1%b5%e8%a1%a8" aria-label="2.多级页表">2.多级页表</a></li>
+                    <li>
+                        <a href="#3%e5%bf%ab%e8%a1%a8tlb" aria-label="3.快表TLB">3.快表TLB</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#linux%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98" aria-label="Linux虚拟内存">Linux虚拟内存</a><ul>
+                            
+                    <li>
+                        <a href="#%e4%b8%80%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98%e7%9a%84%e5%bc%95%e5%85%a5" aria-label="一、虚拟内存的引入">一、虚拟内存的引入</a><ul>
+                            
+                    <li>
+                        <a href="#1%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" aria-label="1.基本概念">1.基本概念</a></li>
+                    <li>
+                        <a href="#2%e5%b1%80%e9%83%a8%e6%80%a7%e5%8e%9f%e7%90%86" aria-label="2.局部性原理">2.局部性原理</a></li>
+                    <li>
+                        <a href="#3%e5%bc%95%e5%85%a5" aria-label="3.引入">3.引入</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%ba%8c%e5%ae%9e%e7%8e%b0%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98" aria-label="二、实现虚拟内存">二、实现虚拟内存</a><ul>
+                            
+                    <li>
+                        <a href="#1%e8%bd%bd%e5%85%a5%e5%86%85%e5%ad%98" aria-label="1.载入内存">1.载入内存</a></li>
+                    <li>
+                        <a href="#2-%e5%88%86%e9%85%8d%e8%99%9a%e5%ad%98-%e5%bb%ba%e6%ae%b5%e8%a1%a8" aria-label="2. 分配虚存、 建段表">2. 分配虚存、 建段表</a></li>
+                    <li>
+                        <a href="#3%e5%88%86%e9%85%8d%e5%86%85%e5%ad%98%e5%bb%ba%e9%a1%b5%e8%a1%a8" aria-label="3.分配内存、建页表">3.分配内存、建页表</a></li>
+                    <li>
+                        <a href="#4%e9%87%8d%e5%ae%9a%e4%bd%8d" aria-label="4.重定位">4.重定位</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e6%80%bb%e7%bb%93-1" aria-label="总结">总结</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%86%85%e5%ad%98%e6%8d%a2%e5%85%a5%e4%b8%8e%e6%8d%a2%e5%87%ba" aria-label="内存换入与换出">内存换入与换出</a><ul>
+                            
+                    <li>
+                        <a href="#%e4%b8%80%e5%86%85%e5%ad%98%e6%8d%a2%e5%85%a5" aria-label="一、内存换入">一、内存换入</a><ul>
+                            
+                    <li>
+                        <a href="#1%e5%bc%95%e5%87%ba%e6%8d%a2%e5%85%a5" aria-label="1.引出换入">1.引出换入</a></li>
+                    <li>
+                        <a href="#2%e8%af%b7%e6%b1%82%e8%b0%83%e9%a1%b5" aria-label="2.请求调页">2.请求调页</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%ba%8c%e5%86%85%e5%ad%98%e6%8d%a2%e5%87%ba" aria-label="二、内存换出">二、内存换出</a><ul>
+                            
+                    <li>
+                        <a href="#1%e5%bc%95%e5%85%a5%e6%8d%a2%e5%87%ba" aria-label="1.引入换出">1.引入换出</a></li>
+                    <li>
+                        <a href="#2fifo%e7%ae%97%e6%b3%95" aria-label="2.FIFO算法">2.FIFO算法</a></li>
+                    <li>
+                        <a href="#3min%e7%ae%97%e6%b3%95" aria-label="3.MIN算法">3.MIN算法</a></li>
+                    <li>
+                        <a href="#4lru%e7%ae%97%e6%b3%95" aria-label="4.LRU算法">4.LRU算法</a></li>
+                    <li>
+                        <a href="#5clock%e7%ae%97%e6%b3%95" aria-label="5.Clock算法"><code>5.Clock算法</code></a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%b8%89%e5%b8%a7framehttpssocsdnnetsosearchqframespm1001210130017020" aria-label="三、帧frame">三、帧<a href="https://so.csdn.net/so/search?q=frame&amp;spm=1001.2101.3001.7020">frame</a></a></li>
+                    <li>
+                        <a href="#%e6%80%bb%e7%bb%93-2" aria-label="总结">总结</a>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><h1 id="内存使用与分段">内存使用与分段<a hidden class="anchor" aria-hidden="true" href="#内存使用与分段">#</a></h1>
+<h2 id="一内存使用">一、内存使用<a hidden class="anchor" aria-hidden="true" href="#一内存使用">#</a></h2>
+<h3 id="1逻辑地址">1.逻辑地址<a hidden class="anchor" aria-hidden="true" href="#1逻辑地址">#</a></h3>
+<p>内存作为计算机的基本组成部分，用来存储程序（指令和数据），内存单元按字节编址、寻址，程序装入到内存后，PC 指向程序开始地址，<strong>依次取指执行</strong></p>
+<p>==即内存使用：将程序放到内存中，PC指向开始地址==</p>
+<p>这是main()编译后，entry是入口地址，如果<code>_main</code>相对于<code>_entry</code>的偏移地址是40</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322527.png" alt="在这里插入图片描述"  />
+
+现在如果这段程序要运行，那么只要将PC指向 call 40 这条指令所在的地址就好了，执行完call 40之后，会自动跳到地址为40处执行。</p>
+<p>但是现在有个问题，<code>_main</code>所在的位置一定是物理地址为40的位置吗？换言之，40表示的是物理地址吗？</p>
+<p>学过前面的知识，我们知道肯定不是的，前面放的system模块</p>
+<p>call 40这个40指的是相对于_entry的偏移量，程序里面的地址是==相对地址（逻辑地址）==，而==程序真正运行时的地址是绝对地址（物理地址）==，即程序运行时，==根据逻辑地址得到物理地址就是地址的重定位==。</p>
+<p>比如<code>_entry</code>这条指令的地址如果存放在物理地址为1000处，那么<code>_main</code>的
+地址就应该是1040，所以call 40就要变成call 1040.</p>
+<h3 id="2重定位">2.重定位<a hidden class="anchor" aria-hidden="true" href="#2重定位">#</a></h3>
+<p>==重定位:==
+==重定位是指将指令中的逻辑地址转换为内存中实际的物理地址的过程==</p>
+<p>重定位方式:</p>
+<p><strong>1.编译时重定位</strong>
+<strong>编译时重定位的程序只能放在内存中的固定位置</strong>，而编译结束后的内存使用情况不一定,与编译时的相同，因此这种重定位方式有很大的局限性。必须保证装入该程序时，这段程序要使用的地址是可用的。</p>
+<p>编译时进行重定位后，装入过程不需要有额外开销，因此效率较高</p>
+<p>编译时重定位一般用在可以保证一段程序固定地装入某段内存中的嵌入式系统中</p>
+<p><strong>2.载入时重定位（静态重定位）</strong>
+程序在装入内存时，将指令中的相对地址加上装入的内存段的基址作为绝对地址，<strong>载入时重定位的程序一旦载入内存后就不可以再移动位置</strong>。不利于程序在内存中的移动（交换，swap）。</p>
+<p><strong>3.运行时重定位（动态重定位）(最佳时机）</strong>
+运行时重定位的程序，装入内存的仍是逻辑地址，在实际访问时进行重定位，即在进程 PCB 中保存程序段的基址，实际访问时进行地址翻译（由基地址与逻辑偏移计算出物理地址），无妨交换</p>
+<h3 id="3交换">3.交换<a hidden class="anchor" aria-hidden="true" href="#3交换">#</a></h3>
+<p>为了更好地支持多进程，当内存空闲空间不足时，<strong>有选择地将某些进程保存到硬盘上（换出）</strong>，将腾出的空间交给当前需要运行的进程使用，即将要运行的进程换入到内存<br>
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322543.png" alt="在这里插入图片描述"  />
+
+进程1睡眠将进程1换出放入磁盘中，并将要运行的程序换入，当程序1要再次运行的时候，就再次换入，但是每次的基地址可能不一样。所以，一般在运行时重定位。</p>
+<h2 id="二内存分段">二、内存分段<a hidden class="anchor" aria-hidden="true" href="#二内存分段">#</a></h2>
+<p>在内存的使用方式，以及每个进程中的指令的地址如何对应到实际的内存
+实际上，更多时候进程不是作为一个连续的整体装入内存的</p>
+<p>而按照程序本身特点，将进程分段管理，满足每个段的需要，建立段表，描述段的信息，包括段号、段基址、段限长，段类别等等
+可以单独移动、扩大某个段，只需要维护好段表</p>
+<p>进程由多个部分(段)组成，每个段有各自的特点和用途，因为各个段性质的不同，当所有段作为一个整体看待时就会有所不便，比如，代码段是只读的，代码段、数据段不会动态增长，而堆栈段可能要动态增长
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322530.png" alt="在这里插入图片描述"  />
+</p>
+<p>假如不分段，在一个程序中执行指令和数据会杂糅在一起并保存在内存中，由于执行指令写到内存后不能被用户修改的，属于只读属性的。而程序中的数据是可读可写的，所以当计算机取址执行时还要判断该对应内存地址下的是指令还是数据，这样就不好判断了。所以我们将指令与数据用地址区间来分开，这样计算机在取址时通过判断地址就可以知道取的是指令还是数据，便于执行程序。所以人们为了计算机方便，就将程序中的具有相同属性的内容放到同一块内存片段。</p>
+<p>定位指令(数据):&lt;段号，段内偏移&gt;</p>
+<p>重定位的段号有特定的表来记录(LDT，和GDT表一样)
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322522.png" alt="在这里插入图片描述"  />
+
+CPU每执行一条牵涉到地址的指令都会查一下PCB里面这个进程段表，从而确定物理地址，有一个专门存放该表地址的寄存器LDTR寄存器。</p>
+<p>每个进程可以维护一个LDT表作为进程段表
+操作系统维护 GDT，每个 LDT 的入口可以作为GDT的一个表项，LDTR寄存器保存当前LDT的地址
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322550.png" alt="在这里插入图片描述"  />
+
+进程切换时，切换PCB，包括切换指令序列(CS:IP)与映射表(LDT)</p>
+<p>当内存在分段管理时，建立一个进程需要按程序所分的段(编译时确定)建立其段表，即初始化LDT，并将LDT与PCB关联起来，然后在内存中找到一块合适空闲区域装入程序</p>
+<p>1.linux0.11下TCB/PCB的实现都是靠一个task_struct结构体</p>
+<p>2.这个结构体里面还有一个结构体tss</p>
+<p>3.tss里面放的内容可以理解为是当前进程的CPU快照</p>
+<p>4.由于进程切换，段寄存器的内容就放在task_struct里的tss了</p>
+<h1 id="内存的管理">内存的管理<a hidden class="anchor" aria-hidden="true" href="#内存的管理">#</a></h1>
+<p>前面讲了内存的分段，这才是内存管理的起点。接下来，分段和分页结合使用才能真正的管理和使用内存</p>
+<h2 id="一内存分区">一、内存分区<a hidden class="anchor" aria-hidden="true" href="#一内存分区">#</a></h2>
+<p>分区式存储管理是把内存分为一些大小相等或不等的分区，操作系统占用其中一个分区，其余的分区由应用程序使用，每个应用程序占用一个或几个分区。分区式存储管理虽然可以支持并发，但难以进行内存分区的共享。</p>
+<p><strong>专业术语介绍</strong></p>
+<p><strong>(1)内碎片与外碎片</strong>：</p>
+<blockquote>
+<p>内碎片是占用分区内未被利用的空间，外碎片是占用分区之间难以利用的空闲分区(通常是小空闲分区)。</p>
+</blockquote>
+<p><strong>(2)内存紧缩</strong>：将空间分区合并需要移动一个段（复制内容），消耗大量时间，影响操作系统性能</p>
+<h3 id="1固定分区">1.固定分区<a hidden class="anchor" aria-hidden="true" href="#1固定分区">#</a></h3>
+<p>固定分区：把内存划分为若干个固定大小的连续分区，这种作法只适合于多个相同程序的并发执行(处理多个类型相同的对象)。分区大小也可以不等：有多个小分区、适量的中等分区以及少量的大分区。根据程序的大小，分配当前空闲的、适当大小的分区。
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322897.png" alt="在这里插入图片描述"  />
+</p>
+<blockquote>
+<p>优点：易于实现，开销小
+缺点：内碎片造成浪费；分区总数固定，限制了并发执行的程序数目</p>
+</blockquote>
+<h3 id="2动态分区">2.动态分区<a hidden class="anchor" aria-hidden="true" href="#2动态分区">#</a></h3>
+<p>==动态分区就是动态创建分区，在装入程序时按其初始要求分配，或在其执行过程中通过系统调用进行分配或改变分区大小。==</p>
+<p>动态分区的分区分配就是寻找某个空闲分区，其大小需大于或等于程序的要求。若是大于需求，则将该分区分割成两个分区，其中一个分区为要求的大小并标记为“占用”，而另一个分区为余下部分并标记为“空闲”。</p>
+<p>分区分配的先后次序通常是从内存低端到高端。动态分区的分区释放过程中有一个要注意的问题是，将相邻的空闲分区合并成一个大的空闲分区。
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322909.png" alt="在这里插入图片描述"  />
+
+与固定分区相比较：没有内碎片，但它却引入了另一种碎片——外碎片。</p>
+<p>==<strong>(1)可变分区的管理过程——核心数据结构</strong>==</p>
+<p>通过已分配分区表和空闲分区表两张表来记录分区使用情况。当有段请求时，空闲分区表将改变
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322910.png" alt="在这里插入图片描述"  />
+
+==<strong>(2)可变分区的管理—请求分配</strong>==
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322914.png" alt="在这里插入图片描述"  />
+
+在上图中，原本内存中已分配了seg1和seg2，空闲分区从地址250k开始，大小为250K，现有一个100k大小的段请求，于是250k-350k被分配给了新请求段seg3，空闲分区还剩下150k</p>
+<p>==<strong>(3)可变分区的管理—释放内存</strong>==
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322918.png" alt="在这里插入图片描述"  />
+
+同时由于进程可能被换入换出，所以内存中已分配的空间有可能被释放，因此空闲分区可能存在多段</p>
+<p>==<strong>(4)可变分区的管理—再次申请</strong>==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322926.png" alt="在这里插入图片描述"  />
+
+当存在多个空间分区时，再来一个段提出内存请求，该选谁？所以引入了三个分区分配算法</p>
+<h3 id="3分区分配算法">3.分区分配算法<a hidden class="anchor" aria-hidden="true" href="#3分区分配算法">#</a></h3>
+<p>==(1)最先适配法(nrst-fit)==</p>
+<p>按分区在内存的先后次序从头查找，<strong>找到符合要求的第一个分区进行分配</strong>。该算法的分配和释放的时间性能较好，较大的空闲分区可以被保留在内存高端。但随着低端分区不断划分会产生较多小分区，每次分配时查找时间开销便会增大。</p>
+<p>==(2)最佳适配法(best-fit)==</p>
+<p>按分区在内存的先后次序从头查找，**找到其大小与要求相差最小的空闲分区进行分配。**从个别来看，外碎片较小；但从整体来看，会形成较多外碎片优点是较大的空闲分区可以被保留。</p>
+<p>==(3)最坏适配法(worst- fit)==</p>
+<p>按分区在内存的先后次序从头查找，<strong>找到最大的空闲分区进行分配</strong>。基本不留下小空闲分区，不易形成外碎片。但由于较大的空闲分区不被保留，当对内存需求较大的进程需要运行时，其要求不易被满足。</p>
+<p>首先适配快，但其他分区就浪费时间，最佳分配需要遍历内存
+因此需要引入分页：解决内存分区导致的内存效率问题</p>
+<h2 id="二内存分页">二、内存分页<a hidden class="anchor" aria-hidden="true" href="#二内存分页">#</a></h2>
+<h3 id="1引入分页">1.引入分页<a hidden class="anchor" aria-hidden="true" href="#1引入分页">#</a></h3>
+<p><strong>引入分页: 解决内存分区导致的内存效率问题</strong></p>
+<p>可变分区多次分配以后就会形成内存碎片，当再来一个段请求大于每个单个空间空间时，就需要将内存合并：内存紧缩，内存紧缩需要花费大量时间
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322295.png" alt="在这里插入图片描述"  />
+
+解决方法：将每个段分成多页，内存也分成很多页，页是最小分配单位，这样每次分配段空间，最多浪费不超过一页，没有内存碎片</p>
+<p>其实也有会部分内存没有使用到，但是注意这种思想，页是一个单位，每次分配的内存都是整数个页，也就是将这些分配出去的页都看成是已经使用的了，所以就没有内存碎片。==所以从内存角度来说这种方式是比较好的，也就是物理内存想要分页，但是用户程序希望是分段。==后面会说到的</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322341.png" alt="在这里插入图片描述"  />
+
+每个段在计算物理地址时需要查找段的基址，那么将段分成页后，计算物理地址需要查找页的基址，物理地址=页基址+逻辑地址。</p>
+<p>PCB中存在页表保存每个段的页分配信息，为了取分段的页，将内存的页叫作页框
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322362.png" alt="在这里插入图片描述"  />
+
+内存分段的有一个段表，分页自然也要有一个页表。有一个专门的寄存器存储页表的地址。</p>
+<p>注意页在内存的排布顺序并不是按照地址的顺序递增的，也就是说页0不一定是放在地址零处，这里引入页框，<strong>页框是按照内存顺序排列的，并且页框的大小和页是相同的</strong></p>
+<p><strong>分析mov [0x2240],%eax</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">图片中</span><span class="err">：</span>  <span class="n">mov</span> <span class="p">[</span><span class="mh">0x2240</span><span class="p">],</span><span class="o">%</span><span class="n">eax</span>  
+</span></span><span class="line"><span class="cl"><span class="mi">2240</span><span class="n">地址表示的实际内存地址是多少</span><span class="err">？</span><span class="n">首先看它是那一页的</span><span class="err">，</span><span class="n">每一页的大小为</span>
+</span></span><span class="line"><span class="cl"><span class="mi">4</span><span class="n">k</span><span class="err">，</span><span class="mh">0x2240</span><span class="n">除以4K得到页号</span><span class="err">，</span><span class="n">除以4K也就是右移12位</span><span class="p">,</span><span class="n">得到2</span><span class="p">,</span><span class="n">即第二页</span><span class="err">，</span><span class="n">根据页</span>
+</span></span><span class="line"><span class="cl"><span class="n">号找到具体的页框号</span><span class="err">，</span><span class="n">在上图中为3</span><span class="err">，</span><span class="n">具体的地址就是3</span><span class="o">*</span><span class="mi">4</span><span class="n">K</span><span class="o">+</span><span class="mi">240</span><span class="o">=</span><span class="mi">3240</span><span class="err">，</span><span class="n">即物理地</span>
+</span></span><span class="line"><span class="cl"><span class="n">址为3240</span><span class="o">.</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2多级页表">2.多级页表<a hidden class="anchor" aria-hidden="true" href="#2多级页表">#</a></h3>
+<p>为了提高内存的利用率，内存是分页管理的，并且有一个页表用来存储页号与页框的对应关系。
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322496.png" alt="在这里插入图片描述"  />
+</p>
+<p>但是，为了更好的提高内存的利用率，每一页就应该做得足够小，但是每一页都要在页表里面有一项与页框对应，也就是说页数越多页表也就会越大，页表如果很大的话就会对内存造成浪费，因为存放页表的这部分你内存是不能给程序使用的，并且一直存放在该进程的PCB里面</p>
+<p>(1)只存放用到的页</p>
+<p>只用到0，1，3就存放这三页，如图
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322602.png" alt="在这里插入图片描述"  />
+
+若这存放用到的页，但这样的话页表的项就不连续了，找某一页对应的页框就不能直接使用偏移量的形式，较高查找效率是折半查找（因为页号是有顺序的），即便使用折半查找耗费的时间也会比使用偏移量大很多倍。</p>
+<p><strong>所以页表的页号必须是连续的。</strong></p>
+<p>==(2)多级页表(页目录表+页表)==</p>
+<p>==页目录表的每一项对应一个页表，然后再根据页表找到对应的页。==
+一个逻辑地址用10bits的页目录号+10bits的页号+12bits的偏移组成
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322637.png" alt="在这里插入图片描述"  />
+</p>
+<p>这种思想就类似于书本的目录，目录的地方有一个章目录（页目录表）和节目录（页表)，如果要查找某一节的内容首先找到这一章的地方，然后再查具体的某一节</p>
+<p>不仅能节省大量内存，并且保证了章目录和节目录都是连续的，所以可以使用偏移量的形式查找对应的章节</p>
+<h3 id="3快表tlb">3.快表TLB<a hidden class="anchor" aria-hidden="true" href="#3快表tlb">#</a></h3>
+<p>多级页表提高了空间效率，但是在时间的效率上非常低。因为每一次访问的时候都要根据章目录找到页目录再找到具体的页。也就是需要访问三次内存，cpu每一条指令执行的时间其实大部分都是浪费在访问内存上
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322789.png" alt="在这里插入图片描述"  />
+
+解决方法：在CPU与内存访问之间加一组TLB，==TLB是一组寄存器，用来存放最近使用过的页对应的页框号==</p>
+<p>这样如果CPU需要访问某一页首先在TLB里面找，如果TLB里面有就不用访问内存了，因为TLB是寄存器，cpu访问寄存器的速度远大于对内存的访问速度，大大地提升时间性能了。</p>
+<p>提升时间性能最主要的因素就是==可以在TLB里面直接找到该页对应的页框号==。</p>
+<p>要提升命中率，TLB肯定是越大越好，但是TLB材料很贵，不会做得很大。TLB的大小大概是[64,1024]。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322814.png" alt="在这里插入图片描述"  />
+</p>
+<p>为什么TLB里面存放这么少的项就能实现“近似访存1次”？</p>
+<p>因为程序的局部性原理，==程序的局部性原理在用户程序里面多对应的是循环，顺序结构==</p>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>为了提高内存的空间性能，提出了多级页表；但是提到空间性能是以浪费时间性能为基础的，因此为了补充损失的时间性能，提出了快表(即TLB)，快表利用的是程序的局部性原理。</p>
+<h1 id="linux虚拟内存">Linux虚拟内存<a hidden class="anchor" aria-hidden="true" href="#linux虚拟内存">#</a></h1>
+<h2 id="一虚拟内存的引入">一、虚拟内存的引入<a hidden class="anchor" aria-hidden="true" href="#一虚拟内存的引入">#</a></h2>
+<h3 id="1基本概念">1.基本概念<a hidden class="anchor" aria-hidden="true" href="#1基本概念">#</a></h3>
+<p>虚拟内存：</p>
+<p>用辅助存储器（一般指磁盘）作为内存的补充。虚拟内存允许进程执行时只将部分程序放入内存，因此程序可以比物理内存大。虚拟内存的大小受计算机寻址机制和可用辅助存储器容量大限制，而不受内存容量的限制。</p>
+<p>特征：</p>
+<blockquote>
+<p>①运行进程时只把现在要执行的页/段装入内存，其余页/段放在外存，需要时再利用请求调入页/段功能和置换功能将其调入内存。
+②在逻辑上扩充内存容量
+③访问速度接近于内存，没位(bit)成本接近于外存。</p>
+</blockquote>
+<p><strong>虚拟地址</strong>：即逻辑地址，虚拟内存中某个字节的地址，假设该字节在内存中（其实可能位于磁盘，但这对用户是透明的）</p>
+<p><strong>虚拟地址空间</strong>：分配给某个进程（程序）的虚拟地址范围</p>
+<p>实地址：即物理地址, 物理内存中某个字节的地址</p>
+<p>驻留集：进程运行时装入内存的部分</p>
+<p>工作集：在 t 时刻，进程在过去的N个时间单位内访问的页面集合(活跃页面)</p>
+<p><strong>内存管理单元MMU</strong>：集成在CPU中，或作为一个协处理器</p>
+<p>==功能：分解逻辑地址；逻辑地址到物理地址的转换；查找更新快表TLB；进程切换时清空TLB；发出缺页中断或越界中断；设置和检查页表中各个特征位。==</p>
+<h3 id="2局部性原理">2.局部性原理<a hidden class="anchor" aria-hidden="true" href="#2局部性原理">#</a></h3>
+<p>上一篇笔记中提了一点关于局部性原理的特点，这里更详细的介绍。</p>
+<p>局部性原理表现在以下两个方面：</p>
+<p>==(1)时间局部性==</p>
+<p>如果程序中的某条指令一旦执行，不久以后该指令可能再次执行；如果某数据被访问过，不久以后该数据可能再次被访问。</p>
+<p>原因:==是由于在程序中存在着大量的循环操作==</p>
+<p>==(2)空间局部性==</p>
+<p>一旦程序访问了某个存储单元，在不久之后，其附近的存储单元也将被访问，即程序在一段时间内所访问的地址，可能集中在一定的范围之内</p>
+<p>原因：==指令通常是顺序存放、顺序执行的，数据也一般是以向量、数组、表等形式簇聚存储的==。</p>
+<p><strong>快表、 页高速缓存以及虚拟内存技术从广义上讲，都是属于高速缓存技术。这个技术所依赖的原理就是局部性原理。局部性原理既适用于程序结构，也适用于数据结构</strong></p>
+<h3 id="3引入">3.引入<a hidden class="anchor" aria-hidden="true" href="#3引入">#</a></h3>
+<p>从前面我们了解到：物理内存必须得是分页管理的；对用户来说是分段的。</p>
+<p>但是用户程序最终能在内存上面跑，肯定需要某种机制或者转化使得以用户程序的视角看起来内存是分段的，以物理内存的视角看起来又是分页的，这种机制就是虚拟内存</p>
+<p>时间局部性是通过将近来使用的指令和数据保存到高速缓存存储器中，并使用高速缓存的层次结构实现。</p>
+<p>空间局部性通常是使用较大的高速缓存，并将预取机制集成到高速缓存控制逻辑中实现。虚拟内存技术实际上就是建立了 “内存一外存”的两级存储器的结构，利用局部性原理实现髙速缓存。</p>
+<p>虚拟内存是一种和物理内存一样的东西，每一个字节都有对应的地址。但是有一点与物理内存不同，从它的名字就能看出来，“虚拟”：即实际上并不存在，它只是一种机制，是用程序表示的。它的作用就是让上层程序看起来是内存是分段的，而实际上是分页的，如图</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322816.png" alt="在这里插入图片描述"  />
+</p>
+<p>用户程序使用了一段内存，首先会在虚拟内存上面找到一段空的内存，然后将用户程序使用的内存映射到这段内存上，然后虚拟内存再将这段内存映射到物理内存上</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322819.png" alt="在这里插入图片描述"  />
+
+用户程序使用的逻辑内存经过了两次映射才达到物理内存，第一次映射是段的映射，需要段表；第二次是页的映射，需要页表。</p>
+<p>逻辑地址究竟是如何变成物理地址的呢？</p>
+<p>==<strong>逻辑地址是段号+偏移（CS：IP）组成的，首先根据段号在段表中找到虚拟内存的段基址，然后加上偏移得到虚拟地址（即在虚拟内存上面的地址），格式是：页号+偏移。然后根据页号在页表中找到对应的页框号，再加上偏移得到最后的物理地址。实现了逻辑地址与物理地址的对应。也就是重定位操作。</strong>==</p>
+<h2 id="二实现虚拟内存">二、实现虚拟内存<a hidden class="anchor" aria-hidden="true" href="#二实现虚拟内存">#</a></h2>
+<h3 id="1载入内存">1.载入内存<a hidden class="anchor" aria-hidden="true" href="#1载入内存">#</a></h3>
+<p>内存管理的核心就是内存分配，所以从程序放入内存、使用内存开始
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322839.png" alt="在这里插入图片描述"  />
+</p>
+<p>首先为程序分配虚拟内存，将程序中的各段分配到虚拟内存的闲置空间中，然后再将虚拟内存中的各段再分成若干页，映射到物理内存的页框中</p>
+<h3 id="2-分配虚存-建段表">2. 分配虚存、 建段表<a hidden class="anchor" aria-hidden="true" href="#2-分配虚存-建段表">#</a></h3>
+<p>创建进程使用的是fork()系统调用，从前面可以知道fork()-&gt;sys_fork-&gt;copy_process</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="err">在</span><span class="n">Linux</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">fork</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">copy_process</span><span class="p">(</span><span class="kt">int</span> <span class="n">nr</span><span class="p">,</span> <span class="kt">long</span> <span class="n">ebp</span><span class="p">...)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="err">………………</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">copy_mem</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span><span class="n">p</span><span class="p">);</span> <span class="c1">//分配虚拟内存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="err">………………</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">copy_mem</span><span class="p">(</span><span class="kt">int</span> <span class="n">nr</span><span class="p">,</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">new_data_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">new_data_base</span> <span class="o">=</span> <span class="n">nr</span><span class="o">*</span><span class="mh">0x4000000</span><span class="p">;</span>		<span class="c1">// nr * 64M
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">set_base</span><span class="p">(</span><span class="n">p_</span><span class="o">&gt;</span><span class="n">ldt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">new_data_base</span><span class="p">);</span>		<span class="c1">// 代码段 ldt(段表)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">set_base</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">ldt</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">new_data_base</span><span class="p">);</span>		<span class="c1">// 数据段
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="err">………………</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>调用fork()，然后调用sys_fork，进入copy_process后，在copy_process中调用copy_men();</p>
+<p>copy_men()函数就是给该进程在虚拟内存上分配内存空间的，
+形参 nr：第nr个进程 p：该进程的pcb</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"> <span class="n">new_data_base</span> <span class="o">=</span> <span class="n">nr</span><span class="o">*</span><span class="mh">0x4000000</span><span class="p">;</span>		<span class="c1">// nr * 64M
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>给该进程在虚拟内存上分配一块64M的内存块。可以看到第0个进程内存区域就是0 ~ 64M，第一个进程64~128M，依次类推，互不重叠。然后将p的ldt[1]和ldt[2]都指向这块内存</p>
+</blockquote>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322831.png" alt="在这里插入图片描述"  />
+</p>
+<p>ldt[1]和ldt[2]指的是数据段和代码段，数据段和代码段现在在虚拟内存上分配内存、建立段表完成</p>
+<h3 id="3分配内存建页表">3.分配内存、建页表<a hidden class="anchor" aria-hidden="true" href="#3分配内存建页表">#</a></h3>
+<p>分配内存、建立页表，还是copy_mem()函数完成的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">copy_mem</span><span class="p">(</span><span class="kt">int</span> <span class="n">nr</span><span class="p">,</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">old_data_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">old_data_base</span> <span class="o">=</span> <span class="nf">get_base</span><span class="p">(</span><span class="n">currnet</span><span class="o">-&gt;</span><span class="n">ldt</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">copy_page_tables</span><span class="p">(</span><span class="n">old_data_base</span><span class="p">,</span> <span class="n">new_data_base</span><span class="p">,</span> <span class="n">data_limit</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="err">………………</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">copy_page_tables</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">from</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">to</span> <span class="p">,</span> <span class="kt">long</span> <span class="n">size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">from_dir</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span><span class="p">)</span> <span class="p">((</span><span class="n">from</span><span class="o">&gt;&gt;</span><span class="mi">20</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">to_dir</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span> <span class="p">)((</span><span class="n">to</span><span class="o">&gt;&gt;</span><span class="mi">20</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)(</span><span class="n">size</span> <span class="o">+</span> <span class="mh">0x3fffff</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">22</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(;</span> <span class="n">size</span><span class="o">--&gt;</span><span class="mi">0</span><span class="p">;</span> <span class="n">from_dir</span><span class="o">++</span><span class="p">,</span> <span class="n">to_dir</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">from_page_table</span><span class="o">=</span><span class="p">(</span><span class="mh">0xfffff000</span> <span class="o">&amp;</span> <span class="o">*</span><span class="n">from_dir</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">to_page_table</span> <span class="o">=</span> <span class="nf">get_free_page</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">		<span class="o">*</span><span class="n">to_dir</span> <span class="o">=</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="n">to_page_table</span><span class="p">)</span> <span class="o">|</span> <span class="mi">7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>简单分析：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">old_data_base</span> <span class="o">=</span> <span class="nf">get_base</span><span class="p">(</span><span class="n">currnet</span><span class="o">-&gt;</span><span class="n">ldt</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>得到当前进程的虚拟内存地址赋给old_data_base，再调用copy_page_tables()函数，</p>
+<p>参数from和to：都是32为虚拟内存地址
+from_dir指向一个父进程的页目录项（章）
+to_dir指向一个子进程的页目录项（章）
+32位虚拟地址格式：
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322846.png" alt="在这里插入图片描述"  />
+</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">from_dir</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span><span class="p">)</span> <span class="p">((</span><span class="n">from</span><span class="o">&gt;&gt;</span><span class="mi">20</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//from右移22位得到的是页目录号 ffc00000 -&gt;1111 1111 1100 0000 
+</span></span></span><span class="line"><span class="cl"><span class="c1">//这里右移20 并与上0xffc 就是去前10位，
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>size是页目录项数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(;</span> <span class="n">size</span><span class="o">--&gt;</span><span class="mi">0</span><span class="p">;</span> <span class="n">from_dir</span><span class="o">++</span><span class="p">,</span> <span class="n">to_dir</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">from_page_table</span><span class="o">=</span><span class="p">(</span><span class="mh">0xfffff000</span> <span class="o">&amp;</span> <span class="o">*</span><span class="n">from_dir</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">to_page_table</span> <span class="o">=</span> <span class="nf">get_free_page</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//分配一个物理内存页来保存页表,就是在mem_map中找一段没有被用过的内存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="o">*</span><span class="n">to_dir</span> <span class="o">=</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="n">to_page_table</span><span class="p">)</span> <span class="o">|</span> <span class="mi">7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>from_dir就是一个指向页目录号的指针，根据这个指针找到每一个页号和对应的页框号,get_free_page()新建一个子进程的页目录表，然后将这个页目录表赋给to_dir,但是to_dir指向的表的内容是空的</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322849.png" alt="在这里插入图片描述"  />
+
+get_free_page()函数：得到一段空闲的空间</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">get_free_page</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="k">register</span> <span class="kt">unsigned</span>
+</span></span><span class="line"><span class="cl"><span class="kt">long</span> <span class="n">_res</span> <span class="k">asm</span><span class="p">(</span><span class="err">“</span><span class="n">ax</span><span class="err">”</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_asm_</span><span class="p">(</span><span class="err">“</span><span class="n">std</span><span class="p">;</span> <span class="n">repne</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">scasbnt</span><span class="err">”</span>
+</span></span><span class="line"><span class="cl"><span class="err">“</span><span class="n">movl</span> <span class="o">%%</span><span class="n">edx</span><span class="p">,</span><span class="o">%%</span><span class="n">eaxn</span><span class="err">”</span>
+</span></span><span class="line"><span class="cl"><span class="err">“</span><span class="n">D</span><span class="err">”</span><span class="p">(</span><span class="n">mem_map</span><span class="o">+</span><span class="n">PAGIG_PA</span>
+</span></span><span class="line"><span class="cl"><span class="n">GES</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="k">return</span> <span class="n">_res</span><span class="p">;</span> <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来就是填表,将父进程的页表拷贝到子进程中<br>
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322220.png" alt="在这里插入图片描述"  />
+</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(;</span> <span class="n">nr</span><span class="o">--&gt;</span><span class="mi">0</span><span class="p">;</span> <span class="n">from_page_table</span><span class="o">++</span><span class="p">,</span> <span class="n">to_page_table</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">this_page</span> <span class="o">=</span> <span class="o">*</span><span class="n">from_page_table</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">this_page</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="mi">2</span><span class="p">;</span>		<span class="c1">// 设置为只读,父进程子进程共享一个页
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="o">*</span><span class="n">to_page_table</span> <span class="o">=</span> <span class="n">this_page</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="o">*</span><span class="n">from_page_table</span> <span class="o">=</span> <span class="n">this_page</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">this_page</span> <span class="o">-=</span> <span class="n">LOW_MEN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">this</span><span class="o">-&gt;</span><span class="n">page</span> <span class="o">&gt;&gt;=</span> <span class="mi">12</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">mem_map</span><span class="p">[</span><span class="n">this_page</span><span class="p">]</span><span class="o">++</span><span class="p">;</span> <span class="err">这一页被共享了，当其中一个释放，还有其他的在使用，因此要</span><span class="o">+</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>做完上面三步，内存情况：
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322240.png" alt="在这里插入图片描述"  />
+</p>
+<h3 id="4重定位">4.重定位<a hidden class="anchor" aria-hidden="true" href="#4重定位">#</a></h3>
+<p>通过逻辑地址找到虚拟地址，通过虚拟地址找到物理地址(MMU自动完成)</p>
+<p>如：
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322265.png" alt="在这里插入图片描述"  />
+</p>
+<p>对父进程指向p=0x300， <code>*p=7</code>，父进程就会在通过重定位找到物理地址，然后将7写入</p>
+<p>然后父进程fork()一个子进程，因为公用的是一套页表，并且将页表置位只读，因此子进程指向p=0x300， <code>*p=8</code>时，就会重新申请一段内存，修改页表，然后MMU重新计算，然后执行<code>*p = 8</code>，这样就实现了进程之间的分离。</p>
+<h2 id="总结-1">总结<a hidden class="anchor" aria-hidden="true" href="#总结-1">#</a></h2>
+<p>虚拟内存的实现</p>
+<ul>
+<li>1.分配段</li>
+<li>2.建段表</li>
+<li>3.分配页</li>
+<li>4.建页表</li>
+<li>5.重定位</li>
+</ul>
+<h1 id="内存换入与换出">内存换入与换出<a hidden class="anchor" aria-hidden="true" href="#内存换入与换出">#</a></h1>
+<p>为了保证内存在用户程序看起来是分段，而实际是分页的效果，引入了虚拟内存。对于用户来说，虚拟内存是一个完整的内存，用户可以随意使用该内存，假设为4G，对于用户来说就有4G的空间可以使用，但是真正的物理内存远小于4G。为了实现这一差别，引出了内存换入和换出</p>
+<h2 id="一内存换入">一、内存换入<a hidden class="anchor" aria-hidden="true" href="#一内存换入">#</a></h2>
+<h3 id="1引出换入">1.引出换入<a hidden class="anchor" aria-hidden="true" href="#1引出换入">#</a></h3>
+<p>从前面我们知道，在内存中段页同时存在
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322215.png" alt="在这里插入图片描述"  />
+</p>
+<p>但是实际情况是虚拟内存的大小一般大于物理内存，我们又不得不实现虚拟内存，所以，用换入换出实现这一差别(建立虚拟内存与物理内存的映射)。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322219.png" alt="在这里插入图片描述"  />
+</p>
+<p>==分段分页的核心是虚拟内存，而要实现虚拟内存，就需要进行内存的换入和换出==</p>
+<p>当要访问某一个段的时候，将该段映射到物理内存中，不向相关的数据可以覆盖。
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322224.png" alt="在这里插入图片描述"  />
+</p>
+<h3 id="2请求调页">2.请求调页<a hidden class="anchor" aria-hidden="true" href="#2请求调页">#</a></h3>
+<p>先用逻辑地址通过查段表计算出虚拟地址时，再由虚拟地址查页表计算物理地址，当用虚拟地址查页表发现该虚拟地址没有映射，即该页没有载入内存时，需要从磁盘中将该页载入物理内存（请求调页）
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322231.png" alt="在这里插入图片描述"  />
+</p>
+<p>逻辑地址CS:IP，首先根据CS在段表中找到对应的基址，加上偏移得到虚拟地址：页号+偏移。然后根据页号在页表中找到对应的页框号，加上偏移得到物理地址。</p>
+<p>但是如果在页表中找不到对应的页号对应的页框地址，就要从磁盘上将这一页换入了。</p>
+<p>换入是利用中断来处理(页错误处理程序)，如果load[addr]的时候，发现addr在页表里面没有对应映射，那么就将中断向量寄存器的某一位置为1，说明有中断产生。然后在中断服务函数里面将addr导入到物理内存中。然后再次执行load[addr]这条语句。</p>
+<p>通过虚拟地址查页表找不到映射的情况称作<strong>缺页</strong>，发现缺页后就要从磁盘中请求调页，这个过程一般比较长，同时需要进入内核，所以在中断中进行。一旦发生缺页，就进入缺页中断，在中断中请求调页。同时建立虚拟内存的该页与物理内存的映射，当请求调页完成时，映射也建立好了
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322227.png" alt="在这里插入图片描述"  />
+
+将某页从磁盘换入到内存的，从中断服务函数开始。cpu有专门的中断会就去查找中断号，然后转去执行该中断服务程序。这些东西是在系统初始化的时候就做好了</p>
+<p><strong>(1)设置中断号</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">trap_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">set_trap_gate</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">page_fault</span><span class="p">);</span> <span class="c1">//设置中断号
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp"># define set_trap_gate(n, addr)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>	<span class="nf">_set_gate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">idt</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">addr</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>(2)中断处理page fault</strong>
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322240.png" alt="在这里插入图片描述"  />
+</p>
+<p>(3)进入中断要push保留现场，然后调用do_no_page();
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322557.png" alt="在这里插入图片描述"  />
+
+当页不存在时，执行该函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">page</span><span class="o">=</span><span class="nf">get_free_page</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nf">bread_page</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">executable</span><span class="o">-&gt;</span><span class="n">i_dev</span><span class="p">,</span> <span class="n">nr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">put_page</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">address</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>先分配一个空闲页给page，然后将磁盘里面的页读到内存中，调用put_page建立映射，最后再次执行load[addr]</p>
+<p><strong>(4)建立映射put_page</strong>
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322576.png" alt="在这里插入图片描述"  />
+</p>
+<h2 id="二内存换出">二、内存换出<a hidden class="anchor" aria-hidden="true" href="#二内存换出">#</a></h2>
+<h3 id="1引入换出">1.引入换出<a hidden class="anchor" aria-hidden="true" href="#1引入换出">#</a></h3>
+<p>由于物理内存大小是有限的，在内存换入多次后，物理内存就会满，因此必须换页，才能腾出空间给新换入的页。</p>
+<p>换页的核心问题是需要选择一页淘汰，换出到磁盘，选择哪一页？类似于进程调度</p>
+<h3 id="2fifo算法">2.FIFO算法<a hidden class="anchor" aria-hidden="true" href="#2fifo算法">#</a></h3>
+<p>即每次缺页的时候就替换掉最开始的那一页（先进先出）
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322590.png" alt="在这里插入图片描述"  />
+
+在第一次换D的时候将A换入，但是后面紧跟着又要换入A…
+这种算法在这个方面肯定不是最好的算法，因为它没有任何机制保证替换次数尽可能少</p>
+<h3 id="3min算法">3.MIN算法<a hidden class="anchor" aria-hidden="true" href="#3min算法">#</a></h3>
+<p>选最远（不常用的）将使用的页淘汰， 是最优方案
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322609.png" alt="在这里插入图片描述"  />
+
+但是，MIN需要知道将来发生的事，在实际中不可行</p>
+<h3 id="4lru算法">4.LRU算法<a hidden class="anchor" aria-hidden="true" href="#4lru算法">#</a></h3>
+<p>选最近最长一段时间没有使用的页淘汰(最近最少使用)</p>
+<p>用过去的历史预测将来，可以通过前面调用的页的顺序来推测未来哪些页是常用的，理论基础就是程序的空间局部性。
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322629.png" alt="在这里插入图片描述"  />
+</p>
+<p>实现一：时间戳</p>
+<p>用时间戳来记录每页的访问时间
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322954.png" alt="在这里插入图片描述"  />
+
+第一次将A放入页框中，并记录当前时间为1；第二次将B放入页框中，并记录当前时间为2；第三次将C放入页框中，并记录当前时间为3；第四次又是访问A页，更新A页访问时间，第五次访问B页，更新B页访问时间；第六次访问D页，不存在，那么就在A、B、C页中选择一个最早使用的也就是数字最小的替换，即C页。</p>
+<p>理论上算法可行，但是，每次地址访问都需要修改时间戳， 需维护一个全局时钟， 需找到最小值 … 实现代价较大</p>
+<ol>
+<li>
+<p>这里的关键是维护时机的问题。</p>
+</li>
+<li>
+<p>如果不缺页，程序应该是直接通过MMU访问物理地址，内核没有机会进行时间戳或者栈的维护。</p>
+</li>
+<li>
+<p>只有在缺页中断的时候内核才有机会接触处理页换出。</p>
+</li>
+<li>
+<p>任何在不缺页的时候的数据结构维护都会带来巨大开销</p>
+</li>
+</ol>
+<p>实现二：页码栈</p>
+<p>每次选择栈底换出
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322967.png" alt="在这里插入图片描述"  />
+
+每次地址访问都需要修改栈(修改10次左右栈指针) … 实现代价仍然较大</p>
+<h3 id="5clock算法"><code>5.Clock算法</code><a hidden class="anchor" aria-hidden="true" href="#5clock算法">#</a></h3>
+<p>LRU的近似实现 – 将时间计数变为是和否</p>
+<p>实现这一算法：Second Chance Replacement（再给一次机会）</p>
+<p>具体思想：每页增加一个引用位( R )，每一次访问该页时，就将该位置为1。当发生缺页时用一个指针查看每一页的引用位，如果是1则将其置为0，如果是0就直接淘汰。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322979.png" alt="在这里插入图片描述"  />
+</p>
+<p>每次访问一页时， 硬件自动设置该位</p>
+<p>选择淘汰页： 扫描该位， 是1时清0， 并继续扫描； 是0时淘汰该页</p>
+<p>这种方法提高了内存的效率，只要维护R位（在PCB中）</p>
+<p>但是，如果缺页很少，可能会出现所以的R为1（在实际中，缺页的情况不会很多；如果缺页很多了，说明内存太小了或者算法不行）</p>
+<p>当发生缺页时，指针转一圈之后将所有的页的引用位都置为0，没找到能替换的，继续转，这时候发现最开始的页引用位为0，将其换出，指针后移</p>
+<p>然后又一段时间没有发生缺页，所有页的引用位都为1，当发生缺页之后，又会将这一轮最开始的页换出，然后指针后移，一段时间之后发生缺页，又会将这一轮最开始的页换出，这不就直接退化为FIFO了吗？</p>
+<p>原因：记录了太长的历史信息</p>
+<p>解决：==定时清除R位==</p>
+<p>再加一个指针用来清除每一页的引用位（这个指针的移动速度要快），可以放在时钟中断里面，定时清除
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322990.png" alt="在这里插入图片描述"  />
+</p>
+<h2 id="三帧framehttpssocsdnnetsosearchqframespm1001210130017020">三、帧<a href="https://so.csdn.net/so/search?q=frame&amp;spm=1001.2101.3001.7020">frame</a><a hidden class="anchor" aria-hidden="true" href="#三帧framehttpssocsdnnetsosearchqframespm1001210130017020">#</a></h2>
+<p>现在置换策略有了，但是还有一个问题：给进程分配多少个页框(帧frame)?</p>
+<p>如果分配多，请求调页导致的内存高效利用就没有用。而且内存就那么大，如果每一个进程分配很多的话，跑的进程数量就少了。</p>
+<p>如果分配的少，系统内进程增多，每个进程的缺页率增大，当缺页率大到一定程度，进程就会总等待调页完成，导致cpu利用率降低，这一现象为颠簸(thrashing)
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322007.png" alt="在这里插入图片描述"  />
+</p>
+<p>所以，先给进程分配一定数量的页框，如果增加页框能增加cpu利用率，就缓慢增加，如果导致cpu利用率减少，就降低页框分配。当然实际情况下每个进程对应的页框数量肯定是得动态调整的。</p>
+<h2 id="总结-2">总结<a hidden class="anchor" aria-hidden="true" href="#总结-2">#</a></h2>
+<p>内存的换入与换出大致过程：
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012322765.png" alt="image-20230801232254692"  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>实验3 系统调用</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/basic/csapp/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>程序的机器级表示</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

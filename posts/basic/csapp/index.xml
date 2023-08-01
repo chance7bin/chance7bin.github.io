@@ -5,6 +5,34 @@
     <link>https://chance7bin.github.io/posts/basic/csapp/</link>
     <description>Recent content in CSAPP on Binb&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://chance7bin.github.io/posts/basic/csapp/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 13 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/posts/basic/csapp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>计算机系统漫游</title>
+      <link>https://chance7bin.github.io/posts/basic/csapp/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/csapp/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/</guid>
+      <description>系统硬件组成 运行hello程序 1.在键盘上输入命令“./hello”后，shell程序将字符逐一读入寄存器，再把它放到内存中。 2.回车时，s</description>
+    </item>
+    
+    <item>
+      <title>信息的表示和处理</title>
+      <link>https://chance7bin.github.io/posts/basic/csapp/%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/csapp/%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/</guid>
+      <description>信息存储 16进制表示法 一个字节可以用两个十六进制数字来表示。（一个字节占8位，16进制一个符号占4位，所以一个字节可以用两个16进制符号表示</description>
+    </item>
+    
+    <item>
+      <title>程序的机器级表示</title>
+      <link>https://chance7bin.github.io/posts/basic/csapp/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/csapp/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/</guid>
+      <description>程序编码 代码示例 mstore.c 1 2 3 4 5 6 long mult2(long, long); void multstore(long x, long y, long *dest){ long t = mult2(x,y); *dest = t; } main.c 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 #include &amp;lt;stdio.h&amp;gt; void multstore(long, long, long *); int main(){ long d; multstore(2,3,&amp;amp;d); printf(&amp;#34;2 * 3 --&amp;gt; %ld\n&amp;#34;,d); return 0; } long</description>
+    </item>
+    
   </channel>
 </rss>

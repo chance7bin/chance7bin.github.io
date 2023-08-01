@@ -8,12 +8,75 @@
     <language>zh-cn</language>
     <lastBuildDate>Mon, 17 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>docker 安装nominatim</title>
-      <link>https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/</link>
+      <title>docker 安装 nominatim</title>
+      <link>https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85-nominatim/</link>
       <pubDate>Thu, 10 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85nominatim/</guid>
+      <guid>https://chance7bin.github.io/posts/note/docker-%E5%AE%89%E8%A3%85-nominatim/</guid>
       <description>引言 Nominatim是一种通过名称和地址（地理编码）搜索OpenStreetMap数据以及生成OSM点的合成地址（反向地理编码）的工具。 写</description>
+    </item>
+    
+    <item>
+      <title>实验1 熟悉实验环境</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C1-%E7%86%9F%E6%82%89%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Tue, 17 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C1-%E7%86%9F%E6%82%89%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</guid>
+      <description>写在前面 该专栏主要是基于 哈工大操作系统实验 Hit-oslab 记录的实验过程与学习笔记 ✍ 实验地址 ➡ 操作系统原理与实践 哈工大操作系统实验 Hit-oslab 环境搭建指南 1. 主要平台</description>
+    </item>
+    
+    <item>
+      <title>图解TCPIP</title>
+      <link>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3tcpip/</link>
+      <pubDate>Mon, 16 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3tcpip/</guid>
+      <description>写在前面 该篇博客是我在看《图解TCPIP》这本书时记录的学习笔记✍~~ 第1章 网络基础知识 计算机网络，根据其规模可分为==WAN（Wide Area N</description>
+    </item>
+    
+    <item>
+      <title>一、内核启动</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E4%B8%80%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8/</link>
+      <pubDate>Sat, 14 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E4%B8%80%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8/</guid>
+      <description>引导启动程序&amp;mdash;bootsect 1.简介 冯·诺依曼存储程序思想 存储程序的主要思想：将程序和数据存放到计算机内部的存储器中，计算机在</description>
+    </item>
+    
+    <item>
+      <title>图解HTTP</title>
+      <link>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3http/</link>
+      <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3http/</guid>
+      <description>写在前面 该篇博客是我在看《图解HTTP》这本书时记录的学习笔记✍~~ 第 1 章 了解 Web 及网络基础 Web 使用一种名为 ==HTTP（HyperText Transfer P</description>
+    </item>
+    
+    <item>
+      <title>网络是怎样连接的</title>
+      <link>https://chance7bin.github.io/posts/basic/network/%E7%BD%91%E7%BB%9C%E6%98%AF%E6%80%8E%E6%A0%B7%E8%BF%9E%E6%8E%A5%E7%9A%84/</link>
+      <pubDate>Wed, 20 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/network/%E7%BD%91%E7%BB%9C%E6%98%AF%E6%80%8E%E6%A0%B7%E8%BF%9E%E6%8E%A5%E7%9A%84/</guid>
+      <description>写在前面 该篇博客是我在看《网络是怎样连接的》这本书时记录的学习笔记✍~~ 第1章 浏览器生成消息——探索浏览器内部 1.1 生成HTTP请求消息 1.2 向 DNS 服</description>
+    </item>
+    
+    <item>
+      <title>计算机系统漫游</title>
+      <link>https://chance7bin.github.io/posts/basic/csapp/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/csapp/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/</guid>
+      <description>系统硬件组成 运行hello程序 1.在键盘上输入命令“./hello”后，shell程序将字符逐一读入寄存器，再把它放到内存中。 2.回车时，s</description>
+    </item>
+    
+    <item>
+      <title>相关知识</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/</guid>
+      <description>x86汇编 操作数排列是从源（右）到目的（左） 1 2 3 4 5 6 7 8 9 10 assume cs:codesg ;假设代码段的名称为codesg codesg segment ;定义一个codesg段 mov ax,0123H mov bx,0456H add ax,bx</description>
     </item>
     
     <item>
@@ -26,12 +89,84 @@
     </item>
     
     <item>
+      <title>二、进程管理</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E4%BA%8C%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Tue, 17 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E4%BA%8C%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
+      <description>操作系统的接口与实现 相关知识 相关链接： 【构建操作系统】全局描述符表GDT GDT（全居描述符表）和LDT（局部描述符表） GDT（Global Descriptor</description>
+    </item>
+    
+    <item>
+      <title>实验2 操作系统的引导</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C2-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BC%95%E5%AF%BC/</link>
+      <pubDate>Tue, 17 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C2-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BC%95%E5%AF%BC/</guid>
+      <description>下面这个博客还是不太明白 操作系统的启动(bootsect、setup、head、main) 0. 汇编知识 简要整理了一下这次实验所需的基础汇编知识</description>
+    </item>
+    
+    <item>
+      <title>第1章 基础知识</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC1%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC1%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+      <description>存储器 从读写属性上看分为两类:随机存储器(RAM)和只读存储器(ROM)。随机存储器可读可写，但必须带电存储，关机后存储的内容丢失；只读存储</description>
+    </item>
+    
+    <item>
+      <title>信息的表示和处理</title>
+      <link>https://chance7bin.github.io/posts/basic/csapp/%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/csapp/%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/</guid>
+      <description>信息存储 16进制表示法 一个字节可以用两个十六进制数字来表示。（一个字节占8位，16进制一个符号占4位，所以一个字节可以用两个16进制符号表示</description>
+    </item>
+    
+    <item>
       <title>创建型模式</title>
       <link>https://chance7bin.github.io/posts/basic/pattern/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Tue, 14 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>https://chance7bin.github.io/posts/basic/pattern/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/</guid>
       <description>简单工厂模式——计算器 结构图 简单工厂模式实现 运算接口（父类） 1 2 3 public interface IOperation { double getResult(double a, double b); } 创建两个运算符类实现该接口 1 2 3 4 5 6 7 8 public class AddOperation implements IOperation {</description>
+    </item>
+    
+    <item>
+      <title>实验3 系统调用</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</link>
+      <pubDate>Wed, 18 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</guid>
+      <description>1. 实验目的 建立对系统调用接口的深入认识； 掌握系统调用的基本过程； 能完成系统调用的全面控制； 为后续实验做准备。 2. 实验内容 此次实验的基本内容是：</description>
+    </item>
+    
+    <item>
+      <title>三、内存管理</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E4%B8%89%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Mon, 16 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E4%B8%89%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</guid>
+      <description>内存使用与分段 一、内存使用 1.逻辑地址 内存作为计算机的基本组成部分，用来存储程序（指令和数据），内存单元按字节编址、寻址，程序装入到内存后，</description>
+    </item>
+    
+    <item>
+      <title>程序的机器级表示</title>
+      <link>https://chance7bin.github.io/posts/basic/csapp/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/csapp/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/</guid>
+      <description>程序编码 代码示例 mstore.c 1 2 3 4 5 6 long mult2(long, long); void multstore(long x, long y, long *dest){ long t = mult2(x,y); *dest = t; } main.c 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 #include &amp;lt;stdio.h&amp;gt; void multstore(long, long, long *); int main(){ long d; multstore(2,3,&amp;amp;d); printf(&amp;#34;2 * 3 --&amp;gt; %ld\n&amp;#34;,d); return 0; } long</description>
+    </item>
+    
+    <item>
+      <title>第2章 寄存器</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC2%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC2%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8/</guid>
+      <description>2.1 通用寄存器 8086CPU 的所有寄存器都是16位的，可以存放两个字节。AX、BX、CX、DX这4个寄存器通常用来存放一般性的数据，被称为通用寄存器。 80</description>
     </item>
     
     <item>
@@ -44,12 +179,219 @@
     </item>
     
     <item>
+      <title>四、IO设备管理</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E5%9B%9Bio%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Sat, 21 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E5%9B%9Bio%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86/</guid>
+      <description>IO设备-显示器与键盘 学习了CPU管理，进程管理，内存管理，下面就开始设备管理的学习了 一、文件视图 对于管理外设，首先我们要让外设设备工作运行</description>
+    </item>
+    
+    <item>
+      <title>实验4 进程运行轨迹的跟踪与统计</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C4-%E8%BF%9B%E7%A8%8B%E8%BF%90%E8%A1%8C%E8%BD%A8%E8%BF%B9%E7%9A%84%E8%B7%9F%E8%B8%AA%E4%B8%8E%E7%BB%9F%E8%AE%A1/</link>
+      <pubDate>Thu, 19 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C4-%E8%BF%9B%E7%A8%8B%E8%BF%90%E8%A1%8C%E8%BD%A8%E8%BF%B9%E7%9A%84%E8%B7%9F%E8%B8%AA%E4%B8%8E%E7%BB%9F%E8%AE%A1/</guid>
+      <description>1.实验目的 掌握 Linux 下的多进程编程技术； 通过对进程运行轨迹的跟踪来形象化进程的概念； 在进程运行轨迹跟踪的基础上进行相应的数据统计，从而能对进程</description>
+    </item>
+    
+    <item>
+      <title>第3章 寄存器（内存访问）</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC3%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC3%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/</guid>
+      <description>3.1 内存中的字存储 字单元，即存放一个字型数据(16位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址</description>
+    </item>
+    
+    <item>
       <title>行为模式</title>
       <link>https://chance7bin.github.io/posts/basic/pattern/%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Tue, 14 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>https://chance7bin.github.io/posts/basic/pattern/%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%BC%8F/</guid>
       <description>职责链模式——加薪 职责链模式（Chain of Responsibility）：使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合</description>
+    </item>
+    
+    <item>
+      <title>实验5 基于内核栈切换的进程切换</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C5-%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E6%A0%88%E5%88%87%E6%8D%A2%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/</link>
+      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C5-%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E6%A0%88%E5%88%87%E6%8D%A2%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/</guid>
+      <description>1.实验目的 深入理解进程和进程切换的概念； 综合应用进程、CPU 管理、PCB、LDT、内核栈、内核态等知识解决实际问题； 开始建立系统认识。 2.</description>
+    </item>
+    
+    <item>
+      <title>五、存储管理</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E4%BA%94%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E4%BA%94%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/</guid>
+      <description>磁盘的管理(一) 前言 磁盘既是输入设备又是输出设备。 输出设备（OutputDevice）是人与计算机交互的一种部件，用于数据的输出。 输入设备：</description>
+    </item>
+    
+    <item>
+      <title>第4章 第一个程序</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC4%E7%AB%A0-%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC4%E7%AB%A0-%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F/</guid>
+      <description>4.1 一个源程序从写出到执行的过程 4.2 源程序 1 2 3 4 5 6 7 8 9 10 11 12 13 14 assume cs: codesg codesg segment mov ax,0123H mov bx,0456H add ax,bx add ax,ax mov ax ,4c00H int 21H codesg ends end 伪指令 在汇编语言源程序中，包含两</description>
+    </item>
+    
+    <item>
+      <title>实验6 信号量的实现和应用</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C6-%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%92%8C%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Sun, 22 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C6-%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%92%8C%E5%BA%94%E7%94%A8/</guid>
+      <description>1.实验目的 加深对进程同步与互斥概念的认识； 掌握信号量的使用，并应用它解决生产者——消费者问题； 掌握信号量的实现原理。 2.实验内容 本次实验的</description>
+    </item>
+    
+    <item>
+      <title>第5章 [BX]和loop指令</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC5%E7%AB%A0-bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC5%E7%AB%A0-bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/</guid>
+      <description>为了描述上的简洁，使用一个描述性的符号“()”来表示一个寄存器或一个内存单元中的内容。比如： (ax)表示ax中的内容、(al)表示al中的内</description>
+    </item>
+    
+    <item>
+      <title>实验7 地址映射与共享</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C7-%E5%9C%B0%E5%9D%80%E6%98%A0%E5%B0%84%E4%B8%8E%E5%85%B1%E4%BA%AB/</link>
+      <pubDate>Wed, 25 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C7-%E5%9C%B0%E5%9D%80%E6%98%A0%E5%B0%84%E4%B8%8E%E5%85%B1%E4%BA%AB/</guid>
+      <description>1.实验目的 深入理解操作系统的段、页式内存管理，深入理解段表、页表、逻辑地址、线性地址、物理地址等概念； 实践段、页式内存管理的地址映射过程；</description>
+    </item>
+    
+    <item>
+      <title>第6章 包含多个段的程序</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC6%E7%AB%A0-%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC6%E7%AB%A0-%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/</guid>
+      <description>6.1 在代码段中使用数据 解释一下，程序第一行中的“dw”的含义是定义字型数据。dw即“define word”。在这里，使用dw定义了8个字型数据</description>
+    </item>
+    
+    <item>
+      <title>实验8 终端设备的控制</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C8-%E7%BB%88%E7%AB%AF%E8%AE%BE%E5%A4%87%E7%9A%84%E6%8E%A7%E5%88%B6/</link>
+      <pubDate>Thu, 26 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C8-%E7%BB%88%E7%AB%AF%E8%AE%BE%E5%A4%87%E7%9A%84%E6%8E%A7%E5%88%B6/</guid>
+      <description>1.实验目的 加深对操作系统设备管理基本原理的认识，实践键盘中断、扫描码等概念； 通过实践掌握 Linux 0.11 对键盘终端和显示器终端的处理过程。 2.实验内容</description>
+    </item>
+    
+    <item>
+      <title>第7章 更灵活的定位内存地址的方法</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC7%E7%AB%A0-%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC7%E7%AB%A0-%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/</guid>
+      <description>7.1 and和or指令 (1) and指令：逻辑与指令，按位进行与运算。 例如指令： mov al,01100011B and al,00111011B 执行后： al=00100011B 通过该指令可将操作对象的相应位设为0，其他位不变。例</description>
+    </item>
+    
+    <item>
+      <title>实验9 proc文件系统的实现</title>
+      <link>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C9-proc%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Thu, 26 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C9-proc%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+      <description>1.实验目的 掌握虚拟文件系统的实现原理； 实践文件、目录、文件系统等概念。 2.实验内容 /proc文件系统是了解系统信息的一个窗口，它不是普通意</description>
+    </item>
+    
+    <item>
+      <title>第8章 数据处理的两个基本问题</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC8%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC8%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/</guid>
+      <description>(1)处理的数据在什么地方？ (2)要处理的数据有多长？ 为了描述上的简洁，使用描述性的符号 reg 来表示一个寄存器，用sreg表示一个段寄存器。 reg 的</description>
+    </item>
+    
+    <item>
+      <title>第9章 转移指令的原理</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC9%E7%AB%A0-%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC9%E7%AB%A0-%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/</guid>
+      <description>==可以修改IP，或同时修改CS 和IP的指令统称为转移指令。==概括地讲，转移指令就是可以控制CPU执行内存中某处代码的指令。 8086CPU</description>
+    </item>
+    
+    <item>
+      <title>第10章 CALL和 RET指令</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC10%E7%AB%A0-call%E5%92%8C-ret%E6%8C%87%E4%BB%A4/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC10%E7%AB%A0-call%E5%92%8C-ret%E6%8C%87%E4%BB%A4/</guid>
+      <description>call和 ret 指令都是转移指令，它们都修改IP，或同时修改CS 和IP。它们经常被共同用来实现子程序的设计。 ret和retf ret指令用栈中的数</description>
+    </item>
+    
+    <item>
+      <title>第11章 标志寄存器</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC11%E7%AB%A0-%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC11%E7%AB%A0-%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/</guid>
+      <description>CPU内部的寄存器中，有一种特殊的寄存器(对于不同的处理机，个数和结构都可能不同)具有以下3种作用。 (1)用来存储相关指令的某些执行结果; (</description>
+    </item>
+    
+    <item>
+      <title>第12章 内中断</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC12%E7%AB%A0-%E5%86%85%E4%B8%AD%E6%96%AD/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC12%E7%AB%A0-%E5%86%85%E4%B8%AD%E6%96%AD/</guid>
+      <description>任何一个通用的CPU，比如8086，都具备一种能力，可以在执行完当前正在执行的指令之后，检测到从CPU 外部发送过来的或内部产生的一种特殊信息</description>
+    </item>
+    
+    <item>
+      <title>第13章 int指令</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC13%E7%AB%A0-int%E6%8C%87%E4%BB%A4/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC13%E7%AB%A0-int%E6%8C%87%E4%BB%A4/</guid>
+      <description>另一种重要的内中断，由int指令引发的中断。 int指令的格式为: int n，n为中断类型码，它的功能是引发中断过程。 CPU执行int n指令，相当于</description>
+    </item>
+    
+    <item>
+      <title>第14章 端口</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC14%E7%AB%A0-%E7%AB%AF%E5%8F%A3/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC14%E7%AB%A0-%E7%AB%AF%E5%8F%A3/</guid>
+      <description>我们前面讲过，各种存储器都和 CPU 的地址线、数据线、控制线相连。CPU 在操控它们的时候，把它们都当作内存来对待，把它们总地看做一个由若干存储单元</description>
+    </item>
+    
+    <item>
+      <title>第15章 外中断</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC15%E7%AB%A0-%E5%A4%96%E4%B8%AD%E6%96%AD/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC15%E7%AB%A0-%E5%A4%96%E4%B8%AD%E6%96%AD/</guid>
+      <description>接口芯片和端口 第14章我们讲过，PC系统的接口卡和主板上，装有各种接口芯片。这些外设接口芯片的内部有若干寄存器，CPU将这些寄存器当作端口来</description>
+    </item>
+    
+    <item>
+      <title>第16章 直接定址表</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC16%E7%AB%A0-%E7%9B%B4%E6%8E%A5%E5%AE%9A%E5%9D%80%E8%A1%A8/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC16%E7%AB%A0-%E7%9B%B4%E6%8E%A5%E5%AE%9A%E5%9D%80%E8%A1%A8/</guid>
+      <description>编写一个子程序，计算 sin(x)，x∈{0°，30°,60°, 90°, 120°, 150°, 180°},并在屏幕中间显示计算结果。比如 sin(</description>
+    </item>
+    
+    <item>
+      <title>第17章 使用BIOS进行键盘输入和磁盘读写</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC17%E7%AB%A0-%E4%BD%BF%E7%94%A8bios%E8%BF%9B%E8%A1%8C%E9%94%AE%E7%9B%98%E8%BE%93%E5%85%A5%E5%92%8C%E7%A3%81%E7%9B%98%E8%AF%BB%E5%86%99/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC17%E7%AB%A0-%E4%BD%BF%E7%94%A8bios%E8%BF%9B%E8%A1%8C%E9%94%AE%E7%9B%98%E8%BE%93%E5%85%A5%E5%92%8C%E7%A3%81%E7%9B%98%E8%AF%BB%E5%86%99/</guid>
+      <description>int 9中断例程对键盘输入的处理 使用int 16h中断例程读取键盘缓冲区 字符串的输入 应用int 13h中断例程对磁盘进行读写</description>
     </item>
     
     <item>
@@ -152,12 +494,12 @@
     </item>
     
     <item>
-      <title>参考资料</title>
+      <title>Spring AOP 实现 Redis 缓存切面</title>
       <link>https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/</link>
       <pubDate>Wed, 31 May 2023 22:37:33 +0800</pubDate>
       
       <guid>https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/</guid>
-      <description>Spring AOP 实现 Redis 缓存切面 @EnableCaching spring boot提供了比较简单的缓存方案。只要使用 @EnableCaching 即可完成简单的缓存功能。 https://blog.csdn.net/micro_hz/article/details/76599632 参考博客 Spring的面向切面编程（AOP） Spring AOP</description>
+      <description>@EnableCaching spring boot提供了比较简单的缓存方案。只要使用 @EnableCaching 即可完成简单的缓存功能。 https://blog.csdn.net/micro_hz/article/details/76599632 参考博客 Spring的面向切面编程（AOP） Spring AOP 实现 Redis 缓存切面 Sp</description>
     </item>
     
     <item>

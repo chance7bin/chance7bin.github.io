@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>汇编 on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/%E6%B1%87%E7%BC%96/</link>
+    <description>Recent content in 汇编 on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 13 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/%E6%B1%87%E7%BC%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>相关知识</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/</guid>
+      <description>x86汇编 操作数排列是从源（右）到目的（左） 1 2 3 4 5 6 7 8 9 10 assume cs:codesg ;假设代码段的名称为codesg codesg segment ;定义一个codesg段 mov ax,0123H mov bx,0456H add ax,bx</description>
+    </item>
+    
+    <item>
+      <title>第1章 基础知识</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC1%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC1%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+      <description>存储器 从读写属性上看分为两类:随机存储器(RAM)和只读存储器(ROM)。随机存储器可读可写，但必须带电存储，关机后存储的内容丢失；只读存储</description>
+    </item>
+    
+    <item>
+      <title>第2章 寄存器</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC2%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC2%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8/</guid>
+      <description>2.1 通用寄存器 8086CPU 的所有寄存器都是16位的，可以存放两个字节。AX、BX、CX、DX这4个寄存器通常用来存放一般性的数据，被称为通用寄存器。 80</description>
+    </item>
+    
+    <item>
+      <title>第3章 寄存器（内存访问）</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC3%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC3%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/</guid>
+      <description>3.1 内存中的字存储 字单元，即存放一个字型数据(16位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址</description>
+    </item>
+    
+    <item>
+      <title>第4章 第一个程序</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC4%E7%AB%A0-%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC4%E7%AB%A0-%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F/</guid>
+      <description>4.1 一个源程序从写出到执行的过程 4.2 源程序 1 2 3 4 5 6 7 8 9 10 11 12 13 14 assume cs: codesg codesg segment mov ax,0123H mov bx,0456H add ax,bx add ax,ax mov ax ,4c00H int 21H codesg ends end 伪指令 在汇编语言源程序中，包含两</description>
+    </item>
+    
+    <item>
+      <title>第5章 [BX]和loop指令</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC5%E7%AB%A0-bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC5%E7%AB%A0-bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/</guid>
+      <description>为了描述上的简洁，使用一个描述性的符号“()”来表示一个寄存器或一个内存单元中的内容。比如： (ax)表示ax中的内容、(al)表示al中的内</description>
+    </item>
+    
+    <item>
+      <title>第6章 包含多个段的程序</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC6%E7%AB%A0-%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC6%E7%AB%A0-%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/</guid>
+      <description>6.1 在代码段中使用数据 解释一下，程序第一行中的“dw”的含义是定义字型数据。dw即“define word”。在这里，使用dw定义了8个字型数据</description>
+    </item>
+    
+    <item>
+      <title>第7章 更灵活的定位内存地址的方法</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC7%E7%AB%A0-%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC7%E7%AB%A0-%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/</guid>
+      <description>7.1 and和or指令 (1) and指令：逻辑与指令，按位进行与运算。 例如指令： mov al,01100011B and al,00111011B 执行后： al=00100011B 通过该指令可将操作对象的相应位设为0，其他位不变。例</description>
+    </item>
+    
+    <item>
+      <title>第8章 数据处理的两个基本问题</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC8%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC8%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/</guid>
+      <description>(1)处理的数据在什么地方？ (2)要处理的数据有多长？ 为了描述上的简洁，使用描述性的符号 reg 来表示一个寄存器，用sreg表示一个段寄存器。 reg 的</description>
+    </item>
+    
+    <item>
+      <title>第9章 转移指令的原理</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC9%E7%AB%A0-%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC9%E7%AB%A0-%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/</guid>
+      <description>==可以修改IP，或同时修改CS 和IP的指令统称为转移指令。==概括地讲，转移指令就是可以控制CPU执行内存中某处代码的指令。 8086CPU</description>
+    </item>
+    
+    <item>
+      <title>第10章 CALL和 RET指令</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC10%E7%AB%A0-call%E5%92%8C-ret%E6%8C%87%E4%BB%A4/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC10%E7%AB%A0-call%E5%92%8C-ret%E6%8C%87%E4%BB%A4/</guid>
+      <description>call和 ret 指令都是转移指令，它们都修改IP，或同时修改CS 和IP。它们经常被共同用来实现子程序的设计。 ret和retf ret指令用栈中的数</description>
+    </item>
+    
+    <item>
+      <title>第11章 标志寄存器</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC11%E7%AB%A0-%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC11%E7%AB%A0-%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/</guid>
+      <description>CPU内部的寄存器中，有一种特殊的寄存器(对于不同的处理机，个数和结构都可能不同)具有以下3种作用。 (1)用来存储相关指令的某些执行结果; (</description>
+    </item>
+    
+    <item>
+      <title>第12章 内中断</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC12%E7%AB%A0-%E5%86%85%E4%B8%AD%E6%96%AD/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC12%E7%AB%A0-%E5%86%85%E4%B8%AD%E6%96%AD/</guid>
+      <description>任何一个通用的CPU，比如8086，都具备一种能力，可以在执行完当前正在执行的指令之后，检测到从CPU 外部发送过来的或内部产生的一种特殊信息</description>
+    </item>
+    
+    <item>
+      <title>第13章 int指令</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC13%E7%AB%A0-int%E6%8C%87%E4%BB%A4/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC13%E7%AB%A0-int%E6%8C%87%E4%BB%A4/</guid>
+      <description>另一种重要的内中断，由int指令引发的中断。 int指令的格式为: int n，n为中断类型码，它的功能是引发中断过程。 CPU执行int n指令，相当于</description>
+    </item>
+    
+    <item>
+      <title>第14章 端口</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC14%E7%AB%A0-%E7%AB%AF%E5%8F%A3/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC14%E7%AB%A0-%E7%AB%AF%E5%8F%A3/</guid>
+      <description>我们前面讲过，各种存储器都和 CPU 的地址线、数据线、控制线相连。CPU 在操控它们的时候，把它们都当作内存来对待，把它们总地看做一个由若干存储单元</description>
+    </item>
+    
+    <item>
+      <title>第15章 外中断</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC15%E7%AB%A0-%E5%A4%96%E4%B8%AD%E6%96%AD/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC15%E7%AB%A0-%E5%A4%96%E4%B8%AD%E6%96%AD/</guid>
+      <description>接口芯片和端口 第14章我们讲过，PC系统的接口卡和主板上，装有各种接口芯片。这些外设接口芯片的内部有若干寄存器，CPU将这些寄存器当作端口来</description>
+    </item>
+    
+    <item>
+      <title>第16章 直接定址表</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC16%E7%AB%A0-%E7%9B%B4%E6%8E%A5%E5%AE%9A%E5%9D%80%E8%A1%A8/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC16%E7%AB%A0-%E7%9B%B4%E6%8E%A5%E5%AE%9A%E5%9D%80%E8%A1%A8/</guid>
+      <description>编写一个子程序，计算 sin(x)，x∈{0°，30°,60°, 90°, 120°, 150°, 180°},并在屏幕中间显示计算结果。比如 sin(</description>
+    </item>
+    
+    <item>
+      <title>第17章 使用BIOS进行键盘输入和磁盘读写</title>
+      <link>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC17%E7%AB%A0-%E4%BD%BF%E7%94%A8bios%E8%BF%9B%E8%A1%8C%E9%94%AE%E7%9B%98%E8%BE%93%E5%85%A5%E5%92%8C%E7%A3%81%E7%9B%98%E8%AF%BB%E5%86%99/</link>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC17%E7%AB%A0-%E4%BD%BF%E7%94%A8bios%E8%BF%9B%E8%A1%8C%E9%94%AE%E7%9B%98%E8%BE%93%E5%85%A5%E5%92%8C%E7%A3%81%E7%9B%98%E8%AF%BB%E5%86%99/</guid>
+      <description>int 9中断例程对键盘输入的处理 使用int 16h中断例程读取键盘缓冲区 字符串的输入 应用int 13h中断例程对磁盘进行读写</description>
+    </item>
+    
+  </channel>
+</rss>

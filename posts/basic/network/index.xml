@@ -5,6 +5,34 @@
     <link>https://chance7bin.github.io/posts/basic/network/</link>
     <description>Recent content in 计算机网络 on Binb&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://chance7bin.github.io/posts/basic/network/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 16 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/posts/basic/network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>图解TCPIP</title>
+      <link>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3tcpip/</link>
+      <pubDate>Mon, 16 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3tcpip/</guid>
+      <description>写在前面 该篇博客是我在看《图解TCPIP》这本书时记录的学习笔记✍~~ 第1章 网络基础知识 计算机网络，根据其规模可分为==WAN（Wide Area N</description>
+    </item>
+    
+    <item>
+      <title>图解HTTP</title>
+      <link>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3http/</link>
+      <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3http/</guid>
+      <description>写在前面 该篇博客是我在看《图解HTTP》这本书时记录的学习笔记✍~~ 第 1 章 了解 Web 及网络基础 Web 使用一种名为 ==HTTP（HyperText Transfer P</description>
+    </item>
+    
+    <item>
+      <title>网络是怎样连接的</title>
+      <link>https://chance7bin.github.io/posts/basic/network/%E7%BD%91%E7%BB%9C%E6%98%AF%E6%80%8E%E6%A0%B7%E8%BF%9E%E6%8E%A5%E7%9A%84/</link>
+      <pubDate>Wed, 20 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/network/%E7%BD%91%E7%BB%9C%E6%98%AF%E6%80%8E%E6%A0%B7%E8%BF%9E%E6%8E%A5%E7%9A%84/</guid>
+      <description>写在前面 该篇博客是我在看《网络是怎样连接的》这本书时记录的学习笔记✍~~ 第1章 浏览器生成消息——探索浏览器内部 1.1 生成HTTP请求消息 1.2 向 DNS 服</description>
+    </item>
+    
   </channel>
 </rss>

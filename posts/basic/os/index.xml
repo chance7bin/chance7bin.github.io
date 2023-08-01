@@ -5,6 +5,52 @@
     <link>https://chance7bin.github.io/posts/basic/os/</link>
     <description>Recent content in 操作系统 on Binb&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://chance7bin.github.io/posts/basic/os/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 21 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/posts/basic/os/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>一、内核启动</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E4%B8%80%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8/</link>
+      <pubDate>Sat, 14 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E4%B8%80%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8/</guid>
+      <description>引导启动程序&amp;mdash;bootsect 1.简介 冯·诺依曼存储程序思想 存储程序的主要思想：将程序和数据存放到计算机内部的存储器中，计算机在</description>
+    </item>
+    
+    <item>
+      <title>二、进程管理</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E4%BA%8C%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Tue, 17 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E4%BA%8C%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
+      <description>操作系统的接口与实现 相关知识 相关链接： 【构建操作系统】全局描述符表GDT GDT（全居描述符表）和LDT（局部描述符表） GDT（Global Descriptor</description>
+    </item>
+    
+    <item>
+      <title>三、内存管理</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E4%B8%89%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Mon, 16 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E4%B8%89%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</guid>
+      <description>内存使用与分段 一、内存使用 1.逻辑地址 内存作为计算机的基本组成部分，用来存储程序（指令和数据），内存单元按字节编址、寻址，程序装入到内存后，</description>
+    </item>
+    
+    <item>
+      <title>四、IO设备管理</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E5%9B%9Bio%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Sat, 21 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E5%9B%9Bio%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86/</guid>
+      <description>IO设备-显示器与键盘 学习了CPU管理，进程管理，内存管理，下面就开始设备管理的学习了 一、文件视图 对于管理外设，首先我们要让外设设备工作运行</description>
+    </item>
+    
+    <item>
+      <title>五、存储管理</title>
+      <link>https://chance7bin.github.io/posts/basic/os/%E4%BA%94%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/os/%E4%BA%94%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/</guid>
+      <description>磁盘的管理(一) 前言 磁盘既是输入设备又是输出设备。 输出设备（OutputDevice）是人与计算机交互的一种部件，用于数据的输出。 输入设备：</description>
+    </item>
+    
   </channel>
 </rss>

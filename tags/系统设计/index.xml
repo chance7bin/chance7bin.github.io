@@ -62,12 +62,12 @@
     </item>
     
     <item>
-      <title>参考资料</title>
+      <title>Spring AOP 实现 Redis 缓存切面</title>
       <link>https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/</link>
       <pubDate>Wed, 31 May 2023 22:37:33 +0800</pubDate>
       
       <guid>https://chance7bin.github.io/posts/design/spring-aop-%E5%AE%9E%E7%8E%B0-redis-%E7%BC%93%E5%AD%98%E5%88%87%E9%9D%A2/</guid>
-      <description>Spring AOP 实现 Redis 缓存切面 @EnableCaching spring boot提供了比较简单的缓存方案。只要使用 @EnableCaching 即可完成简单的缓存功能。 https://blog.csdn.net/micro_hz/article/details/76599632 参考博客 Spring的面向切面编程（AOP） Spring AOP</description>
+      <description>@EnableCaching spring boot提供了比较简单的缓存方案。只要使用 @EnableCaching 即可完成简单的缓存功能。 https://blog.csdn.net/micro_hz/article/details/76599632 参考博客 Spring的面向切面编程（AOP） Spring AOP 实现 Redis 缓存切面 Sp</description>
     </item>
     
     <item>

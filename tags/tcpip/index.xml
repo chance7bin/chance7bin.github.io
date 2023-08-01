@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>TCPIP on Binb&#39;s Blog</title>
+    <link>https://chance7bin.github.io/tags/tcpip/</link>
+    <description>Recent content in TCPIP on Binb&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 16 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://chance7bin.github.io/tags/tcpip/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>图解TCPIP</title>
+      <link>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3tcpip/</link>
+      <pubDate>Mon, 16 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://chance7bin.github.io/posts/basic/network/%E5%9B%BE%E8%A7%A3tcpip/</guid>
+      <description>写在前面 该篇博客是我在看《图解TCPIP》这本书时记录的学习笔记✍~~ 第1章 网络基础知识 计算机网络，根据其规模可分为==WAN（Wide Area N</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>第5章 [BX]和loop指令 | Binb&#39;s Blog</title>
+<meta name="keywords" content="汇编">
+<meta name="description" content="为了描述上的简洁，使用一个描述性的符号“()”来表示一个寄存器或一个内存单元中的内容。比如： (ax)表示ax中的内容、(al)表示al中的内">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC5%E7%AB%A0-bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="第5章 [BX]和loop指令" />
+<meta property="og:description" content="为了描述上的简洁，使用一个描述性的符号“()”来表示一个寄存器或一个内存单元中的内容。比如： (ax)表示ax中的内容、(al)表示al中的内" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC5%E7%AB%A0-bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-04-13T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="第5章 [BX]和loop指令"/>
+<meta name="twitter:description" content="为了描述上的简洁，使用一个描述性的符号“()”来表示一个寄存器或一个内存单元中的内容。比如： (ax)表示ax中的内容、(al)表示al中的内"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📕 计算机基础",
+      "item": "https://chance7bin.github.io/posts/basic/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "汇编语言",
+      "item": "https://chance7bin.github.io/posts/basic/asm/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "第5章 [BX]和loop指令",
+      "item": "https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC5%E7%AB%A0-bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "第5章 [BX]和loop指令",
+  "name": "第5章 [BX]和loop指令",
+  "description": "为了描述上的简洁，使用一个描述性的符号“()”来表示一个寄存器或一个内存单元中的内容。比如： (ax)表示ax中的内容、(al)表示al中的内",
+  "keywords": [
+    "汇编"
+  ],
+  "articleBody": "为了描述上的简洁，使用一个描述性的符号“()”来表示一个寄存器或一个内存单元中的内容。比如：\n(ax)表示ax中的内容、(al)表示al中的内容；\n(20000H)表示内存20000H单元的内容（()中的内存单元的地址为物理地址）;\n((ds)*16+(bx))表示： ds 中的内容为ADR1，bx中的内容为ADR2，内存ADR1×16+ADR2单元的内容。\n也可以理解为： ds中的ADR1作为段地址，bx中的ADR2作为偏移地址，内存ADR1:ADR2单元的内容。\n注意，“( )”中的元素可以有3种类型：①寄存器名；②段寄存器名；③内存单元的物理地址(一个20位数据)。比如：\n(ax)、(ds)、(al)、(cx)、(20000H)、((ds)*16+(bx))等是正确的用法；\n(2000:0)、((ds):1000H)等是不正确的用法。\n“(X)”所表示的数据有两种类型：①字节；②字。是哪种类型由寄存器名或具体的运算决定，比如：\n(al)、(bl)、(cl)等得到的数据为字节型；(ds)、(ax)、(bx)等得到的数据为字型。\n(al)=(20000H)，则(20000H)得到的数据为字节型；(ax)=(20000H)，则(20000H)得到的数据为字型。\n约定符号idata表示常量\n我们在Debug中写过类似的指令：mov ax,[0]，表示将 ds:0 处的数据送入ax中。指令中，在“[…]”里用一个常量0表示内存单元的偏移地址。以后，我们用idata表示常量。比如：\nmov ax,[idata]就代表mov ax,[1]、mov ax,[2]、mov ax,[3]等。\nmov bx,idata就代表mov bx,1、mov bx,2、mov bx,3等。\nmov ds,idata就代表mov ds,1、mov ds,2等，它们都是非法指令。\n==SA:EA 是段地址:偏移地址的别名==\n5.1 [BX] mov ax,[bx] 功能： ==bx中存放的数据作为一个偏移地址EA==，段地址SA默认在ds 中，将SA:EA处的数据送入ax中。\n即： (ax)=((ds)*16+(bx))。\n5.2 Loop指令 [CX] loop 指令的格式是： loop标号，CPU 执行loop指令的时候，要进行两步操作，\n①(cx)=(cx)-1;\n②判断cx中的值，不为零则转至标号处执行程序，如果为零则向下执行。\n从上面的过程中，可以总结出用cx和loop指令相配合实现循环功能的3个要点：\n(1)在cx中存放循环次数;\n(2)loop指令中的标号所标识地址要在前面;\n(3)要循环执行的程序段，要写在标号和 loop指令的中间。\n用cx和 loop指令相配合实现循环功能的程序框架如下：\n1 2 3 mov cx,循环次数 s: 循环执行的程序段 loop s 5.3 在Debug中跟踪用loop指令实现的循环程序 [DX:累加寄存器] 用循环累加来实现乘法，用哪个寄存器进行累加？\n将ffff:0006单元中的数赋值给ax，用dx进行累加。先设(dx)=0，然后做3次(dx)=(dx)+(ax)。\n==为什么要把ffff:0006单元中的数先赋值给ax，而不直接在dx中累加呢？==\n（1）ffff:0006中的数据是8位的，不能直接加到16位寄存器dx中\n（2）也不能在dl中累加，因为dl是8位寄存器，能容纳的数据的范围在 0~255 之间，累加后很有可能造成进位丢失。\n所以一种解决方法是得用一个16位寄存器来做中介。将内存单元中的8位数据赋值到一个16位寄存器ax中，再将ax中的数据加到dx上，从而使两个运算对象的类型匹配并且结果不会超界。\n指令mov ax,0ffffh\n我们知道，大于9FFFh 的十六进制数据A000H、A001H…CO00H、c001H…FFFEH、FFFFH等，在书写的时候都是以字母开头的。而==在汇编源程序中，数据不能以字母开头，所以要在前面加0==。比如，9138h在汇编源程序中可以直接写为“9138h”，而==A000h在汇编源程序中要写为“0A000h”==。\nDebug -g 0012 直接执行到指定位置 ”-g 0012“它表示执行程序到当前代码段(段地址在CS 中)的0012h处。也就是说“g 0012”将使Debug从当前的CS:IP指向的指令执行，一直到(IP)=0012h 为止。具体的情况如图5.12所示。\n-p 将循环一次执行完 希望将循环一次执行完，可以使用p命令来达到目的。再次遇到loop指令时，使用p命令来执行，Debug就会自动重复执行循环中的指令，直到(cx)=0为止。具体情况如图5.14所示。\n当然，也可以用g命令来达到目的，可以用“g 0016”直接执行到CS:0016处。具体情况如图5.15所示。\n5.4 Debug和汇编编译器masm对指令的不同处理 我们在Debug中和源程序中写入同样形式的指令：“mov al,[0]”、“mov bl,[1]”、“mov cl,[2]”、“mov dl,[3]”，但 Debug和编译器对这些指令中的“[idata]”却有不同的解释。\nDebug 将它解释为“[idata]”是一个内存单元，“idata”是内存单元的偏移地址；\n而编译器将“[idata]”解释为“idata”。\n比较一下汇编源程序中以下指令的含义。\n“mov al,[0]”，含义：(al)=0，将常量0送入al中(与mov al,0含义相同)；\n“mov al,ds:[0]”，含义：(al)=((ds)*16+0)，将内存单元中的数据送入al 中；\n“mov al,[bx]”，含义：(al)=((ds)*16+(bx))，将内存单元中的数据送入al 中；\n“mov al,ds:[bx]”，含义：与“mov al,[bx]”相同。\n从上面的比较中可以看出:\n（1）在汇编源程序中，如果用指令访问一个内存单元，则在指令中必须用“[...]”来表示内存单元，如果在“[]”里用一个常量idata直接给出内存单元的偏移地址，就要在“[]”的前面显式地给出段地址所在的段寄存器。比如\nmov al,ds:[0]\n这些出现在访问内存单元的指令中，用于显式地指明内存单元的段地址的“ds:” “cs:” “ss:” “es:”，在汇编语言中称为段前缀。\n如果没有在“[]”的前面显式地给出段地址所在的段寄存器，比如\nmov al,[0]\n那么，编译器masm将把指令中的“[idata]”解释为“idata”。\n（2）如果在“[]”里用寄存器，比如bx，间接给出内存单元的偏移地址，则段地址默认在ds中。当然，也可以显式地给出段地址所在的段寄存器。\n5.5 loop和[bx]的联合应用 5.7 一段安全的空间 (1)我们需要直接向一段内存中写入内容;\n(2)这段内存空间不应存放系统或其他程序的数据或代码，否则写入操作很可能引发错误;\n(3)DOS 方式下，一般情况，0:200~0:2ff 空间中没有系统或其他程序的数据或代码;\n(4)以后，我们需要直接向一段内存中写入内容时，就使用0:200~0:2ff这段空间。\n5.8 段前缀的使用 将内存 ffff:0~ffff:b 单元中的数据复制到 0:200~0:20b 单元中\n分析：0:200~0:20b 单元等同于 0020:0~0020:b 单元，它们描述的是同一段内存空间。\n因源始单元 ffff:X 和目标单元 0020:X 相距大于64KB，在不同的64KB段里，程序5.8中，每次循环要设置两次ds。这样做是正确的，但是效率不高。我们可以使用两个段寄存器分别存放源始单元 ffff:X 和目标单元 0020:X 的段地址，这样就可以省略循环中需要重复做12次的设置ds的程序段。\n改进的程序如下。\n",
+  "wordCount" : "2951",
+  "inLanguage": "zh",
+  "datePublished": "2022-04-13T00:00:00Z",
+  "dateModified": "2022-04-13T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC5%E7%AB%A0-bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/">📕 计算机基础</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/asm/">汇编语言</a></div>
+    <h1 class="post-title">
+      第5章 [BX]和loop指令
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-04-13
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>2951字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>6分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E6%B1%87%E7%BC%96/" style="color: var(--secondary)!important;">汇编</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#51-bx" aria-label="5.1 [BX]">5.1 [BX]</a></li>
+                    <li>
+                        <a href="#52-loop%e6%8c%87%e4%bb%a4-cx" aria-label="5.2 Loop指令 [CX]">5.2 Loop指令 [CX]</a></li>
+                    <li>
+                        <a href="#53-%e5%9c%a8debug%e4%b8%ad%e8%b7%9f%e8%b8%aa%e7%94%a8loop%e6%8c%87%e4%bb%a4%e5%ae%9e%e7%8e%b0%e7%9a%84%e5%be%aa%e7%8e%af%e7%a8%8b%e5%ba%8f--dx%e7%b4%af%e5%8a%a0%e5%af%84%e5%ad%98%e5%99%a8" aria-label="5.3 在Debug中跟踪用loop指令实现的循环程序  [DX:累加寄存器]">5.3 在Debug中跟踪用loop指令实现的循环程序  [DX:累加寄存器]</a></li>
+                    <li>
+                        <a href="#debug" aria-label="Debug">Debug</a><ul>
+                            
+                    <li>
+                        <a href="#-g-0012-%e7%9b%b4%e6%8e%a5%e6%89%a7%e8%a1%8c%e5%88%b0%e6%8c%87%e5%ae%9a%e4%bd%8d%e7%bd%ae" aria-label="-g 0012 直接执行到指定位置">-g 0012 直接执行到指定位置</a></li>
+                    <li>
+                        <a href="#-p-%e5%b0%86%e5%be%aa%e7%8e%af%e4%b8%80%e6%ac%a1%e6%89%a7%e8%a1%8c%e5%ae%8c" aria-label="-p 将循环一次执行完">-p 将循环一次执行完</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#54-debug%e5%92%8c%e6%b1%87%e7%bc%96%e7%bc%96%e8%af%91%e5%99%a8masm%e5%af%b9%e6%8c%87%e4%bb%a4%e7%9a%84%e4%b8%8d%e5%90%8c%e5%a4%84%e7%90%86" aria-label="5.4 Debug和汇编编译器masm对指令的不同处理">5.4 Debug和汇编编译器masm对指令的不同处理</a></li>
+                    <li>
+                        <a href="#55-loop%e5%92%8cbx%e7%9a%84%e8%81%94%e5%90%88%e5%ba%94%e7%94%a8" aria-label="5.5 loop和[bx]的联合应用">5.5 loop和[bx]的联合应用</a></li>
+                    <li>
+                        <a href="#57-%e4%b8%80%e6%ae%b5%e5%ae%89%e5%85%a8%e7%9a%84%e7%a9%ba%e9%97%b4" aria-label="5.7 一段安全的空间">5.7 一段安全的空间</a></li>
+                    <li>
+                        <a href="#58-%e6%ae%b5%e5%89%8d%e7%bc%80%e7%9a%84%e4%bd%bf%e7%94%a8" aria-label="5.8 段前缀的使用">5.8 段前缀的使用</a>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><p>为了描述上的简洁，使用一个描述性的符号<code>“()”</code>来表示一个寄存器或一个内存单元中的内容。比如：</p>
+<p>(ax)表示ax中的内容、(al)表示al中的内容；</p>
+<p>(20000H)表示内存20000H单元的内容（()中的内存单元的地址为物理地址）;</p>
+<p>((ds)*16+(bx))表示：
+ds 中的内容为ADR1，bx中的内容为ADR2，内存ADR1×16+ADR2单元的内容。</p>
+<p>也可以理解为： ds中的ADR1作为段地址，bx中的ADR2作为偏移地址，内存ADR1:ADR2单元的内容。</p>
+<p>注意，“( )”中的元素可以有3种类型：①寄存器名；②段寄存器名；③内存单元的物理地址(一个20位数据)。比如：</p>
+<p>(ax)、(ds)、(al)、(cx)、(20000H)、((ds)*16+(bx))等是正确的用法；</p>
+<p>(2000:0)、((ds):1000H)等是不正确的用法。</p>
+<p>“(X)”所表示的数据有两种类型：①字节；②字。是哪种类型由寄存器名或具体的运算决定，比如：</p>
+<p>(al)、(bl)、(cl)等得到的数据为字节型；(ds)、(ax)、(bx)等得到的数据为字型。</p>
+<p>(al)=(20000H)，则(20000H)得到的数据为字节型；(ax)=(20000H)，则(20000H)得到的数据为字型。</p>
+<p>约定符号<code>idata</code>表示常量</p>
+<p>我们在Debug中写过类似的指令：mov ax,[0]，表示将 ds:0 处的数据送入ax中。指令中，在“[&hellip;]”里用一个常量0表示内存单元的偏移地址。以后，我们用idata表示常量。比如：</p>
+<p>mov ax,[idata]就代表mov ax,[1]、mov ax,[2]、mov ax,[3]等。</p>
+<p>mov bx,idata就代表mov bx,1、mov bx,2、mov bx,3等。</p>
+<p>mov ds,idata就代表mov ds,1、mov ds,2等，它们都是非法指令。</p>
+<p>==SA:EA 是段地址:偏移地址的别名==</p>
+<h3 id="51-bx">5.1 [BX]<a hidden class="anchor" aria-hidden="true" href="#51-bx">#</a></h3>
+<p><code>mov ax,[bx]</code>
+功能： ==bx中存放的数据作为一个偏移地址EA==，段地址SA默认在ds 中，将SA:EA处的数据送入ax中。</p>
+<p>即： (ax)=((ds)*16+(bx))。</p>
+<h3 id="52-loop指令-cx">5.2 Loop指令 [CX]<a hidden class="anchor" aria-hidden="true" href="#52-loop指令-cx">#</a></h3>
+<p>loop 指令的格式是： loop标号，CPU 执行loop指令的时候，要进行两步操作，</p>
+<p>①(cx)=(cx)-1;</p>
+<p>②判断cx中的值，不为零则转至标号处执行程序，如果为零则向下执行。</p>
+<p>从上面的过程中，可以总结出用cx和loop指令相配合实现循环功能的3个要点：</p>
+<p>(1)在cx中存放循环次数;</p>
+<p>(2)loop指令中的标号所标识地址要在前面;</p>
+<p>(3)要循环执行的程序段，要写在标号和 loop指令的中间。</p>
+<p>用cx和 loop指令相配合实现循环功能的程序框架如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">	mov cx,循环次数
+</span></span><span class="line"><span class="cl">s:  循环执行的程序段
+</span></span><span class="line"><span class="cl">	loop s
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="53-在debug中跟踪用loop指令实现的循环程序--dx累加寄存器">5.3 在Debug中跟踪用loop指令实现的循环程序  [DX:累加寄存器]<a hidden class="anchor" aria-hidden="true" href="#53-在debug中跟踪用loop指令实现的循环程序--dx累加寄存器">#</a></h3>
+<p>用循环累加来实现乘法，用哪个寄存器进行累加？</p>
+<p>将ffff:0006单元中的数赋值给ax，用dx进行累加。先设(dx)=0，然后做3次(dx)=(dx)+(ax)。</p>
+<p>==为什么要把ffff:0006单元中的数先赋值给ax，而不直接在dx中累加呢？==</p>
+<p>（1）ffff:0006中的数据是8位的，不能直接加到16位寄存器dx中</p>
+<p>（2）也不能在dl中累加，因为dl是8位寄存器，能容纳的数据的范围在 0~255 之间，累加后很有可能造成进位丢失。</p>
+<p>所以一种解决方法是得用一个16位寄存器来做中介。将内存单元中的8位数据赋值到一个16位寄存器ax中，再将ax中的数据加到dx上，从而使两个运算对象的类型匹配并且结果不会超界。</p>
+<p>指令<code>mov ax,0ffffh</code></p>
+<p>我们知道，大于9FFFh 的十六进制数据A000H、A001H&hellip;CO00H、c001H&hellip;FFFEH、FFFFH等，在书写的时候都是以字母开头的。而==在汇编源程序中，数据不能以字母开头，所以要在前面加0==。比如，9138h在汇编源程序中可以直接写为“9138h”，而==A000h在汇编源程序中要写为“0A000h”==。</p>
+<h3 id="debug">Debug<a hidden class="anchor" aria-hidden="true" href="#debug">#</a></h3>
+<h4 id="-g-0012-直接执行到指定位置">-g 0012 直接执行到指定位置<a hidden class="anchor" aria-hidden="true" href="#-g-0012-直接执行到指定位置">#</a></h4>
+<p>”-g 0012“它表示执行程序到当前代码段(段地址在CS 中)的0012h处。也就是说“g 0012”将使Debug从当前的CS:IP指向的指令执行，一直到(IP)=0012h 为止。具体的情况如图5.12所示。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244564.png" alt="image-20211201162709412" style="zoom: 80%;" /> 
+<h4 id="-p-将循环一次执行完">-p 将循环一次执行完<a hidden class="anchor" aria-hidden="true" href="#-p-将循环一次执行完">#</a></h4>
+<p>希望将循环一次执行完，可以使用p命令来达到目的。再次遇到loop指令时，使用p命令来执行，Debug就会自动重复执行循环中的指令，直到(cx)=0为止。具体情况如图5.14所示。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244570.png" alt="image-20211201163104740" style="zoom:80%;" /> 
+<p>当然，也可以用g命令来达到目的，可以用“g 0016”直接执行到CS:0016处。具体情况如图5.15所示。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244575.png" alt="image-20211201163129329" style="zoom:80%;" /> 
+<h3 id="54-debug和汇编编译器masm对指令的不同处理">5.4 Debug和汇编编译器masm对指令的不同处理<a hidden class="anchor" aria-hidden="true" href="#54-debug和汇编编译器masm对指令的不同处理">#</a></h3>
+<p>我们在Debug中和源程序中写入同样形式的指令：“mov al,[0]”、“mov bl,[1]”、“mov cl,[2]”、“mov dl,[3]”，但 Debug和编译器对这些指令中的“[idata]”却有不同的解释。</p>
+<p>Debug 将它解释为“[idata]”是一个内存单元，“idata”是内存单元的偏移地址；</p>
+<p>而编译器将“[idata]”解释为“idata”。</p>
+<p>比较一下汇编源程序中以下指令的含义。</p>
+<p>“<code>mov al,[0]</code>”，含义：<code>(al)=0</code>，将常量0送入al中(与<code>mov al,0</code>含义相同)；</p>
+<p>“<code>mov al,ds:[0]</code>”，含义：<code>(al)=((ds)*16+0)</code>，将内存单元中的数据送入al 中；</p>
+<p>“<code>mov al,[bx]</code>”，含义：<code>(al)=((ds)*16+(bx))</code>，将内存单元中的数据送入al 中；</p>
+<p>“<code>mov al,ds:[bx]</code>”，含义：与“<code>mov al,[bx]</code>”相同。</p>
+<p>从上面的比较中可以看出:</p>
+<p>（1）在汇编源程序中，如果用指令访问一个内存单元，则在指令中必须用“<code>[...]</code>”来表示内存单元，如果在“<code>[]</code>”里用一个常量idata直接给出内存单元的偏移地址，就要在“<code>[]</code>”的前面显式地给出段地址所在的段寄存器。比如</p>
+<p><code>mov al,ds:[0]</code></p>
+<p>这些出现在访问内存单元的指令中，用于显式地指明内存单元的段地址的“ds:” “cs:” “ss:” “es:”，在汇编语言中称为<strong>段前缀</strong>。</p>
+<p>如果没有在“<code>[]</code>”的前面显式地给出段地址所在的段寄存器，比如</p>
+<p><code>mov al,[0]</code></p>
+<p>那么，编译器masm将把指令中的“<code>[idata]</code>”解释为“<code>idata</code>”。</p>
+<p>（2）如果在“<code>[]</code>”里用寄存器，比如bx，间接给出内存单元的偏移地址，则段地址默认在ds中。当然，也可以显式地给出段地址所在的段寄存器。</p>
+<h3 id="55-loop和bx的联合应用">5.5 loop和[bx]的联合应用<a hidden class="anchor" aria-hidden="true" href="#55-loop和bx的联合应用">#</a></h3>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244581.png" alt="image-20211201170648171" style="zoom:80%;" /> 
+<h3 id="57-一段安全的空间">5.7 一段安全的空间<a hidden class="anchor" aria-hidden="true" href="#57-一段安全的空间">#</a></h3>
+<p>(1)我们需要直接向一段内存中写入内容;</p>
+<p>(2)这段内存空间不应存放系统或其他程序的数据或代码，否则写入操作很可能引发错误;</p>
+<p>(3)DOS 方式下，一般情况，<code>0:200~0:2ff</code> 空间中没有系统或其他程序的数据或代码;</p>
+<p>(4)以后，我们需要直接向一段内存中写入内容时，就使用<code>0:200~0:2ff</code>这段空间。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244584.png" alt="image-20211201171723905" style="zoom:80%;" /> 
+<h3 id="58-段前缀的使用">5.8 段前缀的使用<a hidden class="anchor" aria-hidden="true" href="#58-段前缀的使用">#</a></h3>
+<p>将内存 ffff:0~ffff:b 单元中的数据复制到 0:200~0:20b 单元中</p>
+<p>分析：0:200~0:20b 单元等同于 0020:0~0020:b 单元，它们描述的是同一段内存空间。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244588.png" alt="image-20211201172701947" style="zoom:80%;" /> 
+<p>因源始单元 ffff:X 和目标单元 0020:X 相距大于64KB，在不同的64KB段里，程序5.8中，每次循环要设置两次ds。这样做是正确的，但是效率不高。我们可以使用两个段寄存器分别存放源始单元 ffff:X 和目标单元 0020:X 的段地址，这样就可以省略循环中需要重复做12次的设置ds的程序段。</p>
+<p>改进的程序如下。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244859.png" alt="image-20211201172746677" style="zoom:80%;" /> 
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C6-%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%92%8C%E5%BA%94%E7%94%A8/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>实验6 信号量的实现和应用</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C7-%E5%9C%B0%E5%9D%80%E6%98%A0%E5%B0%84%E4%B8%8E%E5%85%B1%E4%BA%AB/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>实验7 地址映射与共享</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

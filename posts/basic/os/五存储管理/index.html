@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>五、存储管理 | Binb&#39;s Blog</title>
+<meta name="keywords" content="操作系统">
+<meta name="description" content="磁盘的管理(一) 前言 磁盘既是输入设备又是输出设备。 输出设备（OutputDevice）是人与计算机交互的一种部件，用于数据的输出。 输入设备：">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/basic/os/%E4%BA%94%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="五、存储管理" />
+<meta property="og:description" content="磁盘的管理(一) 前言 磁盘既是输入设备又是输出设备。 输出设备（OutputDevice）是人与计算机交互的一种部件，用于数据的输出。 输入设备：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/basic/os/%E4%BA%94%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-05-20T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="五、存储管理"/>
+<meta name="twitter:description" content="磁盘的管理(一) 前言 磁盘既是输入设备又是输出设备。 输出设备（OutputDevice）是人与计算机交互的一种部件，用于数据的输出。 输入设备："/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📕 计算机基础",
+      "item": "https://chance7bin.github.io/posts/basic/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "操作系统",
+      "item": "https://chance7bin.github.io/posts/basic/os/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "五、存储管理",
+      "item": "https://chance7bin.github.io/posts/basic/os/%E4%BA%94%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "五、存储管理",
+  "name": "五、存储管理",
+  "description": "磁盘的管理(一) 前言 磁盘既是输入设备又是输出设备。 输出设备（OutputDevice）是人与计算机交互的一种部件，用于数据的输出。 输入设备：",
+  "keywords": [
+    "操作系统"
+  ],
+  "articleBody": "磁盘的管理(一) 前言 磁盘既是输入设备又是输出设备。 输出设备（OutputDevice）是人与计算机交互的一种部件，用于数据的输出。 输入设备：向计算机输入数据和信息的设备。\n所以，使用磁盘大致上与显示器和键盘一样\n提示：以下是本篇文章正文内容\n一、磁盘的介绍 磁盘由一个个盘片组成的磁盘立体结构，一个盘片上下两面都是可读写的\n磁盘利用了电流的磁效应，对一些电信号进行磁化，保存在磁盘中，用来表示一些信息。\n硬盘又划分为磁头（Heads）、柱面(Cylinder)、扇区(Sector)\n磁头(Heads)：每张盘面的正反两面各有一个磁头，一个磁头对应一张磁片的一个面。用第几磁头就可以表示数据在哪个磁面\n柱面(Cylinder)：所有盘面中半径相同的同心磁道构成“柱面”，这一系列的磁道垂直叠在一起，就形成一个柱面的形状\n扇区(Sector)：将磁道划分为若干个小的区段，就是扇区，每个扇区的容量为512字节，大小本质上是对磁盘数据的传输时间和磁盘的碎片浪费这2项参数的折中\n==硬盘容量＝磁头数×柱面数×扇区数×512字节==\n结构概况：\n二、生磁盘的使用 1.IO过程简介 ==磁盘I/O过程: 控制器–\u003e寻道–\u003e旋转–\u003e传输==\n1.磁头移动到相应的磁道上 2.磁道开始旋转，转到相应的扇区 3.此时再转的时候就是磁生电，磁信号就变成电信号，然后就读取数据 4.读到内存的缓冲区，将这个内存缓冲区修改一个字节 5.然后继续里面再转，此时是电生磁，把字节写到磁道上\n==移动磁头，移动到对应的磁道上，然后转动磁道，移动到对应的扇区上，一边旋转一边进行磁生电，电生磁，和内存缓冲区进行数据的交互读和写==\n2.直接使用磁盘 只要往控制器中写柱面、 磁头、 扇区、 缓存位置\n假如要往磁盘的某个扇区写一个字节，那么需要知道这个扇区对应的哪个柱面中的哪个磁头把这些参数传到磁盘控制器，磁盘控制器再根据这些参数进行驱动磁盘写数据\n(1)磁盘读写的请求函数do_hd_request()\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 void do_hd_request(void) { ..... //前面一些语句就是要得到dev,nsect,sec,head,cyl，WIN_WRITE,\u0026write_intr数据 // 传递给磁盘控制器 if (CURRENT-\u003ecmd == WRITE) { hd_out(dev,nsect,sec,head,cyl,WIN_WRITE,\u0026write_intr); for(i=0 ; i\u003c3000 \u0026\u0026 !(r=inb_p(HD_STATUS)\u0026DRQ_STAT) ; i++) /* nothing */ ; if (!r) { bad_rw_intr(); goto repeat; } port_write(HD_DATA,CURRENT-\u003ebuffer,256); } else if (CURRENT-\u003ecmd == READ) { hd_out(dev,nsect,sec,head,cyl,WIN_READ,\u0026read_intr); } else panic(\"unknown hd-command\"); } (2)磁盘驱动的核心代码hd_out()\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 static void hd_out(unsigned int drive,unsigned int nsect,unsigned int sect, unsigned int head,unsigned int cyl,unsigned int cmd, void (*intr_addr)(void)) { register int port asm(\"dx\"); if (drive\u003e1 || head\u003e15) panic(\"Trying to write bad sector\"); if (!controller_ready()) panic(\"HD controller not ready\"); do_hd = intr_addr; outb_p(hd_info[drive].ctl,HD_CMD); port=HD_DATA; //数据寄存器端口(0x1f0) // outb_p接口就是往外设传送数据的 // cpu中磁盘驱动的核心代码 outb_p(hd_info[drive].wpcom\u003e\u003e2,++port); outb_p(nsect,++port); outb_p(sect,++port); outb_p(cyl,++port); outb_p(cyl\u003e\u003e8,++port); outb_p(0xA0|(drive\u003c\u003c4)|head,++port); outb(cmd,++port); } 以上方法需要的传递的参数太多，不够方便\n3.盘块号读写磁盘(第一层抽象) ==将柱面、磁头、扇区包装成一个磁盘块==\n磁盘驱动负责从block计算出cyl， head， sec(CHS)\n假设扇区的编址如下，(block相邻的盘块可以快速读出)\n1号扇区在0号扇区旋转方向的下一扇区，假设一个盘面有六个扇区，则0-5扇区在第一个盘面，6号扇区在0号扇区竖直方向的下的扇区\n计算公式：block = c * (heads * sectors) + h * sectors + s\nSectors 是每个盘面的扇区数，Heads 是磁盘的磁头数量\n扇区号 = 柱面号 × （一个柱面有多少扇区）+ 盘面号 ×（一个盘面有多少扇区）+ 扇区号\n==根据扇区号 sector 来算出 C、H、S==\nS = sector%Sectors H = sector/Sectors%Heads C = sector/Sectors/Heads\n通过编址建立从 C、H、S 扇区地址到扇区号的一个映射，这就是文件系统第一层抽象的中心任务。扇区号连续的多个扇区就是一个磁盘块\n磁盘的访问时间\n磁盘的访问时间 = 写入控制器时间 + 寻道时间 + 旋转时间 + 传输时间\n(其中主要是寻道时间, 旋转时间长，同时相邻的盘块应能快速读出)\n通过磁盘号进行读写磁盘\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 static void make_request() { struct requset *req; req=request+NR_REQUEST; req-\u003esector=bh-\u003eb_blocknr\u003c\u003c1; add_request(major+blk_dev,req); } void do_hd_request(void) { unsigned int block=CURRENT-\u003esector; __asm__(“divl %4”:”=a”(block),”=d”(sec):”0”(block), “1”(0),”r”(hd_info[dev].sect)); __asm__(“divl %4”:”=a”(cyl),”=d”(head):”0”(block), “1”(0),”r”(hd_info[dev].head)); hd_out(dev,nsect,sec,head,cyl,WIN_WRITE,...); ... } 有了磁盘块，用户发出的磁盘读写请求就是盘块号 blocknr 了，由于磁盘块是连续的多个扇区，可以容易地算出扇区号，即：sector = blocknr × blocksize（ blocksize 是描述磁盘块大小）\n4.队列读写磁盘(第二层抽象) 操作系统中一般有多个进程，每个进程都会提出磁盘块访问请求，所以需要用队列来管理访问请求，这就是操作系统对磁盘管理的第二层抽象\n多个磁盘访问请求出现在请求队列，需要对磁盘进行调度\n调度目标：平均延迟小 调度算法：\n(1)FCFS磁盘调度算法 最直观最公平的调度\n(2)SSTF磁盘调度 在移动过程中把经过的请求处理(Shortest-seek-time First)\n(3)SCAN磁盘调度 SSTF+中途不回折： 每个请求都有处理机会\n(4)C-SCAN磁盘调度(电梯算法) SCAN+直接移到另一端： 两端请求都能很快处理\n这借鉴了生活中电梯的模型，电梯在运行的时候有上升和下降2种情况，当电梯上升时，本次上升的终点就是最高的请求楼层; 当电梯下降时，本次下降的终点就是最低的请求楼层\nIN_ORDER()\n1 2 3 4 5 6 7 8 9 // 核心思想是比较s1与s2中的sector大小 // 也就是比较s1与s2中的柱面号的大小 // 因为柱面的寻找是耗时最长的，所以要保证 // 寻找柱面也即寻道的时间不能太长，就要在 // 寻道上面做优化处理 #define IN_ORDER(s1,s2) ((s1)-\u003ecmd\u003c(s2)-\u003ecmd || ((s1)-\u003ecmd==(s2)-\u003ecmd \u0026\u0026 ((s1)-\u003edev \u003c (s2)-\u003edev || ((s1)-\u003edev == (s2)-\u003edev \u0026\u0026 (s1)-\u003esector \u003c (s2)-\u003esector)))) 知道了IN_ORDER()的作用，可以分析一下电梯算法\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 // linux-0.11/kernel/blk_drv/ll_rw_blk.c static void add_request(struct blk_dev_struct * dev, struct request * req) { struct request * tmp; req-\u003enext = NULL; cli(); // 开启临界区保护 if (req-\u003ebh) req-\u003ebh-\u003eb_dirt = 0; if (!(tmp = dev-\u003ecurrent_request)) { dev-\u003ecurrent_request = req; sti(); (dev-\u003erequest_fn)(); return; } //当符合这两种情况时就跳出循环 // 并将req插入tmp和next之间 //(1)当tmp的柱面号小于req的柱面号，且req小于next的柱面号(电梯上升) //(2)当tmp的柱面号小于next的柱面号，且req小于next的柱面号(电梯下降) // 不管这两种任何一种情况， // 下一步磁盘读写都会进入req这个对象上 //否则就按照原有的,队列进行磁盘读写 //这样就能更高效的使用磁盘 for ( ; tmp-\u003enext ; tmp=tmp-\u003enext) if ((IN_ORDER(tmp,req) || !IN_ORDER(tmp,tmp-\u003enext)) \u0026\u0026 IN_ORDER(req,tmp-\u003enext)) break; req-\u003enext=tmp-\u003enext; tmp-\u003enext=req; sti(); } 总结 小结：==生磁盘(raw disk)写过程==\n磁盘的管理(二) 前言 如果让普通用户使用生磁盘(raw disk)，许多人连扇区都不知道是什么?要求他们根据盘块号来访问磁盘…这是不可能的。 所以，需要在盘块上引入更高一层次的抽象概念—文件\n一、磁盘文件 ==磁盘使用的第三层抽象——文件，文件是一个连续的字符流==\n用户可以在字符流上随意操作，操作系统会根据==映射表找到和字符流位置对应的磁盘块号==，操作系统完成了从磁盘块到字符流的映射。\n实现文件抽象的关键就在于能根据字符流位置找到对应的盘块号，即字符流和盘块号之间的映射关系，==文件: 建立字符流到盘块集合的映射关系==\n1.顺序存储结构 文件使用顺序结构储存在磁盘上，==文件的FCB(文件控制块)存储该文件的起始块号(第一个)，和块数==，根据这个就能知道对应的字符在那个盘块\n若盘块的大小为100，则文件中200-212对应在盘块8\n但是，用顺序存储的结构适合文件的直接读写，不适合文件的动态增长，与数组一样，不方便插入元素\n2.链式存储结构 链式存储结构：操作系统在 FCB 中需要存放的主要映射信息是==第一个磁盘块的盘块号==，利用这个信息可以找到文件的第一个磁盘块，再利用每个磁盘块中存放的下一个盘块号的指针，可以找到第二个磁盘块……\n若盘块的大小为100，则文件中200-212对应在盘块9\n3.索引存储结构 索引存储结构：文件字符流被分割成多个逻辑块，在物理磁盘上寻找一些空闲物理盘块（无需连续）将这些逻辑块的内容存放进去，再找一个磁盘块作为索引块，其中按序存放各个逻辑块对应的物理磁盘块号(索引块来记录文件使用的盘块号) 索引结构指一个文件的信息存放在若干不连续的物理块中，系统为每个文件建立一个专用的数据结构——索引表，并将这些块的块号存放在索引表中。\n优点是保留了链接结构的优点，同时解决了其缺点，即能顺序存取，又能随机存取，满足了文件动态增长，插入删除的需求，也能充分利用外存空间\n缺点是索引表本身带来一定的系统开销\n==多级索引：== 优点：\n1.可以表示很大的文件 2.很小的文件高效访问 3.中等大小的文件访问速度也不慢\n二、文件读取磁盘(第三层抽象) 通过文件对磁盘进行读写\n1 2 3 4 5 6 7 8 在fs/read_write.c中 int sys_write(int fd, const char* buf, int count) { struct file *file = current-\u003efilp[fd]; struct m_inode *inode = file-\u003einode; if(S_ISREG(inode-\u003ei_mode)) return file_write(inode, file, buf, count); } 既然对文件操作就要调用sys_write(),参数：fd文件描述符，buf内存缓冲区，count读写字符的个数 根据文件信息 inode 对应的不是字符设备，而是常规文件，跳到 file_write() 去执行\nfile_write()\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 int file_write(struct m_inode *inode, struct file *filp, char *buf, int count) { off_t pos; if(filp-\u003ef_flags\u0026O_APPEND)//如果是追加，从文末开始 pos=inode-\u003ei_size; else pos=filp-\u003ef_pos; ..... while(i\u003ccount) { block=create_block(inode, pos/BLOCK_SIZE);//算出对应的块 bh=bread(inode-\u003ei_dev, block);//发送请求，放入“电梯” 队列! int c=pos%BLOCK_SIZE; char *p=c+bh-\u003eb_data; //写入数据后，修改修改pos， bh-\u003eb_dirt=1; c=BLOCK_SIZE-c; pos+=c; // pos指向文件的读写位置(字符流末位置) ... //一块一块拷贝用户字符， 并且释放写出 while(c--\u003e0) *(p++)=get_fs_byte(buf++); brelse(bh); } filp-\u003ef_pos=pos; } //pos 先找到 文件的读写位置 （记录在 字段 f_pos 中） //block 计算物理盘块号 //bread 向磁盘发出请求 工作过程：\n1.根据file中的一个==读写指针fseek（文件的当前读写位置）及 count 找到文件读写对应的字符流位置==\n2.根据字符流上的读写位置算出逻辑块号 ,==由inode 找到物理盘块号==\n3.==用磁盘号，buf等形成request放入请求队列(“电梯”)==，就可以读写磁盘\n==create_block()计算盘号，文件抽象的核心==\n这里采用的多级索引 block:(0-6):直接数据块（直接索引）， (7):一重间接， (8):二重间接\n如果逻辑盘块号小于等于 6，说明 inode中的直接数据块就能映射出盘块号 若这个逻辑盘块没有映射到物理盘块，就调用 new_block() 从磁盘上申请一个空闲物理盘块\nblock-=7 ， if(block\u003c512) 说明逻辑盘块号对应的物理盘块号存放在一阶间接索引，接下来需要 bread(inode-\u003ei_dev,inode-\u003ei_zone[7]) 读入这个一阶索引块，接下来需要在这个索引块中寻找和逻辑块相对应的物理盘块号\nm_inode结构体\n1 2 3 4 5 6 7 8 9 10 struct m_inode{ //读入内存后的inode unsigned short i_mode; //文件的类型和属性 ... unsigned short i_zone[9]; //指向文件内容数据块 struct task_struct *i_wait; unsigned short i_count; unsigned char i_lock; unsigned char i_dirt; ... } 根据inode区分文件的属性和类型\n1 2 3 4 5 6 7 8 9 int sys_open(const char* filename, int flag) { if(S_ISCHR(inode-\u003ei_mode)) //字符设备 { if(MAJOR(inode-\u003ei_zone[0])==4) //设备文件 current-\u003etty=MINOR(inode-\u003ei_zone[0]); } ... } ==如果是普通文件需要根据inode里面的映射表来建立磁盘号到字符流直接的映射==\n==如果是特殊文件不需要inode去完成映射，inode存放主设备号(设备文件)==\nMAJOR的宏定义\n1 2 #define MAJOR(a)(((unsigned)(a))\u003e\u003e8)) //取高字节 #define MINOR(a)((a)\u00260xff) //取低字节 总结 ==文件视图== 目录与文件系统 前言 文件， 抽象一个磁盘块集合，这是第三层抽象，从文件到文件系统：文件系统， 抽象整个磁盘（第四层抽象）\n一、文件系统 在使用磁盘的时候，用户眼里的磁盘是一堆树结构的有组织的文件，文件系统就是实现文件到盘块的映射\n目录树的优点： 但是有了这样的映射，怎么才能使用 /my/data/a中a文件(\"/\" 表示根目录)?\n==通过文件路径名找到文件 ，也就是先通过文件路径找到文件a的FCB==\n因为需要通过比较文件名才能找到文件，所以目录中需要存放子目录的文件名，又还需要在磁盘中操作该文件，因此还需要存子目录的FCB。\n但实际上我们只需要比较一个文件名，却读入了大量的FCB，系统效率笔记低，因此可以在目录中存放子目录名+该目录对应的FCB地址。目录里存的就是\u003c文件名：索引值\u003e，实现这一索引结构，需要磁盘配合，==需要磁盘划分一块连续的区域来存放FCB块，这样就能建立索引值到FCB地址的映射==\n因为根目录没有上一级目录来保存它的索引值，因此需要在磁盘中找一个固定的地址存放根目录\n所以操作系统需要完成以下两个任务：\n1.目录中存放子目录的文件名和子目录FCB的索引值 2.磁盘块要划分一段连续的区域专门存放FCB块，并定义一个初始地址作为根目录的索引\n磁盘块如下：\n(1)inode位图：哪些inode空闲，哪些被占用 (2)盘块位图：哪些盘块是空闲的，硬盘大小不同这个图的大小也不同 (3)引导块：磁盘启动和初始化 (4)超级块：记录两个位图有多大等信息\n空闲位图(位向量)：0011110011101 表示：表示磁盘块2、 3、 4、 5、8、 9、 10、 12空闲\n==完成全部映射下的磁盘使用过程== 二、文件系统代码实现 只要把文件系统如何映像到磁盘上对应扇区再加上前面学过的知识不就是文件系统的实现吗?\n目录解析：\n在open()函数里面找到对应文件并打开，而open()调用了sys_open()\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 在linux/fs/open.c中 int sys_open(const char* filename, int flag) { i=open_namei(filename,flag,\u0026inode); //解析路径 ... } int open_namei(...) { dir=dir_namei(pathname,\u0026namelen,\u0026basename); .... } static struct m_inode *dir_namei() { dir=get_dir(pathname); } ==经过一系列的调用真正完成目录解析的是get_dir==\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 static struct m_inode *get_dir(const char *pathname) { if((c=get_fs_byte(pathname))==‘/’) //根目录 { inode=current-\u003eroot; pathname++; } else if(c) inode=current-\u003epwd; //解析从此处开始 while(1) { if(!c) return inode; //函数的正确出口 bh=find_entry(\u0026inode,thisname,namelen,\u0026de); int inr=de-\u003einode; int idev=inode-\u003ei_dev; inode=iget(idev,inr); //根据目录项读取下一层inode } } (1)root： 找到根目录； (2)find_entry： 从目录中读取目录项； (3)inr： 是目录项中的索引节点号； (4)iget： 再读下一层目录\n目录解析首先要找到一个解析的起点，如果路径名从 / 开始，就从根目录的inode 开始，否则要从当前目录的 inode 开始\n==根目录inode的解析==\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 inode=current-\u003eroot; void init(void) { setup((void *) \u0026drive_info); ... } sys_setup(void * BIOS)//在kernel/hd.c中 { hd_info[drive].head = *(2+BIOS); hd_info[drive].sect = *(14+BIOS); mount_root(); ... } void mount_root(void)//在fs/super.c中 { mi=iget(ROOT_DEV,ROOT_INO)); current-\u003eroot = mi; ... } 所有进程的 root 都是从 1 号进程继承来的，在 1 号进程 init() 函数中要执行 mount_root()函数，用来将根目录的 inode读入到内存中，并且关联到 1 号进程的 PCB 中\n有了起点目录文件的 inode，接下来读出目录文件内容，然后用文件路径上的文件名和和目录中的目录项逐个比对，不断向下解析，直到路径名被全部处理完成, 最终找到目标文件的inode\n==读取inode （iget()函数）==\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 struct m_inode * iget(int dev, int nr) { struct m_inode * inode = get_empty_inode(); inode-\u003ei_dev=dev; inode-\u003ei_num=nr; read_inode(inode); return inode; } static void read_inode(struct m_inode *inode) { struct super_block *sb=get_super(inode-\u003ei_dev);; lock_inode(inode); block=2+sb-\u003es_imap_blocks+sb-\u003es_zmap_blocks+ (inode-\u003ei_num-1)/INODES_PER_BLOCK; bh=bread(inode-\u003ei_dev,block); inode=bh-\u003edata[(inode-\u003ei_num-1)%INODES_PER_BLOCK]; unlock_inode(inode); } 以上都是根据磁盘的划分来实现的 从上图可以看到inode 数组的起始位置在引导块,超级块以及两个位图数组之后\ninode 数组在磁盘上的起始位置 = 引导块大小 + 超级块大小 + s_imap_blocks大小 + s_zmap_blocks大小\n==开始解析目录 find_entry()==\n函数 find_entry 根据目录文件的 inode 读取目录项数组，然后逐个目录项进行匹配，即 while(i",
+  "wordCount" : "6329",
+  "inLanguage": "zh",
+  "datePublished": "2022-05-20T00:00:00Z",
+  "dateModified": "2022-05-20T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/basic/os/%E4%BA%94%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/">📕 计算机基础</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/os/">操作系统</a></div>
+    <h1 class="post-title">
+      五、存储管理
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-05-20
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>6329字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>13分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="color: var(--secondary)!important;">操作系统</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e7%a3%81%e7%9b%98%e7%9a%84%e7%ae%a1%e7%90%86%e4%b8%80" aria-label="磁盘的管理(一)">磁盘的管理(一)</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%89%8d%e8%a8%80" aria-label="前言">前言</a></li>
+                    <li>
+                        <a href="#%e4%b8%80%e7%a3%81%e7%9b%98%e7%9a%84%e4%bb%8b%e7%bb%8d" aria-label="一、磁盘的介绍">一、磁盘的介绍</a></li>
+                    <li>
+                        <a href="#%e4%ba%8c%e7%94%9f%e7%a3%81%e7%9b%98%e7%9a%84%e4%bd%bf%e7%94%a8" aria-label="二、生磁盘的使用">二、生磁盘的使用</a><ul>
+                            
+                    <li>
+                        <a href="#1io%e8%bf%87%e7%a8%8b%e7%ae%80%e4%bb%8b" aria-label="1.IO过程简介">1.IO过程简介</a></li>
+                    <li>
+                        <a href="#2%e7%9b%b4%e6%8e%a5%e4%bd%bf%e7%94%a8%e7%a3%81%e7%9b%98" aria-label="2.直接使用磁盘">2.直接使用磁盘</a></li>
+                    <li>
+                        <a href="#3%e7%9b%98%e5%9d%97%e5%8f%b7%e8%af%bb%e5%86%99%e7%a3%81%e7%9b%98%e7%ac%ac%e4%b8%80%e5%b1%82%e6%8a%bd%e8%b1%a1" aria-label="3.盘块号读写磁盘(第一层抽象)">3.盘块号读写磁盘(第一层抽象)</a></li>
+                    <li>
+                        <a href="#4%e9%98%9f%e5%88%97%e8%af%bb%e5%86%99%e7%a3%81%e7%9b%98%e7%ac%ac%e4%ba%8c%e5%b1%82%e6%8a%bd%e8%b1%a1" aria-label="4.队列读写磁盘(第二层抽象)">4.队列读写磁盘(第二层抽象)</a><ul>
+                            
+                    <li>
+                        <a href="#1fcfs%e7%a3%81%e7%9b%98%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95" aria-label="(1)FCFS磁盘调度算法">(1)FCFS磁盘调度算法</a></li>
+                    <li>
+                        <a href="#2sstf%e7%a3%81%e7%9b%98%e8%b0%83%e5%ba%a6" aria-label="(2)SSTF磁盘调度">(2)SSTF磁盘调度</a></li>
+                    <li>
+                        <a href="#3scan%e7%a3%81%e7%9b%98%e8%b0%83%e5%ba%a6" aria-label="(3)SCAN磁盘调度">(3)SCAN磁盘调度</a></li>
+                    <li>
+                        <a href="#4c-scan%e7%a3%81%e7%9b%98%e8%b0%83%e5%ba%a6%e7%94%b5%e6%a2%af%e7%ae%97%e6%b3%95" aria-label="(4)C-SCAN磁盘调度(电梯算法)">(4)C-SCAN磁盘调度(电梯算法)</a></li></ul>
+                    </li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e7%a3%81%e7%9b%98%e7%9a%84%e7%ae%a1%e7%90%86%e4%ba%8c" aria-label="磁盘的管理(二)">磁盘的管理(二)</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%89%8d%e8%a8%80-1" aria-label="前言">前言</a></li>
+                    <li>
+                        <a href="#%e4%b8%80%e7%a3%81%e7%9b%98%e6%96%87%e4%bb%b6" aria-label="一、磁盘文件">一、磁盘文件</a><ul>
+                            
+                    <li>
+                        <a href="#1%e9%a1%ba%e5%ba%8f%e5%ad%98%e5%82%a8%e7%bb%93%e6%9e%84" aria-label="1.顺序存储结构">1.顺序存储结构</a></li>
+                    <li>
+                        <a href="#2%e9%93%be%e5%bc%8f%e5%ad%98%e5%82%a8%e7%bb%93%e6%9e%84" aria-label="2.链式存储结构">2.链式存储结构</a></li>
+                    <li>
+                        <a href="#3%e7%b4%a2%e5%bc%95%e5%ad%98%e5%82%a8%e7%bb%93%e6%9e%84" aria-label="3.索引存储结构">3.索引存储结构</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%ba%8c%e6%96%87%e4%bb%b6%e8%af%bb%e5%8f%96%e7%a3%81%e7%9b%98%e7%ac%ac%e4%b8%89%e5%b1%82%e6%8a%bd%e8%b1%a1" aria-label="二、文件读取磁盘(第三层抽象)">二、文件读取磁盘(第三层抽象)</a></li>
+                    <li>
+                        <a href="#%e6%80%bb%e7%bb%93-1" aria-label="总结">总结</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e7%9b%ae%e5%bd%95%e4%b8%8e%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f" aria-label="目录与文件系统">目录与文件系统</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%89%8d%e8%a8%80-2" aria-label="前言">前言</a></li>
+                    <li>
+                        <a href="#%e4%b8%80%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f" aria-label="一、文件系统">一、文件系统</a></li>
+                    <li>
+                        <a href="#%e4%ba%8c%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0" aria-label="二、文件系统代码实现">二、文件系统代码实现</a>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><h1 id="磁盘的管理一">磁盘的管理(一)<a hidden class="anchor" aria-hidden="true" href="#磁盘的管理一">#</a></h1>
+<h2 id="前言">前言<a hidden class="anchor" aria-hidden="true" href="#前言">#</a></h2>
+<p>磁盘既是输入设备又是输出设备。 输出设备（OutputDevice）是人与计算机交互的一种部件，用于数据的输出。 输入设备：向计算机输入数据和信息的设备。</p>
+<p>所以，使用磁盘大致上与显示器和键盘一样</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323572.png" alt="在这里插入图片描述"  />
+</p>
+<p>提示：以下是本篇文章正文内容</p>
+<h2 id="一磁盘的介绍">一、磁盘的介绍<a hidden class="anchor" aria-hidden="true" href="#一磁盘的介绍">#</a></h2>
+<p>磁盘由一个个盘片组成的磁盘立体结构，一个盘片上下两面都是可读写的</p>
+<p>磁盘利用了电流的磁效应，对一些电信号进行磁化，保存在磁盘中，用来表示一些信息。</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323571.png" alt="在这里插入图片描述"  />
+</p>
+<p>硬盘又划分为磁头（Heads）、柱面(Cylinder)、扇区(Sector)</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323583.png" alt="在这里插入图片描述"  />
+</p>
+<p><strong>磁头(Heads)</strong>：每张盘面的正反两面各有一个磁头，一个磁头对应一张磁片的一个面。用第几磁头就可以表示数据在哪个磁面</p>
+<p><strong>柱面(Cylinder)</strong>：所有盘面中半径相同的同心磁道构成“柱面”，这一系列的磁道垂直叠在一起，就形成一个柱面的形状</p>
+<p><strong>扇区(Sector)</strong>：将磁道划分为若干个小的区段，就是扇区，每个扇区的容量为512字节，大小本质上是对磁盘数据的传输时间和磁盘的碎片浪费这2项参数的折中</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323581.png" alt="在这里插入图片描述"  />
+</p>
+<p>==硬盘容量＝磁头数×柱面数×扇区数×512字节==</p>
+<p>结构概况：</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323588.png" alt="在这里插入图片描述"  />
+</p>
+<h2 id="二生磁盘的使用">二、生磁盘的使用<a hidden class="anchor" aria-hidden="true" href="#二生磁盘的使用">#</a></h2>
+<h3 id="1io过程简介">1.IO过程简介<a hidden class="anchor" aria-hidden="true" href="#1io过程简介">#</a></h3>
+<p>==磁盘I/O过程: 控制器–&gt;寻道–&gt;旋转–&gt;传输==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323597.png" alt="在这里插入图片描述"  />
+</p>
+<blockquote>
+<p>1.磁头移动到相应的磁道上
+2.磁道开始旋转，转到相应的扇区
+3.此时再转的时候就是磁生电，磁信号就变成电信号，然后就读取数据
+4.读到内存的缓冲区，将这个内存缓冲区修改一个字节
+5.然后继续里面再转，此时是电生磁，把字节写到磁道上</p>
+</blockquote>
+<p>==移动磁头，移动到对应的磁道上，然后转动磁道，移动到对应的扇区上，一边旋转一边进行磁生电，电生磁，和内存缓冲区进行数据的交互读和写==</p>
+<h3 id="2直接使用磁盘">2.直接使用磁盘<a hidden class="anchor" aria-hidden="true" href="#2直接使用磁盘">#</a></h3>
+<p>只要往控制器中写柱面、 磁头、 扇区、 缓存位置</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323922.png" alt="在这里插入图片描述"  />
+</p>
+<p>假如要往磁盘的某个扇区写一个字节，那么需要知道这个扇区对应的哪个柱面中的哪个磁头把这些参数传到磁盘控制器，磁盘控制器再根据这些参数进行驱动磁盘写数据</p>
+<p>(1)磁盘读写的请求函数do_hd_request()</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">do_hd_request</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="p">.....</span> 
+</span></span><span class="line"><span class="cl">	<span class="c1">//前面一些语句就是要得到dev,nsect,sec,head,cyl，WIN_WRITE,&amp;write_intr数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// 传递给磁盘控制器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="n">CURRENT</span><span class="o">-&gt;</span><span class="n">cmd</span> <span class="o">==</span> <span class="n">WRITE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">hd_out</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="n">nsect</span><span class="p">,</span><span class="n">sec</span><span class="p">,</span><span class="n">head</span><span class="p">,</span><span class="n">cyl</span><span class="p">,</span><span class="n">WIN_WRITE</span><span class="p">,</span><span class="o">&amp;</span><span class="n">write_intr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span> <span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">3000</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="nf">inb_p</span><span class="p">(</span><span class="n">HD_STATUS</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DRQ_STAT</span><span class="p">)</span> <span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="cm">/* nothing */</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">bad_rw_intr</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">			<span class="k">goto</span> <span class="n">repeat</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">port_write</span><span class="p">(</span><span class="n">HD_DATA</span><span class="p">,</span><span class="n">CURRENT</span><span class="o">-&gt;</span><span class="n">buffer</span><span class="p">,</span><span class="mi">256</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">CURRENT</span><span class="o">-&gt;</span><span class="n">cmd</span> <span class="o">==</span> <span class="n">READ</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">hd_out</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="n">nsect</span><span class="p">,</span><span class="n">sec</span><span class="p">,</span><span class="n">head</span><span class="p">,</span><span class="n">cyl</span><span class="p">,</span><span class="n">WIN_READ</span><span class="p">,</span><span class="o">&amp;</span><span class="n">read_intr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="k">else</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">panic</span><span class="p">(</span><span class="s">&#34;unknown hd-command&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>(2)磁盘驱动的核心代码hd_out()</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">hd_out</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">drive</span><span class="p">,</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nsect</span><span class="p">,</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">sect</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">head</span><span class="p">,</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">cyl</span><span class="p">,</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">intr_addr</span><span class="p">)(</span><span class="kt">void</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">register</span> <span class="kt">int</span> <span class="n">port</span> <span class="k">asm</span><span class="p">(</span><span class="s">&#34;dx&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">drive</span><span class="o">&gt;</span><span class="mi">1</span> <span class="o">||</span> <span class="n">head</span><span class="o">&gt;</span><span class="mi">15</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">panic</span><span class="p">(</span><span class="s">&#34;Trying to write bad sector&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">controller_ready</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">panic</span><span class="p">(</span><span class="s">&#34;HD controller not ready&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">do_hd</span> <span class="o">=</span> <span class="n">intr_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">outb_p</span><span class="p">(</span><span class="n">hd_info</span><span class="p">[</span><span class="n">drive</span><span class="p">].</span><span class="n">ctl</span><span class="p">,</span><span class="n">HD_CMD</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">port</span><span class="o">=</span><span class="n">HD_DATA</span><span class="p">;</span> <span class="c1">//数据寄存器端口(0x1f0)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// outb_p接口就是往外设传送数据的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cpu中磁盘驱动的核心代码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">outb_p</span><span class="p">(</span><span class="n">hd_info</span><span class="p">[</span><span class="n">drive</span><span class="p">].</span><span class="n">wpcom</span><span class="o">&gt;&gt;</span><span class="mi">2</span><span class="p">,</span><span class="o">++</span><span class="n">port</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">outb_p</span><span class="p">(</span><span class="n">nsect</span><span class="p">,</span><span class="o">++</span><span class="n">port</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">outb_p</span><span class="p">(</span><span class="n">sect</span><span class="p">,</span><span class="o">++</span><span class="n">port</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">outb_p</span><span class="p">(</span><span class="n">cyl</span><span class="p">,</span><span class="o">++</span><span class="n">port</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">outb_p</span><span class="p">(</span><span class="n">cyl</span><span class="o">&gt;&gt;</span><span class="mi">8</span><span class="p">,</span><span class="o">++</span><span class="n">port</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">outb_p</span><span class="p">(</span><span class="mh">0xA0</span><span class="o">|</span><span class="p">(</span><span class="n">drive</span><span class="o">&lt;&lt;</span><span class="mi">4</span><span class="p">)</span><span class="o">|</span><span class="n">head</span><span class="p">,</span><span class="o">++</span><span class="n">port</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">outb</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="o">++</span><span class="n">port</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>以上方法需要的传递的参数太多，不够方便</p>
+<h3 id="3盘块号读写磁盘第一层抽象">3.盘块号读写磁盘(第一层抽象)<a hidden class="anchor" aria-hidden="true" href="#3盘块号读写磁盘第一层抽象">#</a></h3>
+<p>==将柱面、磁头、扇区包装成一个磁盘块==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323940.png" alt="在这里插入图片描述"  />
+</p>
+<p>磁盘驱动负责从block计算出cyl， head， sec(CHS)</p>
+<p>假设扇区的编址如下，(block相邻的盘块可以快速读出)</p>
+<p>1号扇区在0号扇区旋转方向的下一扇区，假设一个盘面有六个扇区，则0-5扇区在第一个盘面，6号扇区在0号扇区竖直方向的下的扇区</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323959.png" alt="在这里插入图片描述"  />
+</p>
+<p>计算公式：<code>block = c * (heads * sectors) + h * sectors + s</code></p>
+<p>Sectors 是每个盘面的扇区数，Heads 是磁盘的磁头数量</p>
+<p>扇区号 = 柱面号 × （一个柱面有多少扇区）+ 盘面号 ×（一个盘面有多少扇区）+ 扇区号</p>
+<p>==根据扇区号 sector 来算出 C、H、S==</p>
+<blockquote>
+<p>S = sector%Sectors
+H = sector/Sectors%Heads
+C = sector/Sectors/Heads</p>
+</blockquote>
+<p>通过编址建立从 C、H、S 扇区地址到扇区号的一个映射，这就是文件系统第一层抽象的中心任务。扇区号连续的多个扇区就是一个磁盘块</p>
+<p>磁盘的访问时间</p>
+<p><strong>磁盘的访问时间 = 写入控制器时间 + 寻道时间 + 旋转时间 + 传输时间</strong></p>
+<p>(其中主要是寻道时间, 旋转时间长，同时相邻的盘块应能快速读出)</p>
+<p>通过磁盘号进行读写磁盘</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">make_request</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">requset</span> <span class="o">*</span><span class="n">req</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">req</span><span class="o">=</span><span class="n">request</span><span class="o">+</span><span class="n">NR_REQUEST</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">req</span><span class="o">-&gt;</span><span class="n">sector</span><span class="o">=</span><span class="n">bh</span><span class="o">-&gt;</span><span class="n">b_blocknr</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">add_request</span><span class="p">(</span><span class="n">major</span><span class="o">+</span><span class="n">blk_dev</span><span class="p">,</span><span class="n">req</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">do_hd_request</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">block</span><span class="o">=</span><span class="n">CURRENT</span><span class="o">-&gt;</span><span class="n">sector</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">__asm__</span><span class="p">(</span><span class="err">“</span><span class="n">divl</span> <span class="o">%</span><span class="mi">4</span><span class="err">”</span><span class="o">:</span><span class="err">”</span><span class="o">=</span><span class="n">a</span><span class="err">”</span><span class="p">(</span><span class="n">block</span><span class="p">),</span><span class="err">”</span><span class="o">=</span><span class="n">d</span><span class="err">”</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span><span class="o">:</span><span class="err">”</span><span class="mi">0</span><span class="err">”</span><span class="p">(</span><span class="n">block</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">	<span class="err">“</span><span class="mi">1</span><span class="err">”</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="err">”</span><span class="n">r</span><span class="err">”</span><span class="p">(</span><span class="n">hd_info</span><span class="p">[</span><span class="n">dev</span><span class="p">].</span><span class="n">sect</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">__asm__</span><span class="p">(</span><span class="err">“</span><span class="n">divl</span> <span class="o">%</span><span class="mi">4</span><span class="err">”</span><span class="o">:</span><span class="err">”</span><span class="o">=</span><span class="n">a</span><span class="err">”</span><span class="p">(</span><span class="n">cyl</span><span class="p">),</span><span class="err">”</span><span class="o">=</span><span class="n">d</span><span class="err">”</span><span class="p">(</span><span class="n">head</span><span class="p">)</span><span class="o">:</span><span class="err">”</span><span class="mi">0</span><span class="err">”</span><span class="p">(</span><span class="n">block</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">	<span class="err">“</span><span class="mi">1</span><span class="err">”</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="err">”</span><span class="n">r</span><span class="err">”</span><span class="p">(</span><span class="n">hd_info</span><span class="p">[</span><span class="n">dev</span><span class="p">].</span><span class="n">head</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">hd_out</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="n">nsect</span><span class="p">,</span><span class="n">sec</span><span class="p">,</span><span class="n">head</span><span class="p">,</span><span class="n">cyl</span><span class="p">,</span><span class="n">WIN_WRITE</span><span class="p">,...);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">...</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>有了磁盘块，用户发出的磁盘读写请求就是盘块号 blocknr 了，由于磁盘块是连续的多个扇区，可以容易地算出扇区号，即：sector = blocknr × blocksize（ blocksize 是描述磁盘块大小）</p>
+<h3 id="4队列读写磁盘第二层抽象">4.队列读写磁盘(第二层抽象)<a hidden class="anchor" aria-hidden="true" href="#4队列读写磁盘第二层抽象">#</a></h3>
+<p>操作系统中一般有多个进程，每个进程都会提出磁盘块访问请求，所以需要用队列来管理访问请求，这就是操作系统对磁盘管理的第二层抽象</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323981.png" alt="在这里插入图片描述"  />
+
+多个磁盘访问请求出现在请求队列，需要对磁盘进行调度</p>
+<p>调度目标：平均延迟小
+调度算法：</p>
+<h4 id="1fcfs磁盘调度算法">(1)FCFS磁盘调度算法<a hidden class="anchor" aria-hidden="true" href="#1fcfs磁盘调度算法">#</a></h4>
+<p>最直观最公平的调度</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323022.png" alt="在这里插入图片描述"  />
+</p>
+<h4 id="2sstf磁盘调度">(2)SSTF磁盘调度<a hidden class="anchor" aria-hidden="true" href="#2sstf磁盘调度">#</a></h4>
+<p>在移动过程中把经过的请求处理(Shortest-seek-time First)</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323076.png" alt="在这里插入图片描述"  />
+</p>
+<h4 id="3scan磁盘调度">(3)SCAN磁盘调度<a hidden class="anchor" aria-hidden="true" href="#3scan磁盘调度">#</a></h4>
+<p>SSTF+中途不回折： 每个请求都有处理机会</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323254.png" alt="在这里插入图片描述"  />
+</p>
+<h4 id="4c-scan磁盘调度电梯算法">(4)C-SCAN磁盘调度(电梯算法)<a hidden class="anchor" aria-hidden="true" href="#4c-scan磁盘调度电梯算法">#</a></h4>
+<p>SCAN+直接移到另一端： 两端请求都能很快处理</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323273.png" alt="在这里插入图片描述"  />
+</p>
+<p>这借鉴了生活中电梯的模型，电梯在运行的时候有上升和下降2种情况，当电梯上升时，本次上升的终点就是最高的请求楼层; 当电梯下降时，本次下降的终点就是最低的请求楼层</p>
+<p>IN_ORDER()</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 核心思想是比较s1与s2中的sector大小
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 也就是比较s1与s2中的柱面号的大小
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 因为柱面的寻找是耗时最长的，所以要保证
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 寻找柱面也即寻道的时间不能太长，就要在
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 寻道上面做优化处理
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#define IN_ORDER(s1,s2) 
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">((</span><span class="n">s1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">cmd</span><span class="o">&lt;</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">cmd</span> <span class="o">||</span> <span class="p">((</span><span class="n">s1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">cmd</span><span class="o">==</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">cmd</span> <span class="o">&amp;&amp;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">((</span><span class="n">s1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">dev</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">s2</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">dev</span> <span class="o">||</span> <span class="p">((</span><span class="n">s1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">dev</span> <span class="o">==</span> <span class="p">(</span><span class="n">s2</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">dev</span> <span class="o">&amp;&amp;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sector</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">s2</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sector</span><span class="p">))))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>知道了IN_ORDER()的作用，可以分析一下电梯算法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// linux-0.11/kernel/blk_drv/ll_rw_blk.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">void</span> <span class="nf">add_request</span><span class="p">(</span><span class="k">struct</span> <span class="n">blk_dev_struct</span> <span class="o">*</span> <span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">request</span> <span class="o">*</span> <span class="n">req</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">request</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">req</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">cli</span><span class="p">();</span>   <span class="c1">// 开启临界区保护
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">bh</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="n">req</span><span class="o">-&gt;</span><span class="n">bh</span><span class="o">-&gt;</span><span class="n">b_dirt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">dev</span><span class="o">-&gt;</span><span class="n">current_request</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">dev</span><span class="o">-&gt;</span><span class="n">current_request</span> <span class="o">=</span> <span class="n">req</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">sti</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">		<span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">request_fn</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//当符合这两种情况时就跳出循环
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// 并将req插入tmp和next之间
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">//(1)当tmp的柱面号小于req的柱面号，且req小于next的柱面号(电梯上升)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">//(2)当tmp的柱面号小于next的柱面号，且req小于next的柱面号(电梯下降)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// 不管这两种任何一种情况，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// 下一步磁盘读写都会进入req这个对象上
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">//否则就按照原有的,队列进行磁盘读写
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">//这样就能更高效的使用磁盘
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">next</span> <span class="p">;</span> <span class="n">tmp</span><span class="o">=</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">((</span><span class="nf">IN_ORDER</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span><span class="n">req</span><span class="p">)</span> <span class="o">||</span> 
+</span></span><span class="line"><span class="cl">		    <span class="o">!</span><span class="nf">IN_ORDER</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">))</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">		    <span class="nf">IN_ORDER</span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">			<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">req</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">tmp</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="n">req</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">sti</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323295.png" alt="在这里插入图片描述"  />
+</p>
+<hr>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>小结：==生磁盘(raw disk)写过程==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323332.png" alt="在这里插入图片描述"  />
+</p>
+<h1 id="磁盘的管理二">磁盘的管理(二)<a hidden class="anchor" aria-hidden="true" href="#磁盘的管理二">#</a></h1>
+<h2 id="前言-1">前言<a hidden class="anchor" aria-hidden="true" href="#前言-1">#</a></h2>
+<p>如果让普通用户使用生磁盘(raw disk)，许多人连扇区都不知道是什么?要求他们根据盘块号来访问磁盘…这是不可能的。
+所以，需要在盘块上引入更高一层次的抽象概念—文件</p>
+<h2 id="一磁盘文件">一、磁盘文件<a hidden class="anchor" aria-hidden="true" href="#一磁盘文件">#</a></h2>
+<p>==磁盘使用的第三层抽象——文件，文件是一个连续的字符流==</p>
+<p>用户可以在字符流上随意操作，操作系统会根据==映射表找到和字符流位置对应的磁盘块号==，操作系统完成了从磁盘块到字符流的映射。</p>
+<p>实现文件抽象的关键就在于能根据字符流位置找到对应的盘块号，即字符流和盘块号之间的映射关系，==文件: 建立字符流到盘块集合的映射关系==</p>
+<h3 id="1顺序存储结构">1.顺序存储结构<a hidden class="anchor" aria-hidden="true" href="#1顺序存储结构">#</a></h3>
+<p>文件使用顺序结构储存在磁盘上，==文件的FCB(文件控制块)存储该文件的起始块号(第一个)，和块数==，根据这个就能知道对应的字符在那个盘块</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323758.png" alt="在这里插入图片描述"  />
+</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323759.png" alt="在这里插入图片描述"  />
+</p>
+<p>若盘块的大小为100，则文件中200-212对应在盘块8</p>
+<p>但是，用顺序存储的结构适合文件的直接读写，不适合文件的动态增长，与数组一样，不方便插入元素</p>
+<h3 id="2链式存储结构">2.链式存储结构<a hidden class="anchor" aria-hidden="true" href="#2链式存储结构">#</a></h3>
+<p>链式存储结构：操作系统在 FCB 中需要存放的主要映射信息是==第一个磁盘块的盘块号==，利用这个信息可以找到文件的第一个磁盘块，再利用每个磁盘块中存放的下一个盘块号的指针，可以找到第二个磁盘块……</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323764.png" alt="在这里插入图片描述"  />
+
+若盘块的大小为100，则文件中200-212对应在盘块9</p>
+<h3 id="3索引存储结构">3.索引存储结构<a hidden class="anchor" aria-hidden="true" href="#3索引存储结构">#</a></h3>
+<p>索引存储结构：文件字符流被分割成多个逻辑块，在物理磁盘上寻找一些空闲物理盘块（无需连续）将这些逻辑块的内容存放进去，再找一个磁盘块作为索引块，其中按序存放各个逻辑块对应的物理磁盘块号(索引块来记录文件使用的盘块号)
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323769.png" alt="在这里插入图片描述"  />
+</p>
+<p>索引结构指一个文件的信息存放在若干不连续的物理块中，系统为每个文件建立一个专用的数据结构——索引表，并将这些块的块号存放在索引表中。</p>
+<p>优点是保留了链接结构的优点，同时解决了其缺点，即能顺序存取，又能随机存取，满足了文件动态增长，插入删除的需求，也能充分利用外存空间</p>
+<p>缺点是索引表本身带来一定的系统开销</p>
+<p>==多级索引：==
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323760.png" alt="在这里插入图片描述"  />
+</p>
+<p>优点：</p>
+<blockquote>
+<p>1.可以表示很大的文件
+2.很小的文件高效访问
+3.中等大小的文件访问速度也不慢</p>
+</blockquote>
+<h2 id="二文件读取磁盘第三层抽象">二、文件读取磁盘(第三层抽象)<a hidden class="anchor" aria-hidden="true" href="#二文件读取磁盘第三层抽象">#</a></h2>
+<p>通过文件对磁盘进行读写</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="err">在</span><span class="n">fs</span><span class="o">/</span><span class="n">read_write</span><span class="p">.</span><span class="n">c</span><span class="err">中</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">sys_write</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">file</span> <span class="o">=</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">filp</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">m_inode</span> <span class="o">*</span><span class="n">inode</span> <span class="o">=</span> <span class="n">file</span><span class="o">-&gt;</span><span class="n">inode</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">(</span><span class="nf">S_ISREG</span><span class="p">(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_mode</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">file_write</span><span class="p">(</span><span class="n">inode</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>既然对文件操作就要调用sys_write(),参数：fd文件描述符，buf内存缓冲区，count读写字符的个数
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323781.png" alt="在这里插入图片描述"  />
+</p>
+<p>根据文件信息 inode 对应的不是字符设备，而是常规文件，跳到 file_write() 去执行</p>
+<p>file_write()</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">file_write</span><span class="p">(</span><span class="k">struct</span> <span class="n">m_inode</span> <span class="o">*</span><span class="n">inode</span><span class="p">,</span> <span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">filp</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="kt">off_t</span> <span class="n">pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">(</span><span class="n">filp</span><span class="o">-&gt;</span><span class="n">f_flags</span><span class="o">&amp;</span><span class="n">O_APPEND</span><span class="p">)</span><span class="c1">//如果是追加，从文末开始
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="n">pos</span><span class="o">=</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_size</span><span class="p">;</span> <span class="k">else</span> <span class="n">pos</span><span class="o">=</span><span class="n">filp</span><span class="o">-&gt;</span><span class="n">f_pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">.....</span>
+</span></span><span class="line"><span class="cl">	<span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">count</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">block</span><span class="o">=</span><span class="nf">create_block</span><span class="p">(</span><span class="n">inode</span><span class="p">,</span> <span class="n">pos</span><span class="o">/</span><span class="n">BLOCK_SIZE</span><span class="p">);</span><span class="c1">//算出对应的块
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">bh</span><span class="o">=</span><span class="nf">bread</span><span class="p">(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_dev</span><span class="p">,</span> <span class="n">block</span><span class="p">);</span><span class="c1">//发送请求，放入“电梯” 队列!
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="kt">int</span> <span class="n">c</span><span class="o">=</span><span class="n">pos</span><span class="o">%</span><span class="n">BLOCK_SIZE</span><span class="p">;</span> <span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="o">=</span><span class="n">c</span><span class="o">+</span><span class="n">bh</span><span class="o">-&gt;</span><span class="n">b_data</span><span class="p">;</span> <span class="c1">//写入数据后，修改修改pos，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">bh</span><span class="o">-&gt;</span><span class="n">b_dirt</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">c</span><span class="o">=</span><span class="n">BLOCK_SIZE</span><span class="o">-</span><span class="n">c</span><span class="p">;</span> <span class="n">pos</span><span class="o">+=</span><span class="n">c</span><span class="p">;</span> <span class="c1">// pos指向文件的读写位置(字符流末位置)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="p">...</span> 
+</span></span><span class="line"><span class="cl">		<span class="c1">//一块一块拷贝用户字符， 并且释放写出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">while</span><span class="p">(</span><span class="n">c</span><span class="o">--&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">++</span><span class="p">)</span><span class="o">=</span><span class="nf">get_fs_byte</span><span class="p">(</span><span class="n">buf</span><span class="o">++</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">brelse</span><span class="p">(</span><span class="n">bh</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="n">filp</span><span class="o">-&gt;</span><span class="n">f_pos</span><span class="o">=</span><span class="n">pos</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//pos    先找到 文件的读写位置 （记录在 字段 f_pos 中）
+</span></span></span><span class="line"><span class="cl"><span class="c1">//block  计算物理盘块号
+</span></span></span><span class="line"><span class="cl"><span class="c1">//bread   向磁盘发出请求
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>工作过程：</p>
+<p>1.根据file中的一个==读写指针fseek（文件的当前读写位置）及 count 找到文件读写对应的字符流位置==</p>
+<p>2.根据字符流上的读写位置算出逻辑块号 ,==由inode 找到物理盘块号==</p>
+<p>3.==用磁盘号，buf等形成request放入请求队列(“电梯”)==，就可以读写磁盘</p>
+<p>==create_block()计算盘号，文件抽象的核心==</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323075.png" alt="在这里插入图片描述"  />
+
+这里采用的多级索引
+block:(0-6):直接数据块（直接索引）， (7):一重间接， (8):二重间接</p>
+<p>如果逻辑盘块号小于等于 6，说明 inode中的直接数据块就能映射出盘块号
+若这个逻辑盘块没有映射到物理盘块，就调用 new_block() 从磁盘上申请一个空闲物理盘块</p>
+<p>block-=7 ， if(block&lt;512) 说明逻辑盘块号对应的物理盘块号存放在一阶间接索引，接下来需要 bread(inode-&gt;i_dev,inode-&gt;i_zone[7]) 读入这个一阶索引块，接下来需要在这个索引块中寻找和逻辑块相对应的物理盘块号</p>
+<p>m_inode结构体</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">m_inode</span><span class="p">{</span> <span class="c1">//读入内存后的inode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">i_mode</span><span class="p">;</span> <span class="c1">//文件的类型和属性
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">...</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">i_zone</span><span class="p">[</span><span class="mi">9</span><span class="p">];</span> <span class="c1">//指向文件内容数据块
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">i_wait</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">i_count</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">i_lock</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">i_dirt</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">	<span class="p">...</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>根据inode区分文件的属性和类型</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">sys_open</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">(</span><span class="nf">S_ISCHR</span><span class="p">(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_mode</span><span class="p">))</span> <span class="c1">//字符设备
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">{</span> 
+</span></span><span class="line"><span class="cl">		<span class="k">if</span><span class="p">(</span><span class="nf">MAJOR</span><span class="p">(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_zone</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span>  <span class="c1">//设备文件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">current</span><span class="o">-&gt;</span><span class="n">tty</span><span class="o">=</span><span class="nf">MINOR</span><span class="p">(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_zone</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==如果是普通文件需要根据inode里面的映射表来建立磁盘号到字符流直接的映射==</p>
+<p>==如果是特殊文件不需要inode去完成映射，inode存放主设备号(设备文件)==</p>
+<p>MAJOR的宏定义</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#define MAJOR(a)(((unsigned)(a))&gt;&gt;8)) </span><span class="c1">//取高字节
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#define MINOR(a)((a)&amp;0xff) </span><span class="c1">//取低字节
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="总结-1">总结<a hidden class="anchor" aria-hidden="true" href="#总结-1">#</a></h2>
+<p>==文件视图==
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323092.png" alt="在这里插入图片描述"  />
+</p>
+<h1 id="目录与文件系统">目录与文件系统<a hidden class="anchor" aria-hidden="true" href="#目录与文件系统">#</a></h1>
+<h2 id="前言-2">前言<a hidden class="anchor" aria-hidden="true" href="#前言-2">#</a></h2>
+<p>文件， 抽象一个磁盘块集合，这是第三层抽象，从文件到文件系统：文件系统， 抽象整个磁盘（第四层抽象）</p>
+<h2 id="一文件系统">一、文件系统<a hidden class="anchor" aria-hidden="true" href="#一文件系统">#</a></h2>
+<p>在使用磁盘的时候，用户眼里的磁盘是一堆树结构的有组织的文件，文件系统就是实现文件到盘块的映射</p>
+<p><img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323343.png" alt="在这里插入图片描述"  />
+</p>
+<p>目录树的优点：
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323353.png" alt="在这里插入图片描述"  />
+</p>
+<p>但是有了这样的映射，怎么才能使用 /my/data/a中a文件(&quot;/&quot; 表示根目录)?</p>
+<p>==通过文件路径名找到文件 ，也就是先通过文件路径找到文件a的FCB==</p>
+<p>因为需要通过比较文件名才能找到文件，所以目录中需要存放子目录的文件名，又还需要在磁盘中操作该文件，因此还需要存子目录的FCB。</p>
+<p>但实际上我们只需要比较一个文件名，却读入了大量的FCB，系统效率笔记低，因此可以在目录中存放子目录名+该目录对应的FCB地址。目录里存的就是&lt;文件名：索引值&gt;，实现这一索引结构，需要磁盘配合，==需要磁盘划分一块连续的区域来存放FCB块，这样就能建立索引值到FCB地址的映射==</p>
+<p>因为根目录没有上一级目录来保存它的索引值，因此需要在磁盘中找一个固定的地址存放根目录</p>
+<p>所以操作系统需要完成以下两个任务：</p>
+<blockquote>
+<p>1.目录中存放子目录的文件名和子目录FCB的索引值
+2.磁盘块要划分一段连续的区域专门存放FCB块，并定义一个初始地址作为根目录的索引</p>
+</blockquote>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323347.png" alt="image-20220411221310846" style="zoom:80%;" />
+<p>磁盘块如下：</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323369.png" alt="image-20220411221323667" style="zoom:80%;" /> 
+<blockquote>
+<p>(1)inode位图：哪些inode空闲，哪些被占用
+(2)盘块位图：哪些盘块是空闲的，硬盘大小不同这个图的大小也不同
+(3)引导块：磁盘启动和初始化
+(4)超级块：记录两个位图有多大等信息</p>
+</blockquote>
+<p>空闲位图(位向量)：0011110011101
+表示：表示磁盘块2、 3、 4、 5、8、 9、 10、 12空闲</p>
+<p>==完成全部映射下的磁盘使用过程==
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323363.png" alt="在这里插入图片描述"  />
+</p>
+<h2 id="二文件系统代码实现">二、文件系统代码实现<a hidden class="anchor" aria-hidden="true" href="#二文件系统代码实现">#</a></h2>
+<p>只要把文件系统如何映像到磁盘上对应扇区再加上前面学过的知识不就是文件系统的实现吗?</p>
+<p>目录解析：</p>
+<p>在open()函数里面找到对应文件并打开，而open()调用了sys_open()</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="err">在</span><span class="n">linux</span><span class="o">/</span><span class="n">fs</span><span class="o">/</span><span class="n">open</span><span class="p">.</span><span class="n">c</span><span class="err">中</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">sys_open</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="n">i</span><span class="o">=</span><span class="nf">open_namei</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">flag</span><span class="p">,</span><span class="o">&amp;</span><span class="n">inode</span><span class="p">);</span> <span class="c1">//解析路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">...</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">open_namei</span><span class="p">(...)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="n">dir</span><span class="o">=</span><span class="nf">dir_namei</span><span class="p">(</span><span class="n">pathname</span><span class="p">,</span><span class="o">&amp;</span><span class="n">namelen</span><span class="p">,</span><span class="o">&amp;</span><span class="n">basename</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">....</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">m_inode</span> <span class="o">*</span><span class="nf">dir_namei</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">dir</span><span class="o">=</span><span class="nf">get_dir</span><span class="p">(</span><span class="n">pathname</span><span class="p">);</span> <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>==经过一系列的调用真正完成目录解析的是get_dir==</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">m_inode</span> <span class="o">*</span><span class="nf">get_dir</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pathname</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">((</span><span class="n">c</span><span class="o">=</span><span class="nf">get_fs_byte</span><span class="p">(</span><span class="n">pathname</span><span class="p">))</span><span class="o">==</span><span class="err">‘</span><span class="o">/</span><span class="err">’</span><span class="p">)</span> <span class="c1">//根目录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">inode</span><span class="o">=</span><span class="n">current</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span> <span class="n">pathname</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="n">inode</span><span class="o">=</span><span class="n">current</span><span class="o">-&gt;</span><span class="n">pwd</span><span class="p">;</span> <span class="c1">//解析从此处开始
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">c</span><span class="p">)</span> <span class="k">return</span> <span class="n">inode</span><span class="p">;</span> <span class="c1">//函数的正确出口
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">bh</span><span class="o">=</span><span class="nf">find_entry</span><span class="p">(</span><span class="o">&amp;</span><span class="n">inode</span><span class="p">,</span><span class="n">thisname</span><span class="p">,</span><span class="n">namelen</span><span class="p">,</span><span class="o">&amp;</span><span class="n">de</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="kt">int</span> <span class="n">inr</span><span class="o">=</span><span class="n">de</span><span class="o">-&gt;</span><span class="n">inode</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">		<span class="kt">int</span> <span class="n">idev</span><span class="o">=</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_dev</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="n">inode</span><span class="o">=</span><span class="nf">iget</span><span class="p">(</span><span class="n">idev</span><span class="p">,</span><span class="n">inr</span><span class="p">);</span> <span class="c1">//根据目录项读取下一层inode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>(1)root： 找到根目录；
+(2)find_entry： 从目录中读取目录项；
+(3)inr： 是目录项中的索引节点号；
+(4)iget： 再读下一层目录</p>
+<p>目录解析首先要找到一个解析的起点，如果路径名从 / 开始，就从根目录的inode 开始，否则要从当前目录的 inode 开始</p>
+<p>==根目录inode的解析==</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">inode</span><span class="o">=</span><span class="n">current</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="nf">setup</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">drive_info</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">sys_setup</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">BIOS</span><span class="p">)</span><span class="c1">//在kernel/hd.c中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="n">hd_info</span><span class="p">[</span><span class="n">drive</span><span class="p">].</span><span class="n">head</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">+</span><span class="n">BIOS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">hd_info</span><span class="p">[</span><span class="n">drive</span><span class="p">].</span><span class="n">sect</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="mi">14</span><span class="o">+</span><span class="n">BIOS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mount_root</span><span class="p">();</span> 
+</span></span><span class="line"><span class="cl">	<span class="p">...</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">mount_root</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="c1">//在fs/super.c中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">mi</span><span class="o">=</span><span class="nf">iget</span><span class="p">(</span><span class="n">ROOT_DEV</span><span class="p">,</span><span class="n">ROOT_INO</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="n">current</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">mi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>所有进程的 root 都是从 1 号进程继承来的，在 1 号进程 init() 函数中要执行 mount_root()函数，用来将根目录的 inode读入到内存中，并且关联到 1 号进程的 PCB 中</p>
+<p>有了起点目录文件的 inode，接下来读出目录文件内容，然后用文件路径上的文件名和和目录中的目录项逐个比对，不断向下解析，直到路径名被全部处理完成, 最终找到目标文件的inode</p>
+<p>==读取inode （iget()函数）==</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">m_inode</span> <span class="o">*</span> <span class="nf">iget</span><span class="p">(</span><span class="kt">int</span> <span class="n">dev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">m_inode</span> <span class="o">*</span> <span class="n">inode</span> <span class="o">=</span> <span class="nf">get_empty_inode</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_dev</span><span class="o">=</span><span class="n">dev</span><span class="p">;</span> <span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_num</span><span class="o">=</span><span class="n">nr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">read_inode</span><span class="p">(</span><span class="n">inode</span><span class="p">);</span> <span class="k">return</span> <span class="n">inode</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">read_inode</span><span class="p">(</span><span class="k">struct</span> <span class="n">m_inode</span> <span class="o">*</span><span class="n">inode</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">super_block</span> <span class="o">*</span><span class="n">sb</span><span class="o">=</span><span class="nf">get_super</span><span class="p">(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_dev</span><span class="p">);;</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">lock_inode</span><span class="p">(</span><span class="n">inode</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">block</span><span class="o">=</span><span class="mi">2</span><span class="o">+</span><span class="n">sb</span><span class="o">-&gt;</span><span class="n">s_imap_blocks</span><span class="o">+</span><span class="n">sb</span><span class="o">-&gt;</span><span class="n">s_zmap_blocks</span><span class="o">+</span>
+</span></span><span class="line"><span class="cl">	<span class="p">(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_num</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">INODES_PER_BLOCK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">bh</span><span class="o">=</span><span class="nf">bread</span><span class="p">(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_dev</span><span class="p">,</span><span class="n">block</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">inode</span><span class="o">=</span><span class="n">bh</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[(</span><span class="n">inode</span><span class="o">-&gt;</span><span class="n">i_num</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">INODES_PER_BLOCK</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">unlock_inode</span><span class="p">(</span><span class="n">inode</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>以上都是根据磁盘的划分来实现的
+<img loading="lazy" src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012323378.png" alt="在这里插入图片描述"  />
+</p>
+<p>从上图可以看到inode 数组的起始位置在引导块,超级块以及两个位图数组之后</p>
+<p>inode 数组在磁盘上的起始位置 = 引导块大小 + 超级块大小 + s_imap_blocks大小 + s_zmap_blocks大小</p>
+<p>==开始解析目录 find_entry()==</p>
+<p>函数 find_entry 根据目录文件的 inode 读取目录项数组，然后逐个目录项进行匹配，即 while(i&lt;entries) if(match(namelen,name,de))</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="err">在</span><span class="n">fs</span><span class="o">/</span><span class="n">namei</span><span class="p">.</span><span class="n">c</span><span class="err">中</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">buffer_head</span> <span class="o">*</span><span class="nf">find_entry</span><span class="p">(</span><span class="k">struct</span> <span class="n">m_inode</span>
+</span></span><span class="line"><span class="cl"><span class="o">**</span><span class="n">dir</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="p">...,</span> <span class="k">struct</span> <span class="n">dir_entry</span> <span class="o">**</span> <span class="n">res_dir</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">entries</span><span class="o">=</span><span class="p">(</span><span class="o">*</span><span class="n">dir</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">i_size</span><span class="o">/</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">dir_entry</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">block</span><span class="o">=</span><span class="p">(</span><span class="o">*</span><span class="n">dir</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">i_zone</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">	<span class="o">*</span><span class="n">bh</span><span class="o">=</span><span class="nf">bread</span><span class="p">((</span><span class="o">*</span><span class="n">dir</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">i_dev</span><span class="p">,</span> <span class="n">block</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">dir_entry</span> <span class="o">*</span><span class="n">de</span> <span class="o">=</span><span class="n">bh</span><span class="o">-&gt;</span><span class="n">b_data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">entries</span><span class="p">)</span> <span class="c1">//entries是目录项数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">{</span> 	<span class="c1">//#define BLOCK_SIZE  1024   两个扇区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">if</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">de</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">BLOCK_SIZE</span><span class="o">+</span><span class="n">bh</span><span class="o">-&gt;</span><span class="n">b_data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">brelse</span><span class="p">(</span><span class="n">bh</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="n">block</span><span class="o">=</span><span class="nf">bmap</span><span class="p">(</span><span class="o">*</span><span class="n">dir</span><span class="p">,</span><span class="n">i</span><span class="o">/</span><span class="n">DIR_ENTRIES_PER_BLOCK</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="n">bh</span><span class="o">=</span><span class="nf">bread</span><span class="p">((</span><span class="o">*</span><span class="n">dir</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">i_dev</span><span class="p">,</span><span class="n">block</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="n">de</span><span class="o">=</span><span class="p">(</span><span class="k">struct</span> <span class="n">dir_entry</span><span class="o">*</span><span class="p">)</span><span class="n">bh</span><span class="o">-&gt;</span><span class="n">b_data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span> 
+</span></span><span class="line"><span class="cl">		<span class="c1">//读入下一块上的目录项继续match
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">if</span><span class="p">(</span><span class="nf">match</span><span class="p">(</span><span class="n">namelen</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">de</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="o">*</span><span class="n">res_dir</span><span class="o">=</span><span class="n">de</span><span class="p">;</span><span class="k">return</span> <span class="n">bh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="n">de</span><span class="o">++</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>de: directory entry(目录项)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#define NAME_LEN 14
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">dir_entry</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">inode</span><span class="p">;</span> <span class="c1">//i节点号
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">NAME_LEN</span><span class="p">];</span> <span class="c1">//文件名 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>iget 用来读取索引节点，根据 inode 编号（iget 的参数）和 inode 数组的初始位置计算出该 inode 所在的磁盘块号，再用 bread 发送请求，放入“电梯” 队列，就可以完成磁盘的读写。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C5-%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E6%A0%88%E5%88%87%E6%8D%A2%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>实验5 基于内核栈切换的进程切换</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC4%E7%AB%A0-%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>第4章 第一个程序</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

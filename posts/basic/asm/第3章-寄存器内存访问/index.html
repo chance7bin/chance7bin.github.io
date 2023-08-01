@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>第3章 寄存器（内存访问） | Binb&#39;s Blog</title>
+<meta name="keywords" content="汇编">
+<meta name="description" content="3.1 内存中的字存储 字单元，即存放一个字型数据(16位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址">
+<meta name="author" content="chance7bin">
+<link rel="canonical" href="https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC3%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.be81eec981a615a87a88f121642d7eebde74d033438693944db2fd6b827284ff.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity=""
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="apple-touch-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<link rel="mask-icon" href="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="第3章 寄存器（内存访问）" />
+<meta property="og:description" content="3.1 内存中的字存储 字单元，即存放一个字型数据(16位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC3%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-04-13T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="第3章 寄存器（内存访问）"/>
+<meta name="twitter:description" content="3.1 内存中的字存储 字单元，即存放一个字型数据(16位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚 文章",
+      "item": "https://chance7bin.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📕 计算机基础",
+      "item": "https://chance7bin.github.io/posts/basic/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "汇编语言",
+      "item": "https://chance7bin.github.io/posts/basic/asm/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "第3章 寄存器（内存访问）",
+      "item": "https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC3%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "第3章 寄存器（内存访问）",
+  "name": "第3章 寄存器（内存访问）",
+  "description": "3.1 内存中的字存储 字单元，即存放一个字型数据(16位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址",
+  "keywords": [
+    "汇编"
+  ],
+  "articleBody": "3.1 内存中的字存储 字单元，即存放一个字型数据(16位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址内存单元中存放字型数据的低位字节。\n将起始地址为N的字单元简称为N地址字单元。比如一个字单元由2、3两个内存单元组成，则这个字单元的起始地址为2，可以说这是2地址字单元。\n20000（4E20H）、18（0012H）\n3.2 DS和[address] CPU 要读写一个内存单元的时候，必须先给出这个内存单元的地址，在8086PC 中，内存地址由段地址和偏移地址组成。8086CPU中有一个DS寄存器，通常用来存放要访问数据的段地址。比如我们要读取10000H单元的内容，可以用如下的程序段进行。（从内存单元送到寄存器中）\n1 2 3 mov bx,1000H mov ds,bx mov al,[0] “[···]”表示一个内存单元，“[···]”中的0表示内存单元的偏移地址。只有偏移地址是不能定位一个内存单元的，指令执行时，==8086CPU自动取ds中的数据为内存单元的段地址==。\n如何把一个数据送入寄存器呢？\n==8086CPU 不支持将数据直接送入段寄存器的操作==，ds是一个段寄存器，所以mov ds,1000H这条指令是非法的。那么如何将1000H送入ds呢?只好用一个寄存器来进行中转，即先将1000H送入一个一般的寄存器，如 bx，再将bx中的内容送入ds。\n1 2 3 mov bx,1000H mov ds,bx mov [0],al 3.3 字的传送 只要在 mov指令中给出16 位的寄存器就可以进行16位数据的传送了。\n1 2 3 4 mov bx,1000H mov ds,bx mov ax,[0] ; 1000:0处的字型数据送入ax mov [0],cx ; cx中的16位数据送到1000:0处 3.7 CPU提供的栈机制 8086CPU 提供入栈和出栈指令，最基本的两个是PUSH(入栈)和POP(出栈)。比如，push ax表示将寄存器ax中的数据送入栈中，pop ax表示从栈顶取出数据送入ax。==8086CPU的入栈和出栈操作都是以字为单位进行的==。\nCPU 如何知道当前要执行的指令所在的位置？我们现在知道答案，那就是CS、IP中存放着当前指令的段地址和偏移地址。\n现在的问题是：CPU如何知道栈顶的位置？显然，也应该有相应的寄存器来存放栈顶的地址，8086CPU 中，有两个寄存器，==段寄存器SS和寄存器SP，栈顶的段地址存放在SS 中，偏移地址存放在SP中==。任意时刻，==SS:SP指向栈顶元素==。push指令和pop指令执行时，CPU从SS和SP中得到栈顶的地址。\npush ax的执行，由以下两步完成。\n(1) SP=SP-2，SS:SP指向当前栈顶前面的单元，以当前栈顶前面的单元为新的栈顶;\n(2)将ax中的内容送入SS:SP指向的内存单元处，SS:SP此时指向新栈顶。\n图3.10描述了8086CPU对push指令的执行过程。\n从图中我们可以看出，8086CPU中，==入栈时，栈顶从高地址向低地址方向增长==。\n思考：如果将10000H~1000FH这段空间当作栈，初始状态栈是空的，此时，SS=1000H,SP=？\nSP=0010H，如图3.11所示。\npop ax的执行过程和push ax刚好相反，由以下两步完成。\n(1) 将SS:SP指向的内存单元处的数据送入ax中;\n(2) SP=SP+2，SS:SP指向当前栈顶下面的单元，以当前栈顶下面的单元为新的栈顶。\n图3.12描述了8086CPU对pop指令的执行过程。\n注意，图 3.12中，出栈后，SS:SP指向新的栈顶1000EH，pop操作前的栈顶元素，1000CH 处的2266H依然存在，但是，它已不在栈中。当再次执行 push等入栈指令后，SS:SP移至1000CH，并在里面写入新的数据，它将被覆盖。\n段的综述 我们可以用一个段存放数据，将它定义为“数据段”；\n我们可以用一个段存放代码，将它定义为“代码段”；\n我们可以用一个段当作栈，将它定义为“栈段”。\n我们可以这样安排，但若要让CPU按照我们的安排来访问这些段，就要：\n对于数据段，将它的段地址放在 DS 中，用mov、add、sub等访问内存单元的指令时，CPU就将我们定义的数据段中的内容当作数据来访问；\n对于代码段，将它的段地址放在CS中，将段中第一条指令的偏移地址放在IP中，这样CPU就将执行我们定义的代码段中的指令；\n对于栈段，将它的段地址放在SS中，将栈顶单元的偏移地址放在SP中，这样CPU在需要进行栈操作的时候，比如执行push、pop指令等，就将我们定义的栈段当作栈空间来用。\nDebug （1）关于D命令\nDebug 在执行如d 段地址:偏移地址这种D命令时，将段地址送入ds 中比较方便。\nD命令也提供了一种符合CPU机理的格式：d 段寄存器:偏移地址，以段寄存器中的数据为段地址SA，列出从SA:偏移地址开始的内存区间中的数据。以下是几个例子。\n（2）在E、A、U命令中使用段寄存器。\n在E、A、U这些可以带有内存单元地址的命令中，也可以同D命令一样，用段寄存器表示内存单元的段地址，以下是几个例子。\n（3）下一条指令执行了吗？\n==Debug 的T命令在执行修改寄存器SS 的指令时，下一条指令也紧接着被执行==（不单是 mov ss,ax，对于如mov ss,bx，mov ss,[0]，pop ss 等指令都会发生上面的情况，这些指令都是修改栈段寄存器SS的指令）。\n",
+  "wordCount" : "2083",
+  "inLanguage": "zh",
+  "datePublished": "2022-04-13T00:00:00Z",
+  "dateModified": "2022-04-13T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "chance7bin"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chance7bin.github.io/posts/basic/asm/%E7%AC%AC3%E7%AB%A0-%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Binb's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chance7bin.github.io/" accesskey="h" title="Binb&#39;s Blog (Alt + H)">
+                <img src="https://chance7bin.github.io/img/%E7%BE%8E%E9%98%9F.jpg" alt="" aria-label="logo"
+                    height="35">Binb&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chance7bin.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/" title="🏠 主页">
+                    <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/archives/" title="⏱️ 时间轴">
+                    <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/posts" title="📚 文章">
+                    <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chance7bin.github.io/tags" title="🔖 标签">
+                    <span>🔖 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/chance7bin" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chance7bin.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/">📚 文章</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/">📕 计算机基础</a>&nbsp;»&nbsp;<a href="https://chance7bin.github.io/posts/basic/asm/">汇编语言</a></div>
+    <h1 class="post-title">
+      第3章 寄存器（内存访问）
+    </h1>
+    <div class="post-meta">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2022-04-13
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>2083字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>5分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>chance7bin
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://chance7bin.github.io/tags/%E6%B1%87%E7%BC%96/" style="color: var(--secondary)!important;">汇编</a>
+            </span>
+        </span>
+    </span>
+
+    
+</span>
+
+
+      
+      
+      
+      
+      
+      
+      
+          
+          
+          
+              
+              
+              
+              
+          
+      
+    </div>
+  </header>
+   <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">目录</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#31-%e5%86%85%e5%ad%98%e4%b8%ad%e7%9a%84%e5%ad%97%e5%ad%98%e5%82%a8" aria-label="3.1 内存中的字存储">3.1 内存中的字存储</a></li>
+                    <li>
+                        <a href="#32-ds%e5%92%8caddress" aria-label="3.2 DS和[address]">3.2 DS和[address]</a></li>
+                    <li>
+                        <a href="#33-%e5%ad%97%e7%9a%84%e4%bc%a0%e9%80%81" aria-label="3.3 字的传送">3.3 字的传送</a></li>
+                    <li>
+                        <a href="#37-cpu%e6%8f%90%e4%be%9b%e7%9a%84%e6%a0%88%e6%9c%ba%e5%88%b6" aria-label="3.7 CPU提供的栈机制">3.7 CPU提供的栈机制</a></li>
+                    <li>
+                        <a href="#%e6%ae%b5%e7%9a%84%e7%bb%bc%e8%bf%b0" aria-label="段的综述">段的综述</a></li>
+                    <li>
+                        <a href="#debug" aria-label="Debug">Debug</a>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+  <div class="post-content"><h3 id="31-内存中的字存储">3.1 内存中的字存储<a hidden class="anchor" aria-hidden="true" href="#31-内存中的字存储">#</a></h3>
+<p>字单元，即存放一个字型数据(16位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址内存单元中存放字型数据的低位字节。</p>
+<p>将起始地址为N的字单元简称为N地址字单元。比如一个字单元由2、3两个内存单元组成，则这个字单元的起始地址为2，可以说这是2地址字单元。</p>
+<p><img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244436.png" alt="image-20211130201218289" style="zoom:80%;" />  20000（4E20H）、18（0012H）</p>
+<h3 id="32-ds和address">3.2 DS和[address]<a hidden class="anchor" aria-hidden="true" href="#32-ds和address">#</a></h3>
+<p>CPU 要读写一个内存单元的时候，必须先给出这个内存单元的地址，在8086PC 中，内存地址由段地址和偏移地址组成。8086CPU中有一个DS寄存器，通常用来存放要访问数据的段地址。比如我们要读取10000H单元的内容，可以用如下的程序段进行。（从内存单元送到寄存器中）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mov bx,1000H
+</span></span><span class="line"><span class="cl">mov ds,bx
+</span></span><span class="line"><span class="cl">mov al,[0]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>“[···]”表示一个内存单元，“[···]”中的0表示内存单元的偏移地址。只有偏移地址是不能定位一个内存单元的，指令执行时，==8086CPU自动取ds中的数据为内存单元的段地址==。</p>
+<p><strong>如何把一个数据送入寄存器呢？</strong></p>
+<p>==8086CPU 不支持将数据直接送入段寄存器的操作==，ds是一个段寄存器，所以<code>mov ds,1000H</code>这条指令是非法的。那么如何将1000H送入ds呢?只好用一个寄存器来进行中转，即先将1000H送入一个一般的寄存器，如 bx，再将bx中的内容送入ds。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mov bx,1000H
+</span></span><span class="line"><span class="cl">mov ds,bx
+</span></span><span class="line"><span class="cl">mov [0],al
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="33-字的传送">3.3 字的传送<a hidden class="anchor" aria-hidden="true" href="#33-字的传送">#</a></h3>
+<p>只要在 mov指令中给出16 位的寄存器就可以进行16位数据的传送了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mov bx,1000H
+</span></span><span class="line"><span class="cl">mov ds,bx
+</span></span><span class="line"><span class="cl">mov ax,[0]   ; 1000:0处的字型数据送入ax
+</span></span><span class="line"><span class="cl">mov [0],cx   ; cx中的16位数据送到1000:0处
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="37-cpu提供的栈机制">3.7 CPU提供的栈机制<a hidden class="anchor" aria-hidden="true" href="#37-cpu提供的栈机制">#</a></h3>
+<p>8086CPU 提供入栈和出栈指令，最基本的两个是PUSH(入栈)和POP(出栈)。比如，<code>push ax</code>表示将寄存器ax中的数据送入栈中，<code>pop ax</code>表示从栈顶取出数据送入ax。==8086CPU的入栈和出栈操作都是<strong>以字为单位</strong>进行的==。</p>
+<p>CPU 如何知道当前要执行的指令所在的位置？我们现在知道答案，那就是CS、IP中存放着当前指令的段地址和偏移地址。</p>
+<p>现在的问题是：CPU如何知道栈顶的位置？显然，也应该有相应的寄存器来存放栈顶的地址，8086CPU 中，有两个寄存器，==段寄存器SS和寄存器SP，栈顶的段地址存放在SS 中，偏移地址存放在SP中==。任意时刻，==SS:SP指向栈顶元素==。push指令和pop指令执行时，CPU从SS和SP中得到栈顶的地址。</p>
+<p><code>push ax</code>的执行，由以下两步完成。</p>
+<p>(1) SP=SP-2，SS:SP指向当前栈顶前面的单元，以当前栈顶前面的单元为新的栈顶;</p>
+<p>(2)将ax中的内容送入SS:SP指向的内存单元处，SS:SP此时指向新栈顶。</p>
+<p>图3.10描述了8086CPU对push指令的执行过程。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244440.png" alt="image-20211130211334658" style="zoom:80%;" /> 
+<p>从图中我们可以看出，8086CPU中，==入栈时，栈顶从高地址向低地址方向增长==。</p>
+<p>思考：如果将10000H~1000FH这段空间当作栈，初始状态栈是空的，此时，SS=1000H,SP=？</p>
+<p>SP=0010H，如图3.11所示。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244452.png" alt="image-20211130213511410" style="zoom:80%;" /> 
+<p><code>pop ax</code>的执行过程和<code>push ax</code>刚好相反，由以下两步完成。</p>
+<p>(1) 将SS:SP指向的内存单元处的数据送入ax中;</p>
+<p>(2) SP=SP+2，SS:SP指向当前栈顶下面的单元，以当前栈顶下面的单元为新的栈顶。</p>
+<p>图3.12描述了8086CPU对pop指令的执行过程。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244459.png" alt="image-20211130213622610" style="zoom:80%;" /> 
+<p>注意，图 3.12中，出栈后，SS:SP指向新的栈顶1000EH，pop操作前的栈顶元素，1000CH 处的2266H依然存在，但是，它已不在栈中。当再次执行 push等入栈指令后，SS:SP移至1000CH，并在里面写入新的数据，它将被覆盖。</p>
+<h3 id="段的综述">段的综述<a hidden class="anchor" aria-hidden="true" href="#段的综述">#</a></h3>
+<p>我们可以用一个段存放数据，将它定义为“数据段”；</p>
+<p>我们可以用一个段存放代码，将它定义为“代码段”；</p>
+<p>我们可以用一个段当作栈，将它定义为“栈段”。</p>
+<p>我们可以这样安排，但若要让CPU按照我们的安排来访问这些段，就要：</p>
+<p><strong>对于数据段，将它的段地址放在 DS 中，用mov、add、sub等访问内存单元的指令时，CPU就将我们定义的数据段中的内容当作数据来访问；</strong></p>
+<p><strong>对于代码段，将它的段地址放在CS中，将段中第一条指令的偏移地址放在IP中，这样CPU就将执行我们定义的代码段中的指令；</strong></p>
+<p><strong>对于栈段，将它的段地址放在SS中，将栈顶单元的偏移地址放在SP中，这样CPU在需要进行栈操作的时候，比如执行push、pop指令等，就将我们定义的栈段当作栈空间来用。</strong></p>
+<h3 id="debug">Debug<a hidden class="anchor" aria-hidden="true" href="#debug">#</a></h3>
+<p>（1）关于D命令</p>
+<p>Debug 在执行如<code>d 段地址:偏移地址</code>这种D命令时，将段地址送入ds 中比较方便。</p>
+<p>D命令也提供了一种符合CPU机理的格式：<code>d 段寄存器:偏移地址</code>，以段寄存器中的数据为段地址SA，列出从<code>SA:偏移地址</code>开始的内存区间中的数据。以下是几个例子。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244457.png" alt="image-20211130224915186" style="zoom:80%;" /> 
+<p>（2）在E、A、U命令中使用段寄存器。</p>
+<p>在E、A、U这些可以带有内存单元地址的命令中，也可以同D命令一样，用段寄存器表示内存单元的段地址，以下是几个例子。</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244467.png" alt="image-20211130225022187" style="zoom:80%;" /> 
+<p>（3）下一条指令执行了吗？</p>
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244738.png" alt="image-20211130225054566" style="zoom:80%;" /> 
+<img src="https://blog-images-1301988137.cos.ap-nanjing.myqcloud.com/blog/2207/202308012244754.png" alt="image-20211130225109010" style="zoom:80%;" /> 
+<p>==Debug 的T命令在执行修改寄存器SS 的指令时，下一条指令也紧接着被执行==（不单是 <code>mov ss,ax</code>，对于如<code>mov ss,bx</code>，<code>mov ss,[0]</code>，<code>pop ss </code>等指令都会发生上面的情况，这些指令都是修改栈段寄存器SS的指令）。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+<nav class="paginav">
+  <a class="prev" href="https://chance7bin.github.io/posts/basic/os-lab/%E5%AE%9E%E9%AA%8C4-%E8%BF%9B%E7%A8%8B%E8%BF%90%E8%A1%8C%E8%BD%A8%E8%BF%B9%E7%9A%84%E8%B7%9F%E8%B8%AA%E4%B8%8E%E7%BB%9F%E8%AE%A1/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>实验4 进程运行轨迹的跟踪与统计</span>
+  </a>
+  <a class="next" href="https://chance7bin.github.io/posts/basic/pattern/%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%BC%8F/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>行为模式</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://chance7bin.github.io/">Binb&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
